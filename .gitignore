@@ -27,6 +27,9 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Firecrawl CLI scratch output (local research)
+.firecrawl/
+
 # misc
 /.sass-cache
 /connect.lock
@@ -47,3 +50,5 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+.vercel
+.env*.local
