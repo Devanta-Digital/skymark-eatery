@@ -63,15 +63,53 @@ const cateringSchema = z.object({
 type CateringValues = z.infer<typeof cateringSchema>;
 
 const anchorLinks = [
+  { id: "occasion", label: "Plan" },
   { id: "packages", label: "Packages" },
   { id: "appetizers", label: "Appetizers" },
   { id: "platters", label: "Platters" },
+  { id: "presentation", label: "Trays" },
   { id: "hot-catering", label: "Hot trays" },
   { id: "pizza", label: "Pizza" },
   { id: "desserts", label: "Desserts" },
   { id: "dietary", label: "Dietary" },
   { id: "inquire", label: "Inquire" },
 ];
+
+function BuffetCompareTable() {
+  return (
+    <div className="mt-8 overflow-x-auto rounded-sm border border-[rgba(36,24,18,0.12)] bg-[#fdfaf6] shadow-[0_8px_24px_rgba(28,18,14,0.06)]">
+      <table className="w-full min-w-[600px] border-collapse text-left text-sm">
+        <thead className="border-b border-[rgba(36,24,18,0.1)] bg-[#f4ebe3] font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[#5c4d42]">
+          <tr>
+            <th className="px-4 py-3 sm:px-5">Package</th>
+            <th className="px-4 py-3 sm:px-5">Per person</th>
+            <th className="px-4 py-3 sm:px-5">Minimum</th>
+            <th className="px-4 py-3 sm:px-5">Feeds</th>
+          </tr>
+        </thead>
+        <tbody>
+          {BUFFET_PACKAGES.map((pkg) => (
+            <tr
+              key={pkg.publicName}
+              className="border-b border-[rgba(36,24,18,0.06)] last:border-b-0"
+            >
+              <td className="px-4 py-3.5 font-serif font-medium text-[#1c120e] sm:px-5">
+                {pkg.publicName}
+              </td>
+              <td className="px-4 py-3.5 tabular-nums text-[#3d3028] sm:px-5">
+                {pkg.pricePerPerson}
+              </td>
+              <td className="px-4 py-3.5 text-[#5c4d42] sm:px-5">
+                {pkg.minimumOrder}
+              </td>
+              <td className="px-4 py-3.5 text-[#5c4d42] sm:px-5">{pkg.feeds}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 function metaLine(serving?: string, dietary?: string[]) {
   return [serving, ...(dietary ?? [])].filter(Boolean).join(" • ");
@@ -161,7 +199,7 @@ export default function Catering() {
     title:
       "Catering & Buffets — Skymark Eatery by Caffe E Pranzo | Mississauga Office & Event Italian",
     description:
-      "Italian office catering on Skymark Avenue, Mississauga: buffet packages, hot trays, sandwich platters, appetizers, desserts, and inquiry support from Skymark Eatery by Caffe E Pranzo.",
+      "Office and event Italian catering on Skymark Ave, Mississauga (Pearson-adjacent): buffet packages with per-person pricing, hot trays, sandwich platters, appetizers, desserts, and inquiry support from Skymark Eatery by Caffe E Pranzo.",
     path: "/catering",
     image: SITE_IMAGES.og,
     imageAlt: SITE_IMAGES.ogImageAlt,
@@ -219,28 +257,15 @@ export default function Catering() {
         secondaryCta={{ label: "Request catering", href: "/catering#inquire" }}
       />
 
-      <StickySectionNav
-        label="Catering sections"
-        items={anchorLinks}
-        cta={
-          <a
-            href="#inquire"
-            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[#6d5c50] hover:text-[#8b3d2c]"
-          >
-            Get a quote
-          </a>
-        }
-      />
-
-      <Section tone="light" withMotion className="py-8">
+      <Section id="occasion" tone="light" withMotion className="py-8 md:py-10">
         <div className="section-shell rounded-sm p-4 sm:p-6">
           <p className="section-kicker">Occasion selector</p>
           <Tabs value={occasion} onValueChange={setOccasion} className="mt-4">
             <TabsList className="h-auto flex-wrap bg-[hsl(34,30%,92%)] p-1">
-              <TabsTrigger value="office-lunch">Office lunch</TabsTrigger>
-              <TabsTrigger value="meeting">Meeting</TabsTrigger>
-              <TabsTrigger value="family-event">Family event</TabsTrigger>
-              <TabsTrigger value="corporate-event">Corporate event</TabsTrigger>
+              <TabsTrigger value="office-lunch">Team lunch</TabsTrigger>
+              <TabsTrigger value="meeting">Office meeting</TabsTrigger>
+              <TabsTrigger value="corporate-event">Hosted event</TabsTrigger>
+              <TabsTrigger value="family-event">Family gathering</TabsTrigger>
             </TabsList>
             <TabsContent value="office-lunch">
               <p className="mt-3 text-sm text-[#5c4d42]">
@@ -265,6 +290,19 @@ export default function Catering() {
           </Tabs>
         </div>
       </Section>
+
+      <StickySectionNav
+        label="Catering sections"
+        items={anchorLinks}
+        cta={
+          <a
+            href="#inquire"
+            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[#6d5c50] hover:text-[#8b3d2c]"
+          >
+            Get a quote
+          </a>
+        }
+      />
 
       <section className="border-b border-[rgba(26,18,14,0.06)] section-muted py-8">
         <div className="container mx-auto max-w-6xl px-4">
@@ -302,6 +340,8 @@ export default function Catering() {
               guest minimum, and price per person easy to compare.
             </p>
           </div>
+
+          <BuffetCompareTable />
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             {BUFFET_PACKAGES.map((pkg) => (
@@ -392,6 +432,46 @@ export default function Catering() {
             <div className="grid gap-6">
               <CateringRows sectionId="appetizers" />
               <CateringRows sectionId="platters" />
+            </div>
+          </section>
+
+          <section
+            id="presentation"
+            className="anchor-section section-dark grain-hero overflow-hidden rounded-sm border border-white/10 py-14 sm:py-16"
+          >
+            <div className="container mx-auto max-w-6xl px-4">
+              <div className="grid gap-10 lg:grid-cols-[1fr_minmax(0,1.05fr)] lg:items-center">
+                <div>
+                  <p className="section-kicker text-[#d4a990]">
+                    Tray &amp; buffet presentation
+                  </p>
+                  <h2 className="mt-4 font-serif text-3xl tracking-tight text-white sm:text-4xl">
+                    Scale you can picture before you commit.
+                  </h2>
+                  <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-[#d0c5bc] sm:text-base">
+                    Trays and spreads built for Skymark Ave offices and
+                    Pearson-adjacent meetings — same kitchen as the weekday line,
+                    portioned for busy buyers.
+                  </p>
+                  <Button
+                    asChild
+                    className="mt-6 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90"
+                  >
+                    <Link href="/catering#inquire">Build an inquiry</Link>
+                  </Button>
+                </div>
+                <div className="image-wrapper ratio-card min-h-[240px] overflow-hidden rounded-sm border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:min-h-[300px]">
+                  <img
+                    src={SITE_IMAGES.veggieTray}
+                    alt="Colourful vegetable and dip catering tray from Skymark Eatery"
+                    className="h-full w-full object-cover image-vignette"
+                    width={1200}
+                    height={800}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
             </div>
           </section>
 

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -95,23 +95,26 @@
   --popover-foreground: 18 24% 17%;
   --popover-border: 28 22% 80%;
 
-  --primary: 18 38% 21%;
-  --primary-foreground: 35 44% 95%;
+  /* Terracotta-forward primary: unmistakable CTAs (one dominant accent) */
+  --primary: 14 56% 40%;
+  --primary-foreground: 40 48% 98%;
 
-  --secondary: 14 64% 42%;
+  /* Espresso for secondary fills / dark UI chrome where needed */
+  --secondary: 18 36% 18%;
   --secondary-foreground: 36 42% 97%;
 
   --muted: 33 30% 90%;
   --muted-foreground: 22 16% 39%;
 
-  --accent: 86 30% 34%;
-  --accent-foreground: 35 44% 95%;
+  /* Muted olive: borders, kickers, subtle UI only — not competing fills */
+  --accent: 86 22% 32%;
+  --accent-foreground: 40 48% 98%;
 
   --surface-light: hsl(35 50% 98%);
   --surface-muted: hsl(31 46% 91%);
   --surface-dark: hsl(20 26% 11%);
 
-  --type-h1-size: clamp(2.25rem, 4.2vw, 4.25rem);
+  --type-h1-size: clamp(2.35rem, 4.8vw, 4.65rem);
   --type-h2-size: clamp(1.85rem, 3.1vw, 3rem);
   --type-h3-size: clamp(1.28rem, 2.1vw, 1.9rem);
   --type-body-size: clamp(0.97rem, 1.2vw, 1.05rem);
@@ -122,7 +125,7 @@
   --destructive-foreground: 35 44% 95%;
 
   --input: 28 20% 75%;
-  --ring: 16 50% 42%;
+  --ring: 14 56% 40%;
 
   --chart-1: 18 38% 21%;
   --chart-2: 16 50% 42%;
@@ -130,7 +133,7 @@
   --chart-4: 26 38% 56%;
   --chart-5: 42 60% 58%;
 
-  --app-font-sans: "DM Sans", sans-serif;
+  --app-font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --app-font-serif: "Playfair Display", Georgia, serif;
   --app-font-mono: Menlo, monospace;
 
@@ -361,6 +364,16 @@
 
   .text-measure {
     max-width: var(--type-measure);
+  }
+
+  /** Signature editorial rail — use sparingly on 1–2 sections per page */
+  .brand-rail {
+    border-left: 4px solid hsl(var(--primary));
+    padding-left: 1.25rem;
+  }
+
+  .image-vignette {
+    box-shadow: inset 0 0 80px rgba(15, 10, 8, 0.18);
   }
 
   .anchor-section {

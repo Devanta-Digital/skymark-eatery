@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { fadeUp } from "@/lib/motion";
 
 type SectionTone = "light" | "muted" | "dark" | "transparent";
+type SectionDensity = "default" | "airy";
 
 type SectionProps = {
   id?: string;
@@ -13,6 +14,7 @@ type SectionProps = {
   children: ReactNode;
   tone?: SectionTone;
   withMotion?: boolean;
+  density?: SectionDensity;
 };
 
 const sectionToneClass: Record<SectionTone, string> = {
@@ -20,6 +22,11 @@ const sectionToneClass: Record<SectionTone, string> = {
   muted: "section-muted",
   dark: "section-dark",
   transparent: "",
+};
+
+const densityClass: Record<SectionDensity, string> = {
+  default: "py-16 md:py-24",
+  airy: "py-20 md:py-28 lg:py-32",
 };
 
 export function Section({
@@ -30,6 +37,7 @@ export function Section({
   children,
   tone = "transparent",
   withMotion = false,
+  density = "default",
 }: SectionProps) {
   const content = withMotion ? (
     <motion.div
@@ -49,7 +57,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "py-16 md:py-24",
+        densityClass[density],
         sectionToneClass[tone],
         className,
         id ? "anchor-section" : "",

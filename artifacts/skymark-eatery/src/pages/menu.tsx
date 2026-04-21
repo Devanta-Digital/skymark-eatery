@@ -243,7 +243,7 @@ export default function Menu() {
     title:
       "Menu — Skymark Eatery by Caffe E Pranzo | Italian Lunch & Takeout, Mississauga",
     description:
-      "Skymark Eatery by Caffe E Pranzo weekday menu: breakfast, sandwiches, salads, pizza, pasta, and sides. Italian takeout on Skymark Ave, Mississauga — call or order pickup online when available.",
+      "Weekday Italian takeout menu on Skymark Ave, Mississauga (near Pearson): breakfast, sandwiches, salads, pizza, pasta, and sides. Order pickup online when available or call the kitchen.",
     path: "/menu",
     image: SITE_IMAGES.og,
     imageAlt: SITE_IMAGES.ogImageAlt,
@@ -281,6 +281,19 @@ export default function Menu() {
 
   const onlineOrderingReady = safeItems.length > 0;
 
+  const featuredPicks = useMemo(() => {
+    const rows: {
+      section: (typeof MAIN_MENU_SECTIONS)[number];
+      item: StaticMenuItem;
+    }[] = [];
+    for (const section of MAIN_MENU_SECTIONS) {
+      for (const entry of section.items ?? []) {
+        if (entry.featured) rows.push({ section, item: entry });
+      }
+    }
+    return rows.slice(0, 8);
+  }, []);
+
   const breakfast = getSection("breakfast");
   const sandwiches = getSection("sandwiches");
   const salads = getSection("salads");
@@ -313,6 +326,70 @@ export default function Menu() {
           </span>
         }
       />
+
+      {featuredPicks.length > 0 ? (
+        <Section tone="light" density="airy" className="border-b border-[rgba(26,18,14,0.08)]">
+          <div>
+            <p className="section-kicker">House favourites</p>
+            <h2 className="brand-rail mt-4 max-w-2xl text-[#1f1410]">
+              Start with what the line orders most.
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-[#5c4d42]">
+              Curated picks across breakfast, sandwiches, salads, and mains — same prices as the full menu below.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {featuredPicks.map(({ section, item }) => {
+                const liveItem = getLiveItem(item.name);
+                return (
+                  <div
+                    key={`${section.id}-${item.name}`}
+                    className="section-shell flex flex-col justify-between gap-4 rounded-sm p-4 sm:p-5"
+                  >
+                    <div>
+                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7a4a38]">
+                        {section.shortLabel}
+                      </p>
+                      <h3 className="mt-2 font-serif text-lg text-[#1c120e]">{item.name}</h3>
+                      {item.description ? (
+                        <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-[#5c4d42] sm:text-sm">
+                          {item.description}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div className="flex items-end justify-between gap-3 border-t border-[rgba(26,18,14,0.08)] pt-3">
+                      <span className="font-serif text-lg tabular-nums text-[#1c120e]">
+                        {formatPrice(item.price, liveItem)}
+                      </span>
+                      {liveItem ? (
+                        <OrderControls
+                          liveItem={liveItem}
+                          quantity={getCartQuantity(liveItem.id)}
+                          onAdd={handleAdd}
+                          onIncrement={handleIncrement}
+                          onDecrement={handleDecrement}
+                        />
+                      ) : (
+                        <a
+                          href={BUSINESS_INFO.phoneHref}
+                          className="shrink-0 rounded-md border border-[rgba(26,18,14,0.12)] bg-[#faf6f1] px-3 py-1.5 font-sans text-[11px] font-semibold text-[#1f1410] hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))]"
+                        >
+                          Call kitchen
+                        </a>
+                      )}
+                    </div>
+                    <a
+                      href={`/menu#${section.id}`}
+                      className="font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:underline"
+                    >
+                      More in {section.shortLabel.toLowerCase()}
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Section>
+      ) : null}
 
       <StickySectionNav
         label="Menu sections"

@@ -5,27 +5,56 @@ import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
 import { Button } from "@/components/ui/button";
 import { BUFFET_PACKAGES } from "@/content/catering";
-import { HOME_SIGNATURE_GROUPS } from "@/content/menu";
 import {
   BUSINESS_INFO,
   CATERING_HELPER_TEXT,
   SITE_IMAGES,
 } from "@/content/site";
 import { restaurantStructuredData, useSeo } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
 const featuredPackages = BUFFET_PACKAGES.slice(0, 3);
 
-const signatureBlocks = HOME_SIGNATURE_GROUPS.slice(0, 3).map((g, i) => ({
-  ...g,
-  image: [SITE_IMAGES.focaccia, SITE_IMAGES.vealSandwich, SITE_IMAGES.hotTable][
-    i
-  ],
-  imageAlt: [
-    "Focaccia and baked goods from the Skymark Eatery counter",
-    "Hot sandwich from the lunch line at Skymark Eatery",
-    "Hot table and lunch service at Skymark Eatery",
-  ][i],
-}));
+const categoryShowcase = [
+  {
+    key: "catering",
+    title: "Office catering",
+    description:
+      "Buffets, trays, and platters for Mississauga teams — especially Skymark Ave and Pearson-adjacent offices that need portions and timing nailed.",
+    href: "/catering",
+    image: SITE_IMAGES.greekSaladTray,
+    imageAlt:
+      "Catering salad and tray spread prepared at Skymark Eatery by Caffe E Pranzo",
+    featured: true,
+  },
+  {
+    key: "breakfast",
+    title: "Breakfast & pastry",
+    description: "Early counter rhythm — croissants, bagels, and hot breakfast sandwiches for the first meetings of the day.",
+    href: "/menu#breakfast",
+    image: SITE_IMAGES.focaccia,
+    imageAlt: "Focaccia and baked goods from the Skymark Eatery counter",
+    featured: false,
+  },
+  {
+    key: "lunch",
+    title: "Sandwiches & salads",
+    description: "Hot sandwiches, salads, and dependable weekday staples built for quick pickup.",
+    href: "/menu#sandwiches",
+    image: SITE_IMAGES.vealSandwich,
+    imageAlt: "Hot sandwich from the lunch line at Skymark Eatery",
+    featured: false,
+  },
+  {
+    key: "pasta",
+    title: "Pasta & pizza",
+    description: "Comfort pasta plates and shareable pizzas for solo lunches or team orders.",
+    href: "/menu#pasta",
+    image: SITE_IMAGES.hotTable,
+    imageAlt: "Hot table and lunch service at Skymark Eatery",
+    featured: false,
+  },
+] as const;
 
 export default function Home() {
   useSeo({
@@ -44,7 +73,7 @@ export default function Home() {
       <Hero
         eyebrow="Italian eatery · Mississauga"
         title={`${BUSINESS_INFO.secondaryName} by Caffe E Pranzo`}
-        subtitle="Weekday breakfast through lunch on Skymark Ave, with catering built for offices and events across west Mississauga and teams near Pearson."
+        subtitle="Weekday Italian breakfast and lunch on Skymark Ave — takeout built for speed, catering built for offices and events across west Mississauga and teams near Pearson."
         imageSrc={SITE_IMAGES.hero}
         imageAlt="Pasta and Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
         primaryCta={{ label: "Order pickup", href: "/menu" }}
@@ -60,24 +89,57 @@ export default function Home() {
         }
       />
 
-      <Section tone="light" withMotion className="border-b border-[rgba(26,18,14,0.08)]">
+      <Section
+        tone="light"
+        density="airy"
+        withMotion
+        className="border-b border-[rgba(26,18,14,0.08)]"
+      >
         <div>
           <p className="section-kicker">Category showcase</p>
-          <h2 className="mt-3 max-w-xl text-[#1f1410]">The weekday line, curated by appetite.</h2>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {signatureBlocks.map((block) => (
+          <h2 className="brand-rail mt-4 max-w-2xl text-[#1f1410]">
+            The weekday line — with catering as the grown-up lane.
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm text-[#5c4d42] md:text-base">
+            Pickup stays fast. When the guest list is real, the same kitchen runs trays and buffets
+            with clear portions for Skymark Ave offices and Pearson-area meetings.
+          </p>
+          <div className="mt-10 grid gap-4 md:grid-cols-12 md:grid-rows-2 md:auto-rows-fr">
+            {categoryShowcase.map((block) => (
               <article
-                key={block.title}
-                className="group section-shell overflow-hidden rounded-sm transition-transform duration-300 hover:-translate-y-0.5"
+                key={block.key}
+                className={cn(
+                  "group section-shell overflow-hidden rounded-sm transition-transform duration-300 hover:-translate-y-0.5",
+                  block.featured
+                    ? "md:col-span-6 md:row-span-2"
+                    : "md:col-span-3 md:row-span-1",
+                )}
               >
-                <div className="image-wrapper ratio-card">
+                <div
+                  className={cn(
+                    "image-wrapper image-vignette",
+                    block.featured ? "min-h-[220px] md:min-h-[320px]" : "ratio-card",
+                  )}
+                >
                   <img src={block.image} alt={block.imageAlt} />
                 </div>
-                <div className="p-5">
-                  <h3 className="text-[1.35rem] text-[#1f1410]">{block.title}</h3>
-                  <p className="mt-2 text-sm text-[#5c4d42]">{block.description}</p>
-                  <a href={`/menu#${block.sectionId}`} className="mt-4 inline-flex items-center text-sm font-semibold text-[#8b3d2c]">
-                    Explore
+                <div className={cn("p-5", block.featured && "md:p-6")}>
+                  <h3
+                    className={cn(
+                      "text-[#1f1410]",
+                      block.featured ? "font-serif text-2xl md:text-3xl" : "text-xl",
+                    )}
+                  >
+                    {block.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[#5c4d42] md:text-[0.95rem]">
+                    {block.description}
+                  </p>
+                  <a
+                    href={block.href}
+                    className="mt-4 inline-flex items-center text-sm font-semibold text-[hsl(var(--primary))]"
+                  >
+                    {block.featured ? "Plan catering" : "Explore"}
                     <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
                   </a>
                 </div>
@@ -87,30 +149,47 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section tone="muted" withMotion className="border-b border-[rgba(26,18,14,0.08)]">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-          <div>
+      <Section
+        tone="muted"
+        density="airy"
+        withMotion
+        className="border-b border-[rgba(26,18,14,0.08)]"
+      >
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="brand-rail lg:order-2 lg:col-span-5">
             <p className="section-kicker">Story</p>
-            <h2 className="mt-3 text-[#1f1410]">Built for Mississauga lunch rhythms.</h2>
+            <h2 className="mt-4 text-[#1f1410]">A weekday Italian counter built for pickup rhythm.</h2>
             <p className="mt-4 text-[#5c4d42]">
-              Pastries and breakfast early, sandwiches and pasta through the afternoon, designed
-              so pickup stays quick for Skymark offices and Airport Corporate Centre teams.
+              Pastries and breakfast early, sandwiches and pasta through the afternoon — organized so
+              pickup stays quick for Skymark offices and Airport Corporate Centre teams.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild>
+                <Link href="/menu">View menu</Link>
+              </Button>
               <Button variant="outline" asChild>
-                <Link href="/menu">View full menu</Link>
+                <Link href="/catering">Catering packages</Link>
               </Button>
             </div>
           </div>
-          <div className="image-wrapper ratio-card rounded-sm border border-[rgba(26,18,14,0.09)]">
-            <img src={SITE_IMAGES.vealSandwich} alt="Hot sandwich from the lunch line at Skymark Eatery" />
+          <div className="image-wrapper image-vignette relative min-h-[280px] overflow-hidden rounded-sm border border-[rgba(26,18,14,0.09)] shadow-sm lg:order-1 lg:col-span-7 lg:min-h-[380px] lg:-translate-y-6">
+            <img
+              src={SITE_IMAGES.dining}
+              alt="Interior dining and counter at Skymark Eatery by Caffe E Pranzo, Mississauga"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       </Section>
 
-      <Section tone="dark" withMotion className="border-b border-black/35">
+      <Section
+        tone="dark"
+        density="airy"
+        withMotion
+        className="border-b border-black/35"
+      >
         <div className="grid gap-9 lg:grid-cols-[1fr_1.05fr] lg:items-start">
-          <div>
+          <div className="border-l-4 border-[hsla(14,56%,48%,0.85)] pl-5">
             <p className="section-kicker text-[#d4a990]">Catering highlight</p>
             <h2 className="mt-3 text-white">Buffets and trays when guest counts are real.</h2>
             <p className="mt-4 text-[#d0c0b4]">{CATERING_HELPER_TEXT}</p>

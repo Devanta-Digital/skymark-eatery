@@ -27,8 +27,8 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# Firecrawl CLI scratch output (local research)
-.firecrawl/
+# Firecrawl CLI ephemeral scratch only (structured research lives under .firecrawl/)
+.firecrawl/scratchpad/
 
 # Local screenshot captures (not for the repo)
 .tmp-shots/

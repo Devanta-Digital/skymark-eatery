@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
 import { Button } from "@/components/ui/button";
 import { BUSINESS_INFO, SITE_IMAGES } from "@/content/site";
+import { cn } from "@/lib/utils";
 import {
   breadcrumbStructuredData,
   restaurantStructuredData,
@@ -16,7 +17,7 @@ export default function Contact() {
     title:
       "Contact & Location — Skymark Eatery by Caffe E Pranzo | Skymark Ave, Mississauga",
     description:
-      "Visit Skymark Eatery by Caffe E Pranzo at 2630 Skymark Ave Unit 102, Mississauga. Hours, phone, email, and directions for Italian takeout and catering near Pearson Airport.",
+      "Skymark Eatery by Caffe E Pranzo — 2630 Skymark Ave Unit 102, Mississauga (west GTA, near Pearson). Weekday hours, phone, email, map, and quick links to takeout menu and office catering.",
     path: "/contact",
     image: SITE_IMAGES.locationInterior,
     imageAlt: SITE_IMAGES.locationInteriorAlt,
@@ -41,10 +42,23 @@ export default function Contact() {
         secondaryCta={{ label: "Email", href: BUSINESS_INFO.emailHref }}
       />
 
-      <Section tone="light" className="border-b border-[rgba(26,18,14,0.07)] py-14 sm:py-16">
+      <Section
+        tone="light"
+        density="airy"
+        className="border-b border-[rgba(26,18,14,0.07)]"
+      >
         <div>
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
-            <div className="space-y-8">
+          <p className="section-kicker">Visit &amp; reach us</p>
+          <h2 className="brand-rail mt-4 max-w-2xl font-serif text-3xl tracking-tight text-[#1f1410] sm:text-[2.1rem]">
+            Everything you need to walk in, call, or plan catering — in one glance.
+          </h2>
+          <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
+            <div
+              className={cn(
+                "section-shell space-y-8 rounded-sm p-6 sm:p-8",
+                "border border-[rgba(26,18,14,0.08)] bg-[hsla(40,42%,99%,0.9)]",
+              )}
+            >
               <div>
                 <h2 className="font-serif text-2xl text-[#1f1410]">Address</h2>
                 <p className="mt-3 font-sans text-sm leading-relaxed text-[#5c4d42]">
@@ -122,12 +136,21 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="overflow-hidden border border-[rgba(26,18,14,0.1)] bg-white">
+            <div className="flex flex-col overflow-hidden rounded-sm border border-[rgba(26,18,14,0.12)] bg-[#1a1411] shadow-[0_20px_50px_rgba(28,18,14,0.12)]">
+              <div className="border-b border-white/10 px-5 py-4 sm:px-6">
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#d4a990]">
+                  Map
+                </p>
+                <p className="mt-1 font-serif text-lg text-white">
+                  Skymark Ave · Mississauga
+                </p>
+              </div>
               <iframe
                 src={BUSINESS_INFO.mapsEmbedHref}
                 width="100%"
                 height="100%"
-                style={{ border: 0, minHeight: 520 }}
+                className="min-h-[420px] flex-1 bg-[#0f0c0b] sm:min-h-[520px]"
+                style={{ border: 0 }}
                 loading="lazy"
                 title="Google Map: Skymark Eatery by Caffe E Pranzo, 2630 Skymark Ave Unit 102, Mississauga"
               />
