@@ -58,18 +58,32 @@ export function Hero({
     : staggerContainer;
   const itemVariants: Variants = qa ? instantItem : fadeUp;
 
+  const editorialHero = className?.includes("home-hero");
+
   return (
     <section
       className={cn(
-        "relative overflow-hidden border-b border-[hsla(220,16%,12%,0.08)] bg-[hsl(var(--background))]",
+        "relative border-b border-[hsla(220,16%,12%,0.08)] bg-[hsl(var(--background))]",
+        editorialHero ? "overflow-x-clip overflow-y-visible" : "overflow-hidden",
         className,
       )}
     >
-      <div className="mx-auto flex max-w-7xl flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch">
+      <div
+        className={cn(
+          "mx-auto flex max-w-7xl flex-col lg:grid lg:min-h-0 lg:items-stretch",
+          editorialHero
+            ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+            : "lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]",
+        )}
+      >
         <div
           className={cn(
             "relative order-2 flex flex-col justify-center px-4 lg:order-1 lg:px-10",
-            compact ? "py-10 md:py-12" : "py-10 md:py-14 lg:py-16",
+            compact
+              ? "py-10 md:py-12"
+              : editorialHero
+                ? "py-9 md:py-12 lg:py-[3.35rem]"
+                : "py-10 md:py-14 lg:py-16",
           )}
         >
           <motion.div
@@ -144,10 +158,13 @@ export function Hero({
         {imageSrc ? (
           <div
             className={cn(
-              "depth-tilt relative order-1 w-full overflow-hidden bg-[hsl(220_12%_88%)] lg:order-2",
+              "depth-tilt relative order-1 w-full bg-[hsl(220_12%_88%)] lg:order-2",
+              editorialHero ? "overflow-visible max-lg:overflow-hidden" : "overflow-hidden",
               compact
                 ? "min-h-[200px] max-h-[280px] sm:min-h-[240px] sm:max-h-[320px]"
                 : "aspect-[16/10] min-h-[220px] max-lg:max-h-[min(48vh,380px)] lg:aspect-auto lg:min-h-[min(52vh,500px)]",
+              editorialHero &&
+                "lg:-mr-[clamp(0.75rem,4vw,2.75rem)] lg:min-w-0 lg:max-w-none lg:self-stretch",
             )}
           >
             <img
@@ -158,7 +175,10 @@ export function Hero({
               decoding="async"
             />
             <div
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-black/10 lg:to-black/25"
+              className={cn(
+                "hero-image-vignette pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-black/10 lg:to-black/25",
+                editorialHero && "lg:to-black/28",
+              )}
               aria-hidden
             />
           </div>

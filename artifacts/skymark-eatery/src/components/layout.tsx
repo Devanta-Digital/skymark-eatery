@@ -589,8 +589,8 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="flex-1 bg-white/25" />
           <span className="flex-1 bg-[hsl(var(--primary))]" />
         </div>
-        <div className="container mx-auto max-w-6xl px-4 py-8 md:py-10">
-          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr] lg:gap-9">
+        <div className="container mx-auto max-w-6xl px-4 py-6 md:py-8">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr] lg:gap-6">
             <div>
               <img
                 src={BRAND_LOGO.onDark}
@@ -604,14 +604,14 @@ export function Layout({ children }: { children: ReactNode }) {
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <Button
-                  className="h-9 rounded-md bg-[hsl(var(--primary))] px-4 text-sm text-white hover:opacity-90"
+                  className="h-9 rounded-md bg-[hsl(var(--primary))] px-4 text-sm font-semibold text-white shadow-sm hover:brightness-[0.92]"
                   asChild
                 >
                   <Link href="/menu">Order pickup</Link>
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-9 rounded-md border-white/20 bg-transparent px-4 text-sm text-[#f2e8dc] hover:bg-white/10"
+                  className="h-9 rounded-md border-white/30 bg-transparent px-4 text-sm font-semibold text-[#f2e8dc] hover:border-white/45 hover:bg-white/[0.08]"
                   asChild
                 >
                   <Link href="/catering#inquire">Catering quote</Link>

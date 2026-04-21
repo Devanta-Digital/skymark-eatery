@@ -205,6 +205,7 @@ function SectionIntro({
   description,
   note,
   accent,
+  tightBelow,
 }: {
   eyebrow: string;
   title: string;
@@ -212,11 +213,14 @@ function SectionIntro({
   note?: string;
   /** Alternate rail colour for visual pacing between long sections */
   accent?: boolean;
+  /** Tighter gap from intro to first list row */
+  tightBelow?: boolean;
 }) {
   return (
     <header
       className={cn(
-        "mb-8 max-w-2xl border-l-[3px] pl-4 sm:mb-10 sm:pl-5",
+        "max-w-2xl border-l-[3px] pl-4 sm:pl-5",
+        tightBelow ? "mb-5 sm:mb-6" : "mb-8 sm:mb-10",
         accent
           ? "border-[hsl(152_48%_30%)]"
           : "border-[hsl(var(--primary))]",
@@ -450,7 +454,7 @@ export default function Menu() {
       </div>
 
       <section className="py-10 sm:py-12">
-        <div className="container mx-auto max-w-6xl space-y-12 px-4 sm:space-y-14 lg:space-y-16">
+        <div className="container mx-auto max-w-6xl space-y-14 px-4 sm:space-y-16 lg:space-y-[4.75rem]">
           <section id={breakfast.id} className="anchor-section">
             <SectionIntro
               eyebrow={breakfast.eyebrow}
@@ -458,6 +462,7 @@ export default function Menu() {
               description={breakfast.description}
               note={breakfast.note}
               accent={false}
+              tightBelow
             />
             <div className="menu-list-rail overflow-hidden transition-[box-shadow] duration-300">
               {(breakfast.items ?? []).map((entry) => {
@@ -488,8 +493,9 @@ export default function Menu() {
               title={sandwiches.title}
               description={sandwiches.description}
               accent
+              tightBelow
             />
-            <div className="menu-list-shelf overflow-hidden border-l-2 border-[hsl(var(--primary))]/18 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
+            <div className="menu-list-shelf overflow-hidden pl-2 transition-[box-shadow] duration-300 sm:pl-4">
               {sandwiches.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -525,8 +531,9 @@ export default function Menu() {
               title={salads.title}
               description={salads.description}
               accent={false}
+              tightBelow
             />
-            <div className="menu-list-rail border-l-2 border-[hsl(152_40%_28%)]/22 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
+            <div className="menu-list-rail pl-0 transition-[box-shadow] duration-300 sm:pl-1">
               {salads.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -560,8 +567,9 @@ export default function Menu() {
               title={sides.title}
               description={sides.description}
               accent
+              tightBelow
             />
-            <div className="menu-list-shelf max-w-3xl overflow-hidden border-l-2 border-[hsl(var(--primary))]/18 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
+            <div className="menu-list-shelf max-w-3xl overflow-hidden pl-2 transition-[box-shadow] duration-300 sm:pl-4">
               {sides.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -590,8 +598,9 @@ export default function Menu() {
               title={pizza.title}
               description={pizza.description}
               accent={false}
+              tightBelow
             />
-            <div className="menu-list-rail max-w-3xl border-l-2 border-[hsl(152_40%_28%)]/22 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
+            <div className="menu-list-rail max-w-3xl pl-0 transition-[box-shadow] duration-300 sm:pl-1">
               {pizza.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -620,6 +629,24 @@ export default function Menu() {
             ) : null}
           </section>
 
+          <div className="relative -mx-4 border-y border-[hsla(220,14%,12%,0.07)] bg-[hsl(38_38%_96.4%)] px-5 py-9 sm:-mx-0 sm:rounded-lg sm:px-7 sm:py-10 lg:px-10 lg:py-11">
+            <div className="grid gap-5 lg:grid-cols-2 lg:items-start lg:gap-12">
+              <div>
+                <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[hsl(152_48%_28%)]">
+                  Midday shift
+                </p>
+                <h2 className="mt-2 max-w-xl text-[clamp(1.4rem,3vw,1.95rem)] font-semibold leading-tight tracking-tight text-[hsl(var(--foreground))]">
+                  From the line to pasta bowls.
+                </h2>
+              </div>
+              <p className="max-w-md text-sm leading-relaxed text-[hsl(var(--muted-foreground))] lg:pt-1 lg:text-[0.95rem]">
+                Same counter, different pace after noon — sandwiches and salads stay
+                quick; pasta builds when meetings run long. Jump ahead when you know
+                what the room wants.
+              </p>
+            </div>
+          </div>
+
           <section
             id={pasta.id}
             className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
@@ -631,6 +658,7 @@ export default function Menu() {
                 description={pasta.description}
                 note={pasta.note}
                 accent
+                tightBelow
               />
               <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-2">
                 {pasta.pastaGroups?.map((group) => (
