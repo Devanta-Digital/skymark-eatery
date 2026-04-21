@@ -25,8 +25,8 @@ const sectionToneClass: Record<SectionTone, string> = {
 };
 
 const densityClass: Record<SectionDensity, string> = {
-  default: "py-16 md:py-24",
-  airy: "py-20 md:py-28 lg:py-32",
+  default: "py-12 md:py-16 lg:py-20",
+  airy: "py-14 md:py-20 lg:py-24",
 };
 
 export function Section({

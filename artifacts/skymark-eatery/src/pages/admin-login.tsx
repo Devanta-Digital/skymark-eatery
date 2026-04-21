@@ -51,7 +51,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="inline-block bg-white rounded-xl px-6 py-3 shadow-lg mb-4">
-            <img src="/logo.webp" alt="Skymark Eatery" className="h-12 w-auto object-contain" />
+            <img src="/logo-transparent.webp" alt="Skymark Eatery" className="h-12 w-auto object-contain" />
           </div>
           <div className="flex items-center justify-center gap-2 text-primary-foreground/80">
             <ShieldCheck className="w-4 h-4" />

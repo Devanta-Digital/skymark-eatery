@@ -77,9 +77,9 @@ const anchorLinks = [
 
 function BuffetCompareTable() {
   return (
-    <div className="mt-8 overflow-x-auto rounded-sm border border-[rgba(36,24,18,0.12)] bg-[#fdfaf6] shadow-[0_8px_24px_rgba(28,18,14,0.06)]">
+    <div className="mt-8 overflow-x-auto rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white shadow-sm">
       <table className="w-full min-w-[600px] border-collapse text-left text-sm">
-        <thead className="border-b border-[rgba(36,24,18,0.1)] bg-[#f4ebe3] font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[#5c4d42]">
+        <thead className="border-b border-[hsla(220,14%,12%,0.1)] bg-[hsl(var(--muted))] font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[hsl(var(--muted-foreground))]">
           <tr>
             <th className="px-4 py-3 sm:px-5">Package</th>
             <th className="px-4 py-3 sm:px-5">Per person</th>
@@ -133,14 +133,14 @@ function CateringRows({
       className={cn(
         "anchor-section overflow-hidden rounded-sm border border-[rgba(36,24,18,0.1)]",
         tray
-          ? "border-l-[3px] border-l-[#9c4f38] bg-[#fdfaf6] shadow-[0_12px_32px_rgba(28,18,14,0.05)]"
+          ? "border-l-[3px] border-l-[hsl(var(--primary))] bg-white shadow-sm"
           : "menu-paper",
       )}
     >
       <div
         className={cn(
           "border-b border-[rgba(36,24,18,0.08)] px-5 py-3.5 sm:px-6 sm:py-4",
-          tray && "bg-[#f4ebe3]/80",
+          tray && "bg-[hsl(var(--muted))]/90",
         )}
       >
         <h3
@@ -252,16 +252,16 @@ export default function Catering() {
         title="Italian catering that reads like a menu, not a spreadsheet."
         subtitle={CATERING_INTRO}
         imageSrc={SITE_IMAGES.cateringHero}
-        imageAlt="Catering salads and trays from Skymark Eatery by Caffe E Pranzo"
+        imageAlt="Hot catering line and trays from Skymark Eatery by Caffe E Pranzo"
         primaryCta={{ label: "Buffet packages", href: "/catering#packages" }}
         secondaryCta={{ label: "Request catering", href: "/catering#inquire" }}
       />
 
-      <Section id="occasion" tone="light" withMotion className="py-8 md:py-10">
-        <div className="section-shell rounded-sm p-4 sm:p-6">
+      <Section id="occasion" tone="muted" withMotion className="py-6 md:py-9">
+        <div>
           <p className="section-kicker">Occasion selector</p>
           <Tabs value={occasion} onValueChange={setOccasion} className="mt-4">
-            <TabsList className="h-auto flex-wrap bg-[hsl(34,30%,92%)] p-1">
+            <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white p-1 shadow-sm">
               <TabsTrigger value="office-lunch">Team lunch</TabsTrigger>
               <TabsTrigger value="meeting">Office meeting</TabsTrigger>
               <TabsTrigger value="corporate-event">Hosted event</TabsTrigger>
@@ -297,7 +297,7 @@ export default function Catering() {
         cta={
           <a
             href="#inquire"
-            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[#6d5c50] hover:text-[#8b3d2c]"
+            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:text-white"
           >
             Get a quote
           </a>
@@ -323,13 +323,13 @@ export default function Catering() {
 
       <section
         id="packages"
-        className="anchor-section bg-[#f3eadf] py-16 sm:py-20"
+        className="anchor-section border-y border-[hsla(220,14%,12%,0.06)] bg-[hsl(var(--muted))] py-14 sm:py-16"
       >
         <div className="container mx-auto max-w-6xl px-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <div className="section-kicker">Buffet Catering Packages</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Ready-made buffet options with clear per-person pricing and
                 minimums.
               </h2>
@@ -347,24 +347,24 @@ export default function Catering() {
             {BUFFET_PACKAGES.map((pkg) => (
               <article
                 key={pkg.publicName}
-                className="overflow-hidden rounded-sm border border-[rgba(36,24,18,0.12)] bg-[#fdfaf6] shadow-[0_16px_40px_rgba(28,18,14,0.07)]"
+                className="overflow-hidden rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white shadow-md"
               >
-                <div className="relative border-b border-[rgba(36,24,18,0.1)] bg-[linear-gradient(135deg,#2a1f19_0%,#3d241c_48%,#5c3228_100%)] px-5 py-4 text-[#f4ebe3] sm:px-6 sm:py-5">
-                  <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,transparent,#e8b596,transparent)] opacity-80" />
+                <div className="relative border-b border-white/10 bg-[hsl(220_22%_11%)] px-5 py-4 text-white sm:px-6 sm:py-5">
+                  <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,transparent,hsla(4,86%,55%,0.55),transparent)] opacity-90" />
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-[#e0b69a]">
+                      <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.3em] text-white/60">
                         Flagship buffet
                       </p>
                       <h3 className="mt-2 font-serif text-[1.45rem] leading-tight sm:text-[1.85rem]">
                         {pkg.publicName}
                       </h3>
-                      <p className="mt-2.5 max-w-xl font-sans text-sm leading-relaxed text-[#d8c8bc]">
+                      <p className="mt-2.5 max-w-xl font-sans text-sm leading-relaxed text-white/75">
                         {pkg.summary}
                       </p>
                     </div>
                     <div className="shrink-0 rounded-sm border border-white/18 bg-black/25 px-4 py-3 text-left backdrop-blur-sm">
-                      <p className="font-sans text-[0.55rem] uppercase tracking-[0.22em] text-[#c9a896]">
+                      <p className="font-sans text-[0.55rem] uppercase tracking-[0.22em] text-white/55">
                         Per person
                       </p>
                       <p className="mt-1 font-serif text-xl text-white sm:text-2xl">
@@ -373,8 +373,8 @@ export default function Catering() {
                           / guest
                         </span>
                       </p>
-                      <p className="mt-2 border-t border-white/10 pt-2 font-sans text-[11px] leading-snug text-[#e8d5cc]">{pkg.minimumOrder}</p>
-                      <p className="mt-1 font-sans text-[11px] leading-snug text-[#e8d5cc]">Serves: {pkg.feeds}</p>
+                      <p className="mt-2 border-t border-white/10 pt-2 font-sans text-[11px] leading-snug text-white/75">{pkg.minimumOrder}</p>
+                      <p className="mt-1 font-sans text-[11px] leading-snug text-white/75">Serves: {pkg.feeds}</p>
                     </div>
                   </div>
                 </div>
@@ -384,7 +384,7 @@ export default function Catering() {
                     <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[#7a4a38]">
                       Included
                     </p>
-                    <ul className="mt-3 space-y-1.5 border-l-2 border-[#9c4f38]/55 pl-3.5 font-sans text-[13px] leading-snug text-[#3d3028] sm:text-sm">
+                    <ul className="mt-3 space-y-1.5 border-l-2 border-[hsl(var(--primary))]/70 pl-3.5 font-sans text-[13px] leading-snug text-[hsl(var(--foreground))] sm:text-sm">
                       {pkg.includedDishes.map((dish) => (
                         <li key={dish}>{dish}</li>
                       ))}
@@ -418,7 +418,7 @@ export default function Catering() {
           <section className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
             <div className="max-w-sm">
               <div className="section-kicker">Reception bites</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Appetizers and platters that work for mingling and lighter
                 setups.
               </h2>
@@ -481,7 +481,7 @@ export default function Catering() {
           >
             <div className="max-w-sm">
               <div className="section-kicker">Hot catering</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Pasta trays, mains, salads, and sides that build out the meal.
               </h2>
               <p className="mt-4 text-base leading-8 text-[#6d5748]">
@@ -506,7 +506,7 @@ export default function Catering() {
           <section className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
             <div className="max-w-sm">
               <div className="section-kicker">Finishing touches</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Pizza trays, desserts, beverages, and extras for the full order.
               </h2>
               <p className="mt-4 text-base leading-8 text-[#6d5748]">
@@ -528,13 +528,13 @@ export default function Catering() {
 
       <section
         id="dietary"
-        className="anchor-section border-y border-[rgba(79,50,34,0.08)] bg-[#f3eadf] py-16"
+        className="anchor-section border-y border-[hsla(220,14%,12%,0.06)] bg-[hsl(var(--background))] py-14 sm:py-16"
       >
         <div className="container mx-auto max-w-6xl px-4">
           <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
             <div className="max-w-xl">
               <div className="section-kicker">Dietary accommodations</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Tell us what your group needs and we&apos;ll help shape the
                 menu.
               </h2>
@@ -548,7 +548,7 @@ export default function Catering() {
             <div className="grid gap-5">
               <div className="border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,98%,0.95)] p-6">
                 <div className="flex items-center gap-3">
-                  <Sparkles className="h-5 w-5 text-[#8b4f39]" />
+                  <Sparkles className="h-5 w-5 text-[hsl(var(--primary))]" />
                   <h3 className="text-2xl text-[#2d1e18]">
                     Common accommodations
                   </h3>
@@ -556,7 +556,7 @@ export default function Catering() {
                 <ul className="mt-5 columns-1 gap-x-8 font-sans text-sm leading-relaxed text-[#4a3d35] sm:columns-2">
                   {DIETARY_BADGES.map((badge) => (
                     <li key={badge} className="break-inside-avoid py-1">
-                      <span className="mr-2 text-[#9c4f38]">·</span>
+                      <span className="mr-2 text-[hsl(var(--primary))]">·</span>
                       {badge}
                     </li>
                   ))}
@@ -565,7 +565,7 @@ export default function Catering() {
 
               <div className="border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,98%,0.95)] p-6">
                 <div className="flex items-center gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-[#8b4f39]" />
+                  <CheckCircle2 className="h-5 w-5 text-[hsl(var(--primary))]" />
                   <h3 className="text-2xl text-[#2d1e18]">Good to know</h3>
                 </div>
                 <div className="mt-5 space-y-4">
@@ -589,7 +589,7 @@ export default function Catering() {
           <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
             <div>
               <div className="section-kicker">Request Catering</div>
-              <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
                 Tell us what you&apos;re planning.
               </h2>
               <p className="mt-5 max-w-xl text-base leading-8 text-[#6d5748]">
@@ -607,7 +607,7 @@ export default function Catering() {
                   className="rounded-md border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,97%,0.95)] p-5 transition-colors hover:border-[rgba(139,79,57,0.25)]"
                 >
                   <div className="flex items-center gap-3 text-[#2d1e18]">
-                    <Phone className="h-5 w-5 text-[#8b4f39]" />
+                    <Phone className="h-5 w-5 text-[hsl(var(--primary))]" />
                     <div>
                       <div className="text-lg font-semibold">
                         Call the restaurant
@@ -623,7 +623,7 @@ export default function Catering() {
                   className="rounded-md border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,97%,0.95)] p-5 transition-colors hover:border-[rgba(139,79,57,0.25)]"
                 >
                   <div className="flex items-center gap-3 text-[#2d1e18]">
-                    <Mail className="h-5 w-5 text-[#8b4f39]" />
+                    <Mail className="h-5 w-5 text-[hsl(var(--primary))]" />
                     <div>
                       <div className="text-lg font-semibold">
                         Email the team
@@ -660,7 +660,7 @@ export default function Catering() {
                       </a>
                     </Button>
                     <Button
-                      className="rounded-full bg-[#8b4f39] text-white hover:bg-[#75412f]"
+                      className="rounded-full bg-[hsl(var(--primary))] text-white hover:opacity-90"
                       asChild
                     >
                       <a href={BUSINESS_INFO.emailHref}>Email directly</a>
@@ -882,7 +882,7 @@ export default function Catering() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full rounded-full bg-[#8b4f39] text-white hover:bg-[#75412f]"
+                      className="w-full rounded-full bg-[hsl(var(--primary))] text-white hover:opacity-90"
                     >
                       Start Catering Inquiry
                     </Button>
@@ -909,7 +909,7 @@ export default function Catering() {
             </div>
             <div className="flex flex-col gap-2 sm:items-end">
               <Button
-                className="rounded-md bg-[#2a1f19] font-sans text-white hover:bg-black"
+                className="rounded-md bg-[hsl(var(--secondary))] font-sans text-white hover:opacity-95"
                 asChild
               >
                 <Link href="/menu">Open takeout menu</Link>

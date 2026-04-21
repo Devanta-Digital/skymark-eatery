@@ -26,10 +26,12 @@ export const BUSINESS_INFO = {
 };
 
 export const SITE_IMAGES = {
-  hero: "/images/instagram/hero-pasta.jpg",
-  menuHero: "/images/instagram/veal-sandwich.jpg",
+  /** Tight, high-texture food lead — weekday appetite */
+  hero: "/images/instagram/daily-special.jpg",
+  menuHero: "/images/instagram/salad-sandwich.jpg",
   vealSandwich: "/images/instagram/veal-sandwich.jpg",
-  cateringHero: "/images/instagram/greek-salad.jpg",
+  saladSandwich: "/images/instagram/salad-sandwich.jpg",
+  cateringHero: "/images/instagram/hot-table.jpg",
   caesar: "/images/instagram/caesar.jpg",
   focaccia: "/images/instagram/post-8.jpg",
   veggieTray: "/images/instagram/veggie-tray.jpg",
@@ -37,13 +39,17 @@ export const SITE_IMAGES = {
   hotTable: "/images/instagram/hot-table.jpg",
   dining: "/images/interior-2.jpg",
   catering: "/images/instagram/greek-salad.jpg",
-  /** Interior photo used on home + contact; keep alt text aligned with this asset. */
+  /** Supporting trust / location — not the primary marketing hero */
   locationInterior: "/images/interior-3.jpg",
   locationInteriorAlt:
     "Dining room and counter at Skymark Eatery by Caffe E Pranzo, Mississauga",
-  og: "/images/instagram/hero-pasta.jpg",
+  /** Appetizing hero for contact (utility page — food-forward, not storefront) */
+  contactHero: "/images/instagram/hero-pasta.jpg",
+  contactHeroAlt:
+    "Fresh pasta and Italian lunch from Skymark Eatery by Caffe E Pranzo, Mississauga",
+  og: "/images/instagram/daily-special.jpg",
   ogImageAlt:
-    "Pasta and lunch favourites from Skymark Eatery by Caffe E Pranzo, Mississauga",
+    "Daily lunch favourites from Skymark Eatery by Caffe E Pranzo, Mississauga",
 };
 
 export const WHY_SKYMARK = [

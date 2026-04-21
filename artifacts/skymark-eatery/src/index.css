@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -68,51 +68,49 @@
 }
 
 :root {
-  --button-outline: rgba(58, 38, 27, 0.14);
-  --badge-outline: rgba(58, 38, 27, 0.12);
+  --button-outline: rgba(18, 24, 20, 0.12);
+  --badge-outline: rgba(18, 24, 20, 0.1);
   --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(58, 38, 27, 0.04);
-  --elevate-2: rgba(58, 38, 27, 0.08);
+  --elevate-1: rgba(18, 24, 20, 0.04);
+  --elevate-2: rgba(18, 24, 20, 0.08);
 
-  --background: 34 40% 95%;
-  --foreground: 20 22% 12%;
-  --border: 30 14% 80%;
+  /* Warm paper, charcoal ink, tomato appetite, basil discipline */
+  --background: 40 36% 97%;
+  --foreground: 220 22% 11%;
+  --border: 40 14% 88%;
 
-  --card: 34 38% 96%;
-  --card-foreground: 18 26% 12%;
-  --card-border: 26 14% 78%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 22% 11%;
+  --card-border: 40 12% 90%;
 
-  --sidebar: 36 43% 98%;
-  --sidebar-foreground: 18 24% 17%;
-  --sidebar-border: 28 22% 80%;
-  --sidebar-primary: 18 38% 21%;
-  --sidebar-primary-foreground: 35 44% 95%;
-  --sidebar-accent: 35 30% 91%;
-  --sidebar-accent-foreground: 18 24% 17%;
-  --sidebar-ring: 18 38% 21%;
+  --sidebar: 40 30% 98%;
+  --sidebar-foreground: 220 20% 12%;
+  --sidebar-border: 40 14% 90%;
+  --sidebar-primary: 4 86% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 152 22% 92%;
+  --sidebar-accent-foreground: 220 20% 12%;
+  --sidebar-ring: 4 86% 50%;
 
-  --popover: 36 43% 98%;
-  --popover-foreground: 18 24% 17%;
-  --popover-border: 28 22% 80%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 22% 11%;
+  --popover-border: 40 12% 90%;
 
-  /* Terracotta-forward primary: unmistakable CTAs (one dominant accent) */
-  --primary: 14 56% 40%;
-  --primary-foreground: 40 48% 98%;
+  --primary: 4 86% 50%;
+  --primary-foreground: 0 0% 100%;
 
-  /* Espresso for secondary fills / dark UI chrome where needed */
-  --secondary: 18 36% 18%;
-  --secondary-foreground: 36 42% 97%;
+  --secondary: 220 18% 14%;
+  --secondary-foreground: 40 30% 98%;
 
-  --muted: 33 30% 90%;
-  --muted-foreground: 22 16% 39%;
+  --muted: 40 18% 93%;
+  --muted-foreground: 220 10% 38%;
 
-  /* Muted olive: borders, kickers, subtle UI only — not competing fills */
-  --accent: 86 22% 32%;
-  --accent-foreground: 40 48% 98%;
+  --accent: 152 28% 34%;
+  --accent-foreground: 40 36% 98%;
 
-  --surface-light: hsl(35 50% 98%);
-  --surface-muted: hsl(31 46% 91%);
-  --surface-dark: hsl(20 26% 11%);
+  --surface-light: hsl(40 42% 99%);
+  --surface-muted: hsl(40 22% 94%);
+  --surface-dark: hsl(220 20% 9%);
 
   --type-h1-size: clamp(2.35rem, 4.8vw, 4.65rem);
   --type-h2-size: clamp(1.85rem, 3.1vw, 3rem);
@@ -121,11 +119,11 @@
   --type-small-size: 0.84rem;
   --type-measure: 68ch;
 
-  --destructive: 0 60% 42%;
-  --destructive-foreground: 35 44% 95%;
+  --destructive: 0 72% 42%;
+  --destructive-foreground: 40 40% 98%;
 
-  --input: 28 20% 75%;
-  --ring: 14 56% 40%;
+  --input: 40 16% 82%;
+  --ring: 4 86% 50%;
 
   --chart-1: 18 38% 21%;
   --chart-2: 16 50% 42%;
@@ -134,7 +132,7 @@
   --chart-5: 42 60% 58%;
 
   --app-font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --app-font-serif: "Playfair Display", Georgia, serif;
+  --app-font-serif: "Plus Jakarta Sans", system-ui, sans-serif;
   --app-font-mono: Menlo, monospace;
 
   --radius: 0.45rem;
@@ -143,19 +141,19 @@
   --sticky-nav-height: 2.125rem;
   --section-nav-offset: 92px;
 
-  --shadow-2xs: 0 1px 0 hsl(18 24% 17% / 0.02);
-  --shadow-xs: 0 1px 2px hsl(18 24% 17% / 0.05);
+  --shadow-2xs: 0 1px 0 hsl(220 18% 8% / 0.03);
+  --shadow-xs: 0 1px 2px hsl(220 18% 8% / 0.05);
   --shadow-sm:
-    0 1px 2px hsl(18 24% 17% / 0.04), 0 10px 24px hsl(18 24% 17% / 0.05);
+    0 1px 2px hsl(220 18% 8% / 0.04), 0 10px 24px hsl(220 18% 8% / 0.06);
   --shadow:
-    0 1px 2px hsl(18 24% 17% / 0.05), 0 14px 34px hsl(18 24% 17% / 0.08);
+    0 1px 2px hsl(220 18% 8% / 0.05), 0 14px 34px hsl(220 18% 8% / 0.08);
   --shadow-md:
-    0 2px 4px hsl(18 24% 17% / 0.06), 0 20px 40px hsl(18 24% 17% / 0.08);
+    0 2px 4px hsl(220 18% 8% / 0.06), 0 20px 40px hsl(220 18% 8% / 0.08);
   --shadow-lg:
-    0 3px 6px hsl(18 24% 17% / 0.08), 0 26px 54px hsl(18 24% 17% / 0.12);
+    0 3px 6px hsl(220 18% 8% / 0.07), 0 26px 54px hsl(220 18% 8% / 0.12);
   --shadow-xl:
-    0 5px 10px hsl(18 24% 17% / 0.08), 0 34px 72px hsl(18 24% 17% / 0.14);
-  --shadow-2xl: 0 36px 84px hsl(18 24% 17% / 0.16);
+    0 5px 10px hsl(220 18% 8% / 0.07), 0 34px 72px hsl(220 18% 8% / 0.14);
+  --shadow-2xl: 0 36px 84px hsl(220 18% 8% / 0.16);
 
   --tracking-normal: 0em;
   --spacing: 0.25rem;
@@ -257,19 +255,12 @@
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
-    background-color: hsl(33 32% 92%);
-    background-image:
-      radial-gradient(
-        ellipse 100% 60% at 0% 0%,
-        rgba(181, 88, 55, 0.13),
-        transparent 52%
-      ),
-      radial-gradient(
-        ellipse 80% 50% at 100% 0%,
-        rgba(84, 120, 76, 0.09),
-        transparent 48%
-      ),
-      linear-gradient(180deg, hsl(34 52% 97%) 0%, hsl(33 36% 93%) 42%, hsl(33 32% 90%) 100%);
+    background-color: hsl(var(--background));
+    background-image: linear-gradient(
+      180deg,
+      hsl(40 42% 98.5%) 0%,
+      hsl(40 28% 95%) 100%
+    );
     min-width: 320px;
     font-size: var(--type-body-size);
     line-height: 1.62;
@@ -281,7 +272,7 @@
   h4,
   h5,
   h6 {
-    @apply font-serif tracking-tight;
+    @apply font-sans font-semibold tracking-tight;
   }
 
   h1 {
@@ -319,7 +310,7 @@
   }
 
   ::selection {
-    background: rgba(171, 86, 50, 0.2);
+    background: hsla(4, 86%, 50%, 0.2);
     color: inherit;
   }
 }
@@ -336,12 +327,17 @@
   }
 
   .section-shell {
-    @apply border border-[rgba(26,18,14,0.1)] bg-[hsl(34,42%,97%)];
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
+    @apply border border-[hsla(220,14%,12%,0.08)] bg-white;
+    box-shadow: 0 20px 50px -38px rgba(15, 23, 42, 0.18);
   }
 
   .section-kicker {
-    @apply text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#a04e37];
+    @apply text-[0.62rem] font-semibold uppercase tracking-[0.28em];
+    color: hsl(152 30% 30%);
+  }
+
+  .section-dark .section-kicker {
+    color: hsl(152 36% 72%);
   }
 
   .section-light {
@@ -352,14 +348,14 @@
     background-color: var(--surface-muted);
     background-image: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.65) 0%,
       rgba(255, 255, 255, 0) 100%
     );
   }
 
   .section-dark {
     background-color: var(--surface-dark);
-    color: hsl(35 44% 94%);
+    color: hsl(40 20% 96%);
   }
 
   .text-measure {
@@ -370,6 +366,11 @@
   .brand-rail {
     border-left: 4px solid hsl(var(--primary));
     padding-left: 1.25rem;
+  }
+
+  .brand-rail-muted {
+    border-left: 3px solid hsl(152 28% 36%);
+    padding-left: 1rem;
   }
 
   .image-vignette {
@@ -383,12 +384,12 @@
   }
 
   .menu-paper {
-    @apply border-y border-[rgba(26,18,14,0.09)] bg-[hsla(34,38%,97%,0.65)];
-    box-shadow: none;
+    @apply border border-[hsla(220,14%,12%,0.09)] bg-white;
+    box-shadow: 0 12px 36px -28px rgba(15, 23, 42, 0.12);
   }
 
   .editorial-dark {
-    @apply bg-[#16100d] text-[#f2e8dc];
+    @apply bg-[hsl(220_20%_9%)] text-[hsl(40_24%_96%)];
   }
 
   .grain-hero {
@@ -408,7 +409,7 @@
   .image-wrapper {
     position: relative;
     overflow: hidden;
-    background: hsl(33 26% 90%);
+    background: hsl(220 14% 88%);
   }
 
   .image-wrapper > img,

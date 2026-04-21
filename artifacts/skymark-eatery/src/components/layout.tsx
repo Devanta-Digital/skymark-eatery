@@ -30,6 +30,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { BRAND_LOGO } from "@/lib/branding";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -120,47 +121,51 @@ export function Layout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <a
         href="#main-content"
-        className="sr-only left-4 top-4 z-[60] rounded-md bg-white px-4 py-2 text-sm font-semibold text-[#1f1410] shadow-lg ring-2 ring-[#8b4f39]/25 focus:not-sr-only focus:fixed focus:outline-none"
+        className="sr-only left-4 top-4 z-[60] rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-lg ring-2 ring-[hsl(var(--primary))]/45 focus:not-sr-only focus:fixed focus:outline-none"
       >
         Skip to main content
       </a>
       <header
         ref={headerRef}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b border-[rgba(26,18,14,0.07)] bg-[hsla(34,38%,97%,0.92)] backdrop-blur-md transition-[transform,box-shadow] duration-300 ease-out",
+          "fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[hsla(220,22%,8%,0.94)] text-slate-200 backdrop-blur-md transition-[transform,box-shadow] duration-300 ease-out",
           headerHidden ? "-translate-y-full shadow-none" : "translate-y-0",
           headerCompact && !headerHidden
-            ? "shadow-[0_1px_0_rgba(26,18,14,0.04)]"
-            : "shadow-[0_8px_24px_rgba(26,18,14,0.04)]",
+            ? "shadow-[0_1px_0_rgba(255,255,255,0.06)]"
+            : "shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
         )}
       >
         <div
           className={cn(
             "container mx-auto flex max-w-6xl items-center gap-2 px-4 transition-[height] duration-200 sm:gap-3",
-            headerCompact ? "h-[48px] sm:h-[50px]" : "h-[52px] sm:h-[56px]",
+            headerCompact ? "h-[50px] sm:h-[52px]" : "h-[56px] sm:h-[60px]",
           )}
         >
-          <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+          <Link
+            href="/"
+            aria-label={`${BUSINESS_INFO.primaryName} home`}
+            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
+          >
             <img
-              src="/logo.webp"
-              alt={BUSINESS_INFO.primaryName}
+              src={BRAND_LOGO.onDark}
+              alt=""
               className={cn(
-                "h-auto w-auto object-contain drop-shadow-[0_3px_8px_rgba(0,0,0,0.14)] transition-all duration-200",
-                headerCompact ? "h-8 sm:h-9" : "h-10 sm:h-11",
+                "h-auto w-auto object-contain object-left transition-all duration-200",
+                headerCompact ? "h-10 sm:h-11" : "h-11 sm:h-[3.1rem]",
               )}
             />
             <div className="hidden min-w-0 sm:block">
               <div
                 className={cn(
-                  "font-serif leading-none tracking-tight text-[#1f1410] transition-all duration-200",
+                  "font-serif leading-none tracking-tight text-white transition-all duration-200",
                   headerCompact
-                    ? "text-[1.05rem] sm:text-[1.12rem]"
-                    : "text-[1.12rem] sm:text-[1.22rem]",
+                    ? "text-[1.08rem] sm:text-[1.14rem]"
+                    : "text-[1.15rem] sm:text-[1.28rem]",
                 )}
               >
                 {BUSINESS_INFO.secondaryName}
               </div>
-              <div className="font-sans text-[0.55rem] font-medium uppercase tracking-[0.2em] text-[#7a6558]">
+              <div className="font-sans text-[0.55rem] font-medium uppercase tracking-[0.2em] text-slate-400">
                 by Caffe E Pranzo
               </div>
             </div>
@@ -176,8 +181,8 @@ export function Layout({ children }: { children: ReactNode }) {
                   className={cn(
                     "whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors",
                     active
-                      ? "text-[#1f1410]"
-                      : "text-[#6d5c50] hover:text-[#8b3d2c]",
+                      ? "text-white"
+                      : "text-slate-400 hover:text-[hsl(var(--primary))]",
                   )}
                 >
                   {link.label}
@@ -186,16 +191,16 @@ export function Layout({ children }: { children: ReactNode }) {
             })}
           </nav>
 
-          <div className="hidden h-4 w-px shrink-0 bg-[rgba(26,18,14,0.1)] lg:block" />
+          <div className="hidden h-4 w-px shrink-0 bg-white/12 lg:block" />
 
-          <div className="hidden shrink-0 flex-col text-right text-[10px] leading-tight text-[#6d5c50] lg:flex">
+          <div className="hidden shrink-0 flex-col text-right text-[10px] leading-tight text-slate-400 lg:flex">
             <a
               href={BUSINESS_INFO.phoneHref}
-              className="font-semibold text-[#1f1410] hover:text-[#8b3d2c]"
+              className="font-semibold text-white hover:text-[hsl(var(--primary))]"
             >
               {BUSINESS_INFO.phone}
             </a>
-            <span className="mt-0.5 font-medium uppercase tracking-[0.1em] text-[#9a8a7e]">
+            <span className="mt-0.5 font-medium uppercase tracking-[0.1em] text-slate-500">
               Mon–Fri · 7:30a–4:30p
             </span>
           </div>
@@ -203,14 +208,14 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
             <Link
               href="/catering#inquire"
-              className="hidden px-2 text-[11px] font-semibold text-[#6d5c50] transition-colors hover:text-[#1f1410] xl:inline"
+              className="hidden px-2 text-[11px] font-semibold text-slate-400 transition-colors hover:text-[hsl(var(--primary))] xl:inline"
             >
               Catering quote
             </Link>
             <Button
               variant="ghost"
               size="sm"
-              className="hidden h-8 px-2.5 text-[11px] font-semibold text-[#1f1410] hover:bg-[rgba(26,18,14,0.05)] md:inline-flex"
+              className="hidden h-8 px-2.5 text-[11px] font-semibold text-slate-200 hover:bg-white/10 hover:text-white md:inline-flex"
               asChild
             >
               <Link href="/menu">View menu</Link>
@@ -221,11 +226,11 @@ export function Layout({ children }: { children: ReactNode }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="relative h-9 w-9 rounded-md text-[#1f1410] hover:bg-[rgba(26,18,14,0.06)]"
+                  className="relative h-9 w-9 rounded-md text-slate-200 hover:bg-white/10"
                 >
                   <ShoppingBag className="h-[1.15rem] w-[1.15rem]" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#8b3d2c] px-1 text-[9px] font-bold text-white">
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[hsl(var(--primary))] px-1 text-[9px] font-bold text-white">
                       {cartItemCount}
                     </span>
                   )}
@@ -315,7 +320,7 @@ export function Layout({ children }: { children: ReactNode }) {
                               <button
                                 type="button"
                                 onClick={() => removeItem(item.menuItem.id)}
-                                className="text-xs font-medium text-[#8b3d2c] hover:underline"
+                                className="text-xs font-medium text-[hsl(var(--primary))] hover:underline"
                               >
                                 Remove
                               </button>
@@ -334,7 +339,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     </div>
                     <SheetTrigger asChild>
                       <Button
-                        className="w-full bg-[#8b3d2c] text-lg text-white hover:bg-[#722f22]"
+                        className="w-full bg-[hsl(var(--primary))] text-lg text-white hover:opacity-90"
                         size="lg"
                         asChild
                       >
@@ -352,7 +357,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="hidden h-8 items-center gap-1.5 rounded-md px-2 text-[#6d5c50] hover:bg-[rgba(26,18,14,0.05)] hover:text-[#1f1410] md:flex"
+                    className="hidden h-8 items-center gap-1.5 rounded-md px-2 text-slate-300 hover:bg-white/10 hover:text-white md:flex"
                   >
                     <User className="h-3.5 w-3.5" />
                     <span className="max-w-20 truncate text-[11px] font-medium">
@@ -412,7 +417,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden h-8 rounded-md px-2 text-[11px] font-medium text-[#6d5c50] hover:bg-[rgba(26,18,14,0.05)] hover:text-[#1f1410] md:inline-flex"
+                className="hidden h-8 rounded-md px-2 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white md:inline-flex"
                 asChild
               >
                 <Link href="/login">Sign in</Link>
@@ -424,7 +429,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-9 w-9 rounded-md text-[#1f1410] md:hidden"
+                  className="h-9 w-9 rounded-md text-slate-100 md:hidden"
                 >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open navigation</span>
@@ -437,9 +442,9 @@ export function Layout({ children }: { children: ReactNode }) {
                 <div className="flex h-full flex-col py-2">
                   <div className="border-b border-[rgba(26,18,14,0.08)] pb-5">
                     <img
-                      src="/logo.webp"
+                      src={BRAND_LOGO.onLight}
                       alt={BUSINESS_INFO.primaryName}
-                      className="h-11 w-auto object-contain"
+                      className="h-12 w-auto object-contain"
                     />
                     <p className="mt-3 font-serif text-xl text-[#1f1410]">
                       {BUSINESS_INFO.secondaryName}
@@ -464,7 +469,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
                   <div className="mt-6 grid gap-2">
                     <Button
-                      className="h-11 rounded-md bg-[#8b3d2c] font-sans text-sm text-white hover:bg-[#722f22]"
+                      className="h-11 rounded-md bg-[hsl(var(--primary))] font-sans text-sm text-white hover:opacity-90"
                       asChild
                     >
                       <Link
@@ -573,14 +578,14 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="border-t border-[rgba(26,18,14,0.12)] bg-[#1a120e] text-[#f2e8dc]">
+      <footer className="border-t border-white/10 bg-[hsl(220_22%_8%)] text-[hsl(40_24%_96%)]">
         <div className="container mx-auto max-w-6xl px-4 py-12 md:py-14">
           <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr]">
             <div>
               <img
-                src="/logo.webp"
+                src={BRAND_LOGO.onDark}
                 alt={BUSINESS_INFO.primaryName}
-                className="h-12 w-auto object-contain opacity-95"
+                className="h-[3.25rem] w-auto object-contain object-left opacity-95 sm:h-14"
               />
               <p className="mt-4 max-w-md text-sm leading-relaxed text-[#f2e8dc]/75">
                 {BUSINESS_INFO.primaryName} — Italian takeout, weekday lunch,
@@ -589,7 +594,7 @@ export function Layout({ children }: { children: ReactNode }) {
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
                 <Button
-                  className="h-9 rounded-md bg-[#b85c40] px-4 text-sm text-white hover:bg-[#9a4d35]"
+                  className="h-9 rounded-md bg-[hsl(var(--primary))] px-4 text-sm text-white hover:opacity-90"
                   asChild
                 >
                   <Link href="/menu">Order pickup</Link>
@@ -694,7 +699,7 @@ export function Layout({ children }: { children: ReactNode }) {
         aria-label="Back to top"
         title="Back to top"
         className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#8b3d2c] text-white shadow-lg transition-all duration-300 hover:bg-[#722f22]",
+          "fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[hsl(var(--primary))] text-white shadow-lg transition-all duration-300 hover:opacity-90",
           showBackToTop
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-3 opacity-0",
@@ -704,7 +709,7 @@ export function Layout({ children }: { children: ReactNode }) {
       </button>
 
       {isPublicRoute ? (
-        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[rgba(26,18,14,0.12)] bg-[hsla(34,42%,97%,0.96)] px-3 py-2 backdrop-blur md:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[hsla(220,14%,12%,0.1)] bg-[hsla(40,36%,98%,0.96)] px-3 py-2 backdrop-blur md:hidden">
           <div className="mx-auto flex max-w-6xl items-center gap-2">
             <Button className="min-h-10 flex-1 rounded-md text-xs" asChild>
               <Link href="/menu">View menu</Link>

@@ -16,7 +16,8 @@ type HeroProps = {
   infoLine?: ReactNode;
   className?: string;
   contentClassName?: string;
-  overlayClassName?: string;
+  /** Tighter utility hero (e.g. contact): shorter image column, less vertical padding */
+  density?: "default" | "compact";
 };
 
 function isExternalHref(href: string) {
@@ -38,74 +39,47 @@ export function Hero({
   infoLine,
   className,
   contentClassName,
-  overlayClassName,
+  density = "default",
 }: HeroProps) {
+  const compact = density === "compact";
+
   return (
     <section
       className={cn(
-        "grain-hero section-dark relative min-h-[min(88vh,760px)] overflow-hidden lg:min-h-[min(86vh,820px)]",
+        "relative overflow-hidden border-b border-[hsla(220,16%,12%,0.08)] bg-[hsl(var(--background))]",
         className,
       )}
     >
-      {imageSrc ? (
-        <>
-          <div className="absolute inset-0 lg:hidden">
-            <div className="image-wrapper h-full w-full">
-              <img
-                src={imageSrc}
-                alt={imageAlt}
-                className="min-h-[min(72vh,560px)] w-full object-cover"
-              />
-            </div>
-            <div
-              className={cn(
-                "absolute inset-0 bg-[linear-gradient(105deg,rgba(8,6,5,0.94)_0%,rgba(18,12,10,0.82)_48%,rgba(18,12,10,0.55)_100%)]",
-                overlayClassName,
-              )}
-            />
-          </div>
-          <div className="absolute inset-y-0 right-0 hidden w-[min(46%,520px)] lg:block">
-            <div className="image-wrapper image-vignette h-full min-h-full">
-              <img
-                src={imageSrc}
-                alt=""
-                aria-hidden
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div
-              className={cn(
-                "absolute inset-0 bg-[linear-gradient(100deg,rgba(8,6,5,0.05)_0%,rgba(18,12,10,0.55)_45%,rgba(18,12,10,0.88)_100%)]",
-                overlayClassName,
-              )}
-            />
-          </div>
-          <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(12,9,8,0.92)_0%,rgba(12,9,8,0.55)_52%,transparent_100%)] lg:block" />
-        </>
-      ) : null}
-
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col px-4 py-16 md:py-24 lg:min-h-[min(86vh,820px)] lg:justify-end lg:py-28">
-        <div className="grid items-end gap-10 lg:grid-cols-12 lg:gap-6">
+      <div className="mx-auto flex max-w-7xl flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch">
+        <div
+          className={cn(
+            "relative order-2 flex flex-col justify-center px-4 lg:order-1 lg:px-10",
+            compact ? "py-10 md:py-12" : "py-10 md:py-14 lg:py-16",
+          )}
+        >
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className={cn("lg:col-span-7", contentClassName)}
+            className={cn("max-w-xl lg:max-w-2xl", contentClassName)}
           >
             {eyebrow ? (
               <motion.p
                 variants={fadeUp}
-                className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.32em] text-[#e2b69a]"
+                className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[hsl(152_30%_28%)]"
               >
                 {eyebrow}
               </motion.p>
             ) : null}
-            <motion.h1 variants={fadeUp} className="mt-4 text-[#f4ebe3]">
+            <motion.h1
+              variants={fadeUp}
+              className="mt-3 text-balance text-[hsl(var(--foreground))]"
+            >
               {title}
             </motion.h1>
             <motion.p
               variants={fadeUp}
-              className="mt-5 max-w-xl text-[#d9c7b8] lg:max-w-none"
+              className="mt-4 max-w-xl text-pretty text-[hsl(var(--muted-foreground))] md:text-[1.02rem]"
             >
               {subtitle}
             </motion.p>
@@ -113,10 +87,10 @@ export function Hero({
             {(primaryCta || secondaryCta) && (
               <motion.div
                 variants={fadeUp}
-                className="mt-8 flex max-w-xl flex-wrap gap-3"
+                className="mt-7 flex flex-wrap gap-3"
               >
                 {primaryCta ? (
-                  <Button size="lg" className="min-h-11 px-7" asChild>
+                  <Button size="lg" className="min-h-11 px-6 font-semibold" asChild>
                     {isExternalHref(primaryCta.href) ? (
                       <a href={primaryCta.href}>{primaryCta.label}</a>
                     ) : (
@@ -128,7 +102,7 @@ export function Hero({
                   <Button
                     size="lg"
                     variant="outline"
-                    className="min-h-11 border-white/28 bg-transparent px-6 text-[#f4ebe3] hover:bg-white/10"
+                    className="min-h-11 border-[hsla(220,18%,12%,0.18)] bg-white/70 px-6 font-semibold text-[hsl(var(--foreground))] hover:bg-white"
                     asChild
                   >
                     {isExternalHref(secondaryCta.href) ? (
@@ -144,13 +118,36 @@ export function Hero({
             {infoLine ? (
               <motion.div
                 variants={fadeUp}
-                className="mt-8 max-w-xl border-t border-white/15 pt-5 text-sm text-[#d3c1b4]"
+                className="mt-7 max-w-xl border-t border-[hsla(220,14%,12%,0.1)] pt-5 text-sm text-[hsl(var(--muted-foreground))]"
               >
                 {infoLine}
               </motion.div>
             ) : null}
           </motion.div>
         </div>
+
+        {imageSrc ? (
+          <div
+            className={cn(
+              "relative order-1 w-full overflow-hidden bg-[hsl(220_12%_88%)] lg:order-2 lg:min-h-full",
+              compact
+                ? "min-h-[200px] max-h-[280px] sm:min-h-[240px] sm:max-h-[320px]"
+                : "aspect-[16/10] min-h-[220px] max-lg:max-h-[min(48vh,380px)] lg:aspect-auto lg:min-h-[min(52vh,500px)]",
+            )}
+          >
+            <img
+              src={imageSrc}
+              alt={imageAlt}
+              className="h-full w-full object-cover object-center"
+              sizes="(min-width: 1024px) 48vw, 100vw"
+              decoding="async"
+            />
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-black/10 lg:to-black/25"
+              aria-hidden
+            />
+          </div>
+        ) : null}
       </div>
     </section>
   );

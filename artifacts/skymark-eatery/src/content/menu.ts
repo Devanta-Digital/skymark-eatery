@@ -553,6 +553,19 @@ export const MAIN_MENU_SECTIONS: StaticMenuSection[] = [
   },
 ];
 
+/** Featured picks from flat `items` lists (used on marketing pages). */
+export function getFeaturedMenuPicks(
+  limit = 4,
+): { section: StaticMenuSection; item: StaticMenuItem }[] {
+  const rows: { section: StaticMenuSection; item: StaticMenuItem }[] = [];
+  for (const section of MAIN_MENU_SECTIONS) {
+    for (const entry of section.items ?? []) {
+      if (entry.featured) rows.push({ section, item: entry });
+    }
+  }
+  return rows.slice(0, limit);
+}
+
 export const HOME_SIGNATURE_GROUPS = [
   {
     title: "Breakfast and pastry counter",

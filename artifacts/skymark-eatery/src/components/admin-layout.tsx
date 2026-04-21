@@ -26,7 +26,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <aside className="w-64 border-r border-border bg-background flex flex-col sticky top-0 h-screen hidden md:flex">
         <div className="p-4 border-b border-border flex items-center gap-3">
-          <img src="/logo.webp" alt="Skymark Eatery" className="h-10 w-auto object-contain" />
+          <img src="/logo-transparent.webp" alt="Skymark Eatery" className="h-10 w-auto object-contain" />
           <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Admin Portal</span>
         </div>
 

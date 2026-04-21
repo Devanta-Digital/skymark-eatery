@@ -50,7 +50,7 @@ export default function Login() {
         <div className="text-center mb-8">
           <Link href="/">
             <img
-              src="/logo.webp"
+              src="/logo-transparent.webp"
               alt="Skymark Eatery"
               className="h-16 w-auto mx-auto object-contain"
             />

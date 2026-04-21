@@ -50,7 +50,7 @@ export default function OrderBoard() {
       <header className="bg-primary px-8 py-5 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="bg-white rounded-lg px-3 py-1.5">
-            <img src="/logo.webp" alt="Skymark Eatery" className="h-10 w-auto object-contain" />
+            <img src="/logo-transparent.webp" alt="Skymark Eatery" className="h-10 w-auto object-contain" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Order Status Board</h1>

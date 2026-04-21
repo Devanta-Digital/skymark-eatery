@@ -215,16 +215,16 @@ function SectionIntro({
   note?: string;
 }) {
   return (
-    <header className="mb-5 max-w-2xl border-l-2 border-[#9c4f38]/80 pl-4 sm:mb-6 sm:pl-5">
+    <header className="mb-6 max-w-2xl border-l-[3px] border-[hsl(var(--primary))] pl-4 sm:mb-7 sm:pl-5">
       <p className="section-kicker">{eyebrow}</p>
-      <h2 className="mt-2 font-serif text-3xl tracking-tight text-[#1c120e] sm:text-[2.05rem]">
+      <h2 className="mt-2 font-sans text-2xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-[1.85rem]">
         {title}
       </h2>
-      <p className="mt-2.5 font-sans text-sm leading-relaxed text-[#5c4d42] sm:text-base">
+      <p className="mt-2.5 max-w-prose font-sans text-sm leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-base">
         {description}
       </p>
       {note ? (
-        <p className="mt-2 font-sans text-xs text-[#7a4a38] sm:text-sm">
+        <p className="mt-2 font-sans text-xs text-[hsl(152_28%_30%)] sm:text-sm">
           {note}
         </p>
       ) : null}
@@ -302,7 +302,19 @@ export default function Menu() {
   const pasta = getSection("pasta");
 
   if (!breakfast || !sandwiches || !salads || !sides || !pizza || !pasta) {
-    return null;
+    return (
+      <Layout>
+        <Section tone="light" className="py-20">
+          <p className="text-[hsl(var(--muted-foreground))]">
+            The menu is temporarily unavailable. Please call{" "}
+            <a className="font-semibold text-[hsl(var(--primary))]" href={BUSINESS_INFO.phoneHref}>
+              {BUSINESS_INFO.phone}
+            </a>{" "}
+            to order.
+          </p>
+        </Section>
+      </Layout>
+    );
   }
 
   return (
@@ -320,21 +332,23 @@ export default function Menu() {
         primaryCta={{ label: "Call to order", href: BUSINESS_INFO.phoneHref }}
         secondaryCta={{ label: "Catering", href: "/catering" }}
         infoLine={
-          <span className="inline-flex items-center gap-2">
-            <Clock className="h-4 w-4 text-[#deb39a]" />
-            Mon–Fri · 7:30a–4:30p · {BUSINESS_INFO.addressLine1}
+          <span className="inline-flex flex-wrap items-center gap-2">
+            <Clock className="h-4 w-4 shrink-0 text-[hsl(152_30%_32%)]" />
+            <span>
+              Mon–Fri · 7:30a–4:30p · {BUSINESS_INFO.addressLine1}
+            </span>
           </span>
         }
       />
 
       {featuredPicks.length > 0 ? (
-        <Section tone="light" density="airy" className="border-b border-[rgba(26,18,14,0.08)]">
+        <Section tone="muted" density="default" className="border-b border-[hsla(220,14%,12%,0.08)]">
           <div>
             <p className="section-kicker">House favourites</p>
-            <h2 className="brand-rail mt-4 max-w-2xl text-[#1f1410]">
+            <h2 className="brand-rail mt-3 max-w-2xl text-[hsl(var(--foreground))]">
               Start with what the line orders most.
             </h2>
-            <p className="mt-3 max-w-2xl text-sm text-[#5c4d42]">
+            <p className="mt-2 max-w-2xl text-sm text-[hsl(var(--muted-foreground))]">
               Curated picks across breakfast, sandwiches, salads, and mains — same prices as the full menu below.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -343,13 +357,13 @@ export default function Menu() {
                 return (
                   <div
                     key={`${section.id}-${item.name}`}
-                    className="section-shell flex flex-col justify-between gap-4 rounded-sm p-4 sm:p-5"
+                    className="flex flex-col justify-between gap-4 rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white p-4 shadow-sm sm:p-5"
                   >
                     <div>
-                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7a4a38]">
+                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[hsl(152_30%_28%)]">
                         {section.shortLabel}
                       </p>
-                      <h3 className="mt-2 font-serif text-lg text-[#1c120e]">{item.name}</h3>
+                      <h3 className="mt-2 font-sans text-lg font-semibold text-[hsl(var(--foreground))]">{item.name}</h3>
                       {item.description ? (
                         <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-[#5c4d42] sm:text-sm">
                           {item.description}
@@ -400,28 +414,32 @@ export default function Menu() {
         cta={
           <a
             href={BUSINESS_INFO.phoneHref}
-            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[#6d5c50] hover:text-[#8b3d2c]"
+            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:text-white"
           >
             {BUSINESS_INFO.phone}
           </a>
         }
       />
 
-      <div className="container mx-auto max-w-6xl px-4 py-2">
-        <p className="font-sans text-[11px] leading-relaxed text-[#6d5c50] sm:text-xs">
-          Trays and buffets live on{" "}
-          <Link href="/catering" className="font-semibold text-[#8b3d2c]">
-            catering
-          </Link>
-          . Below is weekday takeout.
+      <div className="border-b border-[hsla(220,14%,12%,0.08)] bg-[hsl(var(--card))]">
+        <div className="container mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
+            <span className="font-semibold text-[hsl(var(--foreground))]">Takeout below</span>
+            {" · "}
+            Trays and buffets on{" "}
+            <Link href="/catering" className="font-semibold text-[hsl(var(--primary))] hover:underline">
+              catering
+            </Link>
+            .
+          </p>
           <Link
             href="/catering"
-            className="ml-2 inline-flex items-center gap-0.5 font-semibold text-[#1f1410] hover:text-[#8b3d2c]"
+            className="inline-flex w-fit items-center gap-1 rounded-md border border-[hsla(220,14%,12%,0.12)] bg-white px-3 py-1.5 font-sans text-xs font-semibold text-[hsl(var(--foreground))] shadow-sm hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))]"
           >
-            Catering menu
-            <ArrowRight className="h-3 w-3" />
+            Open catering
+            <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-        </p>
+        </div>
       </div>
 
       <section className="py-10 sm:py-12">

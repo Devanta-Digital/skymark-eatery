@@ -72,7 +72,7 @@ export function StickySectionNav({
     <nav
       aria-label={label}
       className={cn(
-        "sticky top-[var(--site-header-height)] z-40 border-b border-[rgba(26,18,14,0.07)] bg-[hsla(34,38%,97%,0.88)] backdrop-blur-sm",
+        "sticky top-[var(--site-header-height)] z-40 border-b border-white/10 bg-[hsla(220,22%,8%,0.92)] text-slate-300 backdrop-blur-md",
         className,
       )}
     >
@@ -89,8 +89,8 @@ export function StickySectionNav({
                   className={cn(
                     "relative shrink-0 border-b-2 px-2 pb-2 pt-1.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors sm:px-2.5 sm:text-[12px] sm:tracking-[0.14em]",
                     isActive
-                      ? "border-[#8b3d2c] text-[#1f1410]"
-                      : "border-transparent text-[#6d5c50] hover:text-[#1f1410]",
+                      ? "border-[hsl(var(--primary))] text-white"
+                      : "border-transparent text-slate-400 hover:text-[hsl(var(--primary))]",
                   )}
                 >
                   {item.label}
