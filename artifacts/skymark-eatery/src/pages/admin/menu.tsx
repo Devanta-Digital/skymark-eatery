@@ -1,14 +1,13 @@
 import { AdminLayout } from "@/components/admin-layout";
-import { 
-  useListCategories, 
-  useListMenuItems, 
-  useCreateMenuItem, 
+import {
+  useListCategories,
+  useListMenuItems,
+  useCreateMenuItem,
   useUpdateMenuItem, 
   useDeleteMenuItem,
   useCreateCategory,
   useDeleteCategory,
   useAiMenuSuggest,
-  Category,
   MenuItem
 } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +26,7 @@ import * as z from "zod";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Edit, Trash2, Wand2, Loader2, GripVertical, UtensilsCrossed, Star, EyeOff, Eye } from "lucide-react";
+import { Plus, Edit, Trash2, Wand2, Loader2, Star, ImageIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SafeImage } from "@/components/safe-image";
 
@@ -53,12 +52,33 @@ const categorySchema = z.object({
 
 type CategoryValues = z.infer<typeof categorySchema>;
 
+const BASE_URL = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+
+async function generateMenuItemImage(name: string, description: string, category?: string): Promise<string> {
+  const response = await fetch(`${BASE_URL}/api/ai/generate-menu-item-image`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ name, description, category }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error((err as { error?: string }).error ?? "Image generation failed");
+  }
+
+  const data = await response.json();
+  return data.imageUrl as string;
+}
+
 export default function AdminMenu() {
   const queryClient = useQueryClient();
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [isItemDialogOpen, setIsItemDialogOpen] = useState(false);
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [generatedPreview, setGeneratedPreview] = useState<string | null>(null);
   
   const { data: categories, isLoading: isCategoriesLoading } = useListCategories({
     query: { queryKey: ["categories"] },
@@ -114,6 +134,7 @@ export default function AdminMenu() {
       isFeatured: (item as any).isFeatured || false,
       allergens: item.allergens || "",
     });
+    setGeneratedPreview(item.imageUrl || null);
     setIsItemDialogOpen(true);
   };
 
@@ -130,6 +151,7 @@ export default function AdminMenu() {
       isFeatured: false,
       allergens: "",
     });
+    setGeneratedPreview(null);
     setIsItemDialogOpen(true);
   };
 
@@ -158,6 +180,7 @@ export default function AdminMenu() {
         toast.success("Menu item created");
       }
       queryClient.invalidateQueries({ queryKey: ["menu-items"] });
+      setGeneratedPreview(null);
       setIsItemDialogOpen(false);
     } catch (e) {
       toast.error("Failed to save menu item");
@@ -188,6 +211,30 @@ export default function AdminMenu() {
       toast.success("AI suggestion applied!");
     } catch (e) {
       toast.error("Failed to generate AI suggestion");
+    }
+  };
+
+  const handleGenerateImage = async () => {
+    const name = itemForm.getValues("name");
+    const description = itemForm.getValues("description") || "";
+    const categoryId = itemForm.getValues("categoryId");
+    const categoryName = categories?.find((category: { id: number; name: string }) => category.id === categoryId)?.name;
+
+    if (!name) {
+      toast.error("Please enter a name first");
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    try {
+      const imageUrl = await generateMenuItemImage(name, description, categoryName);
+      itemForm.setValue("imageUrl", imageUrl, { shouldDirty: true, shouldValidate: true });
+      setGeneratedPreview(imageUrl);
+      toast.success("AI image generated. Save the item to keep it.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to generate AI image");
+    } finally {
+      setIsGeneratingImage(false);
     }
   };
 
@@ -245,8 +292,9 @@ export default function AdminMenu() {
   };
 
   const filteredItems = activeCategory 
-    ? menuItems?.filter(i => i.categoryId === activeCategory)
+    ? menuItems?.filter((item: MenuItem) => item.categoryId === activeCategory)
     : menuItems;
+  const imagePreviewSrc = itemForm.watch("imageUrl") || generatedPreview || "";
 
   return (
     <AdminLayout>
@@ -291,7 +339,13 @@ export default function AdminMenu() {
               </DialogContent>
             </Dialog>
 
-            <Dialog open={isItemDialogOpen} onOpenChange={setIsItemDialogOpen}>
+            <Dialog
+              open={isItemDialogOpen}
+              onOpenChange={(open) => {
+                setIsItemDialogOpen(open);
+                if (!open) setGeneratedPreview(null);
+              }}
+            >
               <DialogTrigger asChild>
                 <Button onClick={openCreateDialog}>
                   <Plus className="w-4 h-4 mr-2" /> Add Item
@@ -324,8 +378,8 @@ export default function AdminMenu() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {categories?.map(c => (
-                                <SelectItem key={c.id} value={c.id.toString()}>{c.name}</SelectItem>
+                              {categories?.map((category: { id: number; name: string }) => (
+                                <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
@@ -349,6 +403,38 @@ export default function AdminMenu() {
                           <FormMessage />
                         </FormItem>
                       )} />
+                    </div>
+
+                    <div className="rounded-lg border border-border bg-muted/30 p-4 space-y-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <h4 className="text-sm font-semibold text-foreground">AI Menu Photo</h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Generate a draft menu image from the item name and description.
+                          </p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={handleGenerateImage}
+                          disabled={isGeneratingImage}
+                        >
+                          {isGeneratingImage ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 mr-2" />
+                          )}
+                          Generate Image
+                        </Button>
+                      </div>
+
+                      <SafeImage
+                        src={imagePreviewSrc}
+                        alt={itemForm.getValues("name") || "Menu item preview"}
+                        className="h-48 w-full rounded-lg object-cover border border-border bg-background"
+                        fallbackClassName="h-48 w-full rounded-lg border border-dashed border-border bg-background"
+                      />
                     </div>
 
                     <div className="bg-primary/5 p-4 rounded-lg border border-primary/20 space-y-4">
@@ -447,7 +533,7 @@ export default function AdminMenu() {
                   >
                     All Items
                   </button>
-                  {categories?.map(category => (
+                  {categories?.map((category: { id: number; name: string }) => (
                     <div key={category.id} className="group flex items-center justify-between pr-2">
                       <button
                         className={`flex-1 text-left px-4 py-3 text-sm font-medium transition-colors ${activeCategory === category.id ? 'bg-primary/10 text-primary border-l-2 border-primary' : 'hover:bg-muted text-muted-foreground border-l-2 border-transparent'}`}
@@ -480,7 +566,7 @@ export default function AdminMenu() {
                 <Button onClick={openCreateDialog} variant="outline">Add First Item</Button>
               </div>
             ) : (
-              filteredItems?.map(item => (
+              filteredItems?.map((item: MenuItem) => (
                 <Card key={item.id} className={`transition-opacity ${!item.available ? 'opacity-60' : ''}`}>
                   <CardContent className="p-4 flex items-center gap-4">
                     <SafeImage

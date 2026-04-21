@@ -17,7 +17,7 @@ const SEED_USERS: SeedUser[] = [
     role: "developer",
   },
   {
-    email: "skymarkeatery@gmail.com",
+    email: "info@skymarkeatery.ca",
     password: "password2026",
     name: "Skymark Eatery Staff",
     role: "staff",

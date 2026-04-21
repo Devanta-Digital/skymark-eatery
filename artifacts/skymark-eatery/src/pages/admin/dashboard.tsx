@@ -61,7 +61,7 @@ export default function AdminDashboard() {
     }
     setIsStartingPreview(true);
     clearCart();
-    const picks = menuItems.filter(i => i.categoryId <= 5).slice(0, 3);
+    const picks = menuItems.filter((i) => i.categoryId != null && i.categoryId <= 5).slice(0, 3);
     if (picks.length === 0) {
       const fallback = menuItems.slice(0, 3);
       fallback.forEach(item => addItem(item, 1));

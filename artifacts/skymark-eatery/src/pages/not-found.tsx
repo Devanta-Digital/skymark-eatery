@@ -1,8 +1,16 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { UtensilsCrossed, Home, Menu, ArrowLeft } from "lucide-react";
+import { useSeo } from "@/lib/seo";
+import { UtensilsCrossed, Home, Menu } from "lucide-react";
 
 export default function NotFound() {
+  useSeo({
+    title: "Page Not Found | Skymark Eatery by Caffe E Pranzo",
+    description: "The page you are looking for could not be found.",
+    path: window.location.pathname,
+    robots: "noindex, nofollow",
+  });
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-muted/30 px-4">
       <div className="text-center max-w-md space-y-6">
@@ -39,7 +47,7 @@ export default function NotFound() {
 
         <div className="pt-4 border-t border-border/40">
           <p className="text-xs text-muted-foreground">
-            Skymark Eatery by Caffé É Pranzo · 2630 Skymark Ave., Unit 102, Mississauga
+            Skymark Eatery by Caffe E Pranzo · 2630 Skymark Ave., Unit 102, Mississauga
           </p>
         </div>
       </div>

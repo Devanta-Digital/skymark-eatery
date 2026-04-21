@@ -30,6 +30,9 @@ node_modules
 # Firecrawl CLI scratch output (local research)
 .firecrawl/
 
+# Local screenshot captures (not for the repo)
+.tmp-shots/
+
 # misc
 /.sass-cache
 /connect.lock

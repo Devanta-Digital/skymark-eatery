@@ -128,6 +128,26 @@ router.post("/generate-special-image", async (req, res) => {
   }
 });
 
+router.post("/generate-menu-item-image", async (req, res) => {
+  const { name, description, category } = req.body;
+  if (!name || typeof name !== "string") {
+    res.status(400).json({ error: "name required" }); return;
+  }
+
+  try {
+    const prompt = `Professional food photography for Skymark Eatery, an Italian lunch and catering kitchen in Mississauga. Create a square photorealistic image of "${name}". ${category ? `Category: ${category}.` : ""} ${description ? `Description: ${description}.` : ""} Style: real plated food, warm natural light, clean table styling, appetizing restaurant presentation, no people, no hands, no text, no watermarks. The dish must look believable for an Italian restaurant menu item.`;
+
+    const buffer = await generateImageBuffer(prompt, "1024x1024");
+    const base64 = buffer.toString("base64");
+    const imageUrl = `data:image/png;base64,${base64}`;
+
+    res.json({ imageUrl });
+  } catch (err) {
+    req.log?.error({ err }, "AI menu item image generation error");
+    res.status(500).json({ error: "Image generation failed" });
+  }
+});
+
 router.post("/general", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt || typeof prompt !== "string") {

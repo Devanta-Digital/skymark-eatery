@@ -50,9 +50,12 @@ router.patch("/categories/:id", async (req, res) => {
     res.status(400).json({ error: "Invalid input" });
     return;
   }
+  const updateData = Object.fromEntries(
+    Object.entries(body.data).filter(([, value]) => value != null)
+  );
   const [cat] = await db
     .update(categoriesTable)
-    .set(body.data)
+    .set(updateData)
     .where(eq(categoriesTable.id, params.data.id))
     .returning();
   if (!cat) { res.status(404).json({ error: "Not found" }); return; }

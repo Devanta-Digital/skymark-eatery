@@ -1,33 +1,44 @@
+import { Suspense, lazy, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
-import Home from "@/pages/home";
-import Menu from "@/pages/menu";
-import Checkout from "@/pages/checkout";
-import OrderStatus from "@/pages/order";
-import Login from "@/pages/login";
-import Signup from "@/pages/signup";
-import AdminLogin from "@/pages/admin-login";
-import Kitchen from "@/pages/kitchen";
-import AdminDashboard from "@/pages/admin/dashboard";
-import AdminOrders from "@/pages/admin/orders";
-import AdminMenu from "@/pages/admin/menu";
-import AdminSpecials from "@/pages/admin/specials";
-import AdminFinance from "@/pages/admin/finance";
-import AdminSubscriptions from "@/pages/admin/subscriptions";
-import AdminAI from "@/pages/admin/ai";
-import AdminSettings from "@/pages/admin/settings";
-import Catering from "@/pages/catering";
 import { CartProvider } from "@/hooks/use-cart";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
-import { useEffect } from "react";
+
+const NotFound = lazy(() => import("@/pages/not-found"));
+const Home = lazy(() => import("@/pages/home"));
+const Menu = lazy(() => import("@/pages/menu"));
+const Checkout = lazy(() => import("@/pages/checkout"));
+const OrderStatus = lazy(() => import("@/pages/order"));
+const Login = lazy(() => import("@/pages/login"));
+const Signup = lazy(() => import("@/pages/signup"));
+const AdminLogin = lazy(() => import("@/pages/admin-login"));
+const Kitchen = lazy(() => import("@/pages/kitchen"));
+const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
+const AdminOrders = lazy(() => import("@/pages/admin/orders"));
+const AdminMenu = lazy(() => import("@/pages/admin/menu"));
+const AdminSpecials = lazy(() => import("@/pages/admin/specials"));
+const AdminFinance = lazy(() => import("@/pages/admin/finance"));
+const AdminSubscriptions = lazy(() => import("@/pages/admin/subscriptions"));
+const AdminAI = lazy(() => import("@/pages/admin/ai"));
+const AdminSettings = lazy(() => import("@/pages/admin/settings"));
+const Catering = lazy(() => import("@/pages/catering"));
+const Contact = lazy(() => import("@/pages/contact"));
+const OrderBoard = lazy(() => import("@/pages/order-board"));
 
 const queryClient = new QueryClient();
 
 const STAFF_ROLES = ["admin", "developer", "staff"];
 const ADMIN_ROLES = ["admin", "developer"];
+
+function RouteFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
+      Loading...
+    </div>
+  );
+}
 
 function RequireAdmin({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -40,11 +51,7 @@ function RequireAdmin({ children }: { children: React.ReactNode }) {
   }, [user, isLoading, navigate]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">Verifying access...</div>
-      </div>
-    );
+    return <RouteFallback />;
   }
 
   if (!user || !ADMIN_ROLES.includes(user.role)) return null;
@@ -62,11 +69,7 @@ function RequireStaff({ children }: { children: React.ReactNode }) {
   }, [user, isLoading, navigate]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">Verifying access...</div>
-      </div>
-    );
+    return <RouteFallback />;
   }
 
   if (!user || !STAFF_ROLES.includes(user.role)) return null;
@@ -75,44 +78,90 @@ function RequireStaff({ children }: { children: React.ReactNode }) {
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/menu" component={Menu} />
-      <Route path="/checkout" component={Checkout} />
-      <Route path="/order/:id" component={OrderStatus} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={Signup} />
-      <Route path="/admin-login" component={AdminLogin} />
-      <Route path="/kitchen">
-        {() => <RequireStaff><Kitchen /></RequireStaff>}
-      </Route>
-      <Route path="/admin">
-        {() => <RequireAdmin><AdminDashboard /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/orders">
-        {() => <RequireAdmin><AdminOrders /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/menu">
-        {() => <RequireAdmin><AdminMenu /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/specials">
-        {() => <RequireAdmin><AdminSpecials /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/finance">
-        {() => <RequireAdmin><AdminFinance /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/subscriptions">
-        {() => <RequireAdmin><AdminSubscriptions /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/ai">
-        {() => <RequireAdmin><AdminAI /></RequireAdmin>}
-      </Route>
-      <Route path="/admin/settings">
-        {() => <RequireAdmin><AdminSettings /></RequireAdmin>}
-      </Route>
-      <Route path="/catering" component={Catering} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense fallback={<RouteFallback />}>
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/menu" component={Menu} />
+        <Route path="/checkout" component={Checkout} />
+        <Route path="/order/:id" component={OrderStatus} />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/admin-login" component={AdminLogin} />
+        <Route path="/kitchen">
+          {() => (
+            <RequireStaff>
+              <Kitchen />
+            </RequireStaff>
+          )}
+        </Route>
+        <Route path="/order-board">
+          {() => (
+            <RequireStaff>
+              <OrderBoard />
+            </RequireStaff>
+          )}
+        </Route>
+        <Route path="/admin">
+          {() => (
+            <RequireAdmin>
+              <AdminDashboard />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/orders">
+          {() => (
+            <RequireAdmin>
+              <AdminOrders />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/menu">
+          {() => (
+            <RequireAdmin>
+              <AdminMenu />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/specials">
+          {() => (
+            <RequireAdmin>
+              <AdminSpecials />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/finance">
+          {() => (
+            <RequireAdmin>
+              <AdminFinance />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/subscriptions">
+          {() => (
+            <RequireAdmin>
+              <AdminSubscriptions />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/ai">
+          {() => (
+            <RequireAdmin>
+              <AdminAI />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/admin/settings">
+          {() => (
+            <RequireAdmin>
+              <AdminSettings />
+            </RequireAdmin>
+          )}
+        </Route>
+        <Route path="/catering" component={Catering} />
+        <Route path="/contact" component={Contact} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 

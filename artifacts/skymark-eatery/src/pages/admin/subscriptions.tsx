@@ -228,7 +228,7 @@ export default function AdminSubscriptions() {
               </div>
             </div>
             <div className="bg-secondary/10 border border-secondary/20 rounded-lg p-3 text-sm text-secondary font-medium">
-              📞 To set up a corporate account, contact us at (905) 206-5550 or email catering@skymarkeatery.com
+              📞 To set up a corporate account, contact us at (905) 206-5550 or email info@skymarkeatery.ca
             </div>
           </CardContent>
         </Card>

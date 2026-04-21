@@ -10,7 +10,7 @@ const router = Router();
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("STRIPE_SECRET_KEY not configured");
-  return new Stripe(key, { apiVersion: "2025-01-27.acacia" });
+  return new Stripe(key, { apiVersion: "2026-03-25.dahlia" });
 }
 
 router.post("/create-intent", async (req, res) => {

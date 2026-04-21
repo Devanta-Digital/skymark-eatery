@@ -1,0 +1,16 @@
+{
+  "name": "Skymark Eatery by Caffe E Pranzo",
+  "short_name": "Skymark Eatery",
+  "description": "Italian takeout, weekday lunch, breakfast, and catering in Mississauga.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6efe4",
+  "theme_color": "#2d1e18",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

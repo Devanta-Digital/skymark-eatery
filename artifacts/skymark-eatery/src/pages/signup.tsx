@@ -4,11 +4,25 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { useSeo } from "@/lib/seo";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Signup() {
+  useSeo({
+    title: "Create Account | Skymark Eatery by Caffe E Pranzo",
+    description: "Create a Skymark Eatery account for faster ordering.",
+    path: "/signup",
+    robots: "noindex, nofollow",
+  });
+
   const [, navigate] = useLocation();
   const { signup } = useAuth();
   const [name, setName] = useState("");
@@ -20,8 +34,14 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirm) return toast.error("Passwords do not match");
-    if (password.length < 8) return toast.error("Password must be at least 8 characters");
+    if (password !== confirm) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
     setLoading(true);
     try {
       await signup(email, password, name);
@@ -39,13 +59,21 @@ export default function Signup() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/">
-            <img src="/logo.webp" alt="Skymark Eatery" className="h-16 w-auto mx-auto object-contain" />
+            <img
+              src="/logo.webp"
+              alt="Skymark Eatery"
+              className="h-16 w-auto mx-auto object-contain"
+            />
           </Link>
         </div>
         <Card className="shadow-lg border-border">
           <CardHeader className="pb-4">
-            <CardTitle className="font-serif text-2xl text-center">Create Account</CardTitle>
-            <CardDescription className="text-center">Join Skymark Eatery for a faster ordering experience</CardDescription>
+            <CardTitle className="font-serif text-2xl text-center">
+              Create Account
+            </CardTitle>
+            <CardDescription className="text-center">
+              Join Skymark Eatery for a faster ordering experience
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -64,7 +92,7 @@ export default function Signup() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="you@example.ca"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -87,7 +115,11 @@ export default function Signup() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     onClick={() => setShowPass(!showPass)}
                   >
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPass ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -102,14 +134,29 @@ export default function Signup() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading} size="lg">
-                {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating account...</> : "Create Account"}
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={loading}
+                size="lg"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating
+                    account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </Button>
             </form>
 
             <div className="mt-4 text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline font-medium">
+              <Link
+                href="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in
               </Link>
             </div>

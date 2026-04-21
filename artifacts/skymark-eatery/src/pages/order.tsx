@@ -5,12 +5,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { useSeo } from "@/lib/seo";
 import { CheckCircle2, Clock, ChefHat, PackageCheck, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 
 export default function OrderStatus() {
   const params = useParams();
   const id = parseInt(params.id || "0");
+
+  useSeo({
+    title: "Order Status | Skymark Eatery by Caffe E Pranzo",
+    description: "Track the status of your Skymark Eatery order.",
+    path: `/order/${id || ""}`,
+    robots: "noindex, nofollow",
+  });
 
   const { data: order, isLoading: isOrderLoading } = useGetOrder(id, {
     query: { enabled: !!id, queryKey: ["order", id] },

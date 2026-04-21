@@ -1,24 +1,43 @@
 import { Layout } from "@/components/layout";
 import { useCart } from "@/hooks/use-cart";
-import { useCreateOrder, useCreatePaymentIntent, useConfirmPayment } from "@workspace/api-client-react";
+import {
+  useCreateOrder,
+  useCreatePaymentIntent,
+  useConfirmPayment,
+} from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { toast } from "sonner";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { useSeo } from "@/lib/seo";
 import { FlaskConical, CheckCircle2, ShoppingBag } from "lucide-react";
 import { Link } from "wouter";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder");
+const stripePromise = loadStripe(
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder",
+);
 
 const checkoutSchema = z.object({
   customerName: z.string().min(2, "Name is required"),
@@ -29,7 +48,17 @@ const checkoutSchema = z.object({
 
 type CheckoutValues = z.infer<typeof checkoutSchema>;
 
-function PaymentForm({ orderId, clientSecret, onSuccess, amount }: { orderId: number, clientSecret: string, onSuccess: (orderId: number) => void, amount: number }) {
+function PaymentForm({
+  orderId,
+  clientSecret,
+  onSuccess,
+  amount,
+}: {
+  orderId: number;
+  clientSecret: string;
+  onSuccess: (orderId: number) => void;
+  amount: number;
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -48,10 +77,14 @@ function PaymentForm({ orderId, clientSecret, onSuccess, amount }: { orderId: nu
       setIsProcessing(false);
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       try {
-        await confirmPayment.mutateAsync({ data: { orderId, paymentIntentId: paymentIntent.id } });
+        await confirmPayment.mutateAsync({
+          data: { orderId, paymentIntentId: paymentIntent.id },
+        });
         onSuccess(orderId);
       } catch {
-        toast.error("Payment succeeded but order confirmation failed. Please contact us.");
+        toast.error(
+          "Payment succeeded but order confirmation failed. Please contact us.",
+        );
         setIsProcessing(false);
       }
     } else {
@@ -65,14 +98,26 @@ function PaymentForm({ orderId, clientSecret, onSuccess, amount }: { orderId: nu
       <div className="bg-card p-4 rounded-md border border-border">
         <PaymentElement />
       </div>
-      <Button type="submit" disabled={!stripe || isProcessing} className="w-full h-12 text-lg">
+      <Button
+        type="submit"
+        disabled={!stripe || isProcessing}
+        className="w-full h-12 text-lg"
+      >
         {isProcessing ? "Processing..." : `Pay $${amount.toFixed(2)}`}
       </Button>
     </form>
   );
 }
 
-function DemoPaymentForm({ orderId, onSuccess, amount }: { orderId: number, onSuccess: (orderId: number) => void, amount: number }) {
+function DemoPaymentForm({
+  orderId,
+  onSuccess,
+  amount,
+}: {
+  orderId: number;
+  onSuccess: (orderId: number) => void;
+  amount: number;
+}) {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDemoConfirm = async () => {
@@ -100,7 +145,9 @@ function DemoPaymentForm({ orderId, onSuccess, amount }: { orderId: number, onSu
           Simulated Payment — Demo Mode
         </div>
         <p className="text-sm text-blue-700">
-          In production, a real Stripe payment form would appear here. Click below to simulate a successful payment and see the full order confirmation flow.
+          In production, a real Stripe payment form would appear here. Click
+          below to simulate a successful payment and see the full order
+          confirmation flow.
         </p>
         <div className="bg-white border border-blue-100 rounded-md p-3 space-y-2 text-sm">
           <div className="flex justify-between text-muted-foreground">
@@ -119,13 +166,22 @@ function DemoPaymentForm({ orderId, onSuccess, amount }: { orderId: number, onSu
         className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-700"
       >
         <CheckCircle2 className="w-5 h-5 mr-2" />
-        {isProcessing ? "Confirming..." : `Simulate Payment · $${amount.toFixed(2)}`}
+        {isProcessing
+          ? "Confirming..."
+          : `Simulate Payment · $${amount.toFixed(2)}`}
       </Button>
     </div>
   );
 }
 
 export default function Checkout() {
+  useSeo({
+    title: "Checkout | Skymark Eatery by Caffe E Pranzo",
+    description: "Complete your Skymark Eatery order.",
+    path: "/checkout",
+    robots: "noindex, nofollow",
+  });
+
   const { items, total, clearCart } = useCart();
   const [, setLocation] = useLocation();
   const search = useSearch();
@@ -158,7 +214,7 @@ export default function Checkout() {
       const order = await createOrder.mutateAsync({
         data: {
           ...data,
-          items: items.map(item => ({
+          items: items.map((item) => ({
             menuItemId: item.menuItem.id,
             quantity: item.quantity,
             specialInstructions: item.specialInstructions || undefined,
@@ -168,7 +224,9 @@ export default function Checkout() {
       setCreatedOrderId(order.id);
 
       if (!isDemoMode) {
-        const paymentIntent = await createPaymentIntent.mutateAsync({ data: { orderId: order.id } });
+        const paymentIntent = await createPaymentIntent.mutateAsync({
+          data: { orderId: order.id },
+        });
         setClientSecret(paymentIntent.clientSecret);
       } else {
         setClientSecret("demo");
@@ -192,7 +250,9 @@ export default function Checkout() {
     <Layout>
       <div className="bg-muted py-8 border-b border-border/40">
         <div className="container mx-auto px-4 flex items-center gap-4">
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-primary">Checkout</h1>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold text-primary">
+            Checkout
+          </h1>
           {isDemoMode && (
             <Badge className="bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-100 flex items-center gap-1.5 px-3 py-1 text-sm">
               <FlaskConical className="w-3.5 h-3.5" />
@@ -211,12 +271,18 @@ export default function Checkout() {
                 {isDemoMode && (
                   <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 flex items-center gap-2 text-sm text-blue-700">
                     <FlaskConical className="w-4 h-4 shrink-0" />
-                    Demo mode: form is pre-filled. Click "Continue to Payment" to see the payment simulation.
+                    Demo mode: form is pre-filled. Click "Continue to Payment"
+                    to see the payment simulation.
                   </div>
                 )}
-                <h2 className="font-serif text-2xl font-semibold mb-6">Your Details</h2>
+                <h2 className="font-serif text-2xl font-semibold mb-6">
+                  Your Details
+                </h2>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -252,7 +318,11 @@ export default function Checkout() {
                         <FormItem>
                           <FormLabel>Email Address</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="john@example.com" {...field} />
+                            <Input
+                              type="email"
+                              placeholder="john@example.ca"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -278,16 +348,22 @@ export default function Checkout() {
                     <Button
                       type="submit"
                       className="w-full h-12 text-lg mt-4"
-                      disabled={createOrder.isPending || createPaymentIntent.isPending}
+                      disabled={
+                        createOrder.isPending || createPaymentIntent.isPending
+                      }
                     >
-                      {createOrder.isPending || createPaymentIntent.isPending ? "Processing..." : "Continue to Payment"}
+                      {createOrder.isPending || createPaymentIntent.isPending
+                        ? "Processing..."
+                        : "Continue to Payment"}
                     </Button>
                   </form>
                 </Form>
               </div>
             ) : (
               <div className="bg-card border border-border rounded-xl p-6 md:p-8 shadow-sm">
-                <h2 className="font-serif text-2xl font-semibold mb-6">Payment</h2>
+                <h2 className="font-serif text-2xl font-semibold mb-6">
+                  Payment
+                </h2>
                 {isDemoMode || clientSecret === "demo" ? (
                   <DemoPaymentForm
                     orderId={createdOrderId!}
@@ -295,7 +371,10 @@ export default function Checkout() {
                     amount={total * 1.13}
                   />
                 ) : (
-                  <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe" } }}>
+                  <Elements
+                    stripe={stripePromise}
+                    options={{ clientSecret, appearance: { theme: "stripe" } }}
+                  >
                     <PaymentForm
                       orderId={createdOrderId!}
                       clientSecret={clientSecret}
@@ -318,10 +397,15 @@ export default function Checkout() {
 
               <div className="space-y-4 mb-6">
                 {items.map((item) => (
-                  <div key={item.menuItem.id} className="flex justify-between items-start">
+                  <div
+                    key={item.menuItem.id}
+                    className="flex justify-between items-start"
+                  >
                     <div className="flex-1 pr-4">
                       <div className="font-medium">
-                        <span className="text-muted-foreground mr-2">{item.quantity}×</span>
+                        <span className="text-muted-foreground mr-2">
+                          {item.quantity}×
+                        </span>
                         {item.menuItem.name}
                       </div>
                       {item.specialInstructions && (
@@ -358,12 +442,19 @@ export default function Checkout() {
               </div>
 
               <div className="mt-4 text-xs text-muted-foreground text-center">
-                Pickup only · Ready in {new Date().getHours() >= 11 && new Date().getHours() < 13 ? "~25" : "~15"} minutes
+                Pickup only · Ready in{" "}
+                {new Date().getHours() >= 11 && new Date().getHours() < 13
+                  ? "~25"
+                  : "~15"}{" "}
+                minutes
               </div>
 
               {isDemoMode && (
                 <div className="mt-4 pt-4 border-t border-border/50">
-                  <Link href="/admin" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                  <Link
+                    href="/admin"
+                    className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                  >
                     ← Back to Admin Dashboard
                   </Link>
                 </div>

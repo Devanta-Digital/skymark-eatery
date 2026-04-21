@@ -5,10 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useSeo } from "@/lib/seo";
 import { Loader2, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 export default function AdminLogin() {
+  useSeo({
+    title: "Staff Login | Skymark Eatery by Caffe E Pranzo",
+    description: "Staff and admin login for Skymark Eatery.",
+    path: "/admin-login",
+    robots: "noindex, nofollow",
+  });
+
   const [, navigate] = useLocation();
   const { login, user } = useAuth();
   const [email, setEmail] = useState("");
@@ -65,7 +73,7 @@ export default function AdminLogin() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@skymarkeatery.com"
+                  placeholder="info@skymarkeatery.ca"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

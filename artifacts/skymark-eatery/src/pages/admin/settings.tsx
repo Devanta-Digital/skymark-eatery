@@ -9,10 +9,10 @@ import { toast } from "sonner";
 const SETTINGS_KEY = "skymark_business_settings";
 
 const DEFAULTS = {
-  businessName: "Skymark Eatery by Caffè É Pranzo",
+  businessName: "Skymark Eatery by Caffe E Pranzo",
   address: "2630 Skymark Ave., Unit 102, Mississauga, ON L4W 5A4",
   phone: "(905) 206-5550",
-  email: "skymarkeatery@gmail.com",
+  email: "info@skymarkeatery.ca",
   hoursWeekday: "Monday – Friday: 7:30 AM – 4:30 PM",
   hoursClosed: "Closed weekends & public holidays",
   defaultPrepTime: "15",
