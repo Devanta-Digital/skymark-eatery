@@ -261,7 +261,6 @@ export default function Catering() {
         imageSrc={SITE_IMAGES.cateringHero}
         imageAlt="Catering salad and tray spread from Skymark Eatery, Mississauga"
         imageClassName="media-crop-catering-hero"
-        imageEmphasis="subdued"
         primaryCta={{ label: "Buffet packages", href: "/catering#packages" }}
         secondaryCta={{ label: "Request catering", href: "/catering#inquire" }}
       />

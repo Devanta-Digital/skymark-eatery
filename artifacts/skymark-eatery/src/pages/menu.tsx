@@ -336,7 +336,6 @@ export default function Menu() {
         imageSrc={SITE_IMAGES.menuHero}
         imageAlt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
         imageClassName="media-crop-menu-hero"
-        imageEmphasis="subdued"
         primaryCta={{ label: "Call to order", href: BUSINESS_INFO.phoneHref }}
         secondaryCta={{ label: "Catering", href: "/catering" }}
         infoLine={
@@ -451,7 +450,7 @@ export default function Menu() {
       </div>
 
       <section className="py-10 sm:py-12">
-        <div className="container mx-auto max-w-6xl space-y-16 px-4 sm:space-y-20 lg:space-y-24">
+        <div className="container mx-auto max-w-6xl space-y-12 px-4 sm:space-y-14 lg:space-y-16">
           <section id={breakfast.id} className="anchor-section">
             <SectionIntro
               eyebrow={breakfast.eyebrow}
@@ -480,14 +479,17 @@ export default function Menu() {
             </div>
           </section>
 
-          <section id={sandwiches.id} className="anchor-section">
+          <section
+            id={sandwiches.id}
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+          >
             <SectionIntro
               eyebrow={sandwiches.eyebrow}
               title={sandwiches.title}
               description={sandwiches.description}
               accent
             />
-            <div className="menu-list-shelf overflow-hidden transition-[box-shadow] duration-300">
+            <div className="menu-list-shelf overflow-hidden border-l-2 border-[hsl(var(--primary))]/18 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
               {sandwiches.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -514,14 +516,17 @@ export default function Menu() {
             ) : null}
           </section>
 
-          <section id={salads.id} className="anchor-section">
+          <section
+            id={salads.id}
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+          >
             <SectionIntro
               eyebrow={salads.eyebrow}
               title={salads.title}
               description={salads.description}
               accent={false}
             />
-            <div className="menu-list-rail transition-[box-shadow] duration-300">
+            <div className="menu-list-rail border-l-2 border-[hsl(152_40%_28%)]/22 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
               {salads.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -546,14 +551,17 @@ export default function Menu() {
             ) : null}
           </section>
 
-          <section id={sides.id} className="anchor-section">
+          <section
+            id={sides.id}
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+          >
             <SectionIntro
               eyebrow={sides.eyebrow}
               title={sides.title}
               description={sides.description}
               accent
             />
-            <div className="menu-list-shelf max-w-3xl overflow-hidden transition-[box-shadow] duration-300">
+            <div className="menu-list-shelf max-w-3xl overflow-hidden border-l-2 border-[hsl(var(--primary))]/18 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
               {sides.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -573,14 +581,17 @@ export default function Menu() {
             </div>
           </section>
 
-          <section id={pizza.id} className="anchor-section">
+          <section
+            id={pizza.id}
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+          >
             <SectionIntro
               eyebrow={pizza.eyebrow}
               title={pizza.title}
               description={pizza.description}
               accent={false}
             />
-            <div className="menu-list-rail max-w-3xl transition-[box-shadow] duration-300">
+            <div className="menu-list-rail max-w-3xl border-l-2 border-[hsl(152_40%_28%)]/22 pl-3 transition-[box-shadow] duration-300 sm:pl-5">
               {pizza.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -609,8 +620,11 @@ export default function Menu() {
             ) : null}
           </section>
 
-          <section id={pasta.id} className="anchor-section">
-            <div className="max-w-3xl">
+          <section
+            id={pasta.id}
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+          >
+            <div className="max-w-3xl border-l-2 border-[hsl(var(--primary))]/16 pl-3 sm:pl-5">
               <SectionIntro
                 eyebrow={pasta.eyebrow}
                 title={pasta.title}

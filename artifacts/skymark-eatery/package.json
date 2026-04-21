@@ -10,7 +10,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "process-logo": "node scripts/process-logo.mjs",
     "visual:snapshots": "node scripts/visual-snapshots.mjs",
-    "visual:snapshots:desktop": "node scripts/visual-snapshots.mjs --desktop"
+    "visual:snapshots:desktop": "node scripts/visual-snapshots.mjs --desktop",
+    "visual:snapshots:qa-partial": "node scripts/visual-snapshots.mjs --desktop --shots=home-hero,home-mid,home-full,menu-full"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",

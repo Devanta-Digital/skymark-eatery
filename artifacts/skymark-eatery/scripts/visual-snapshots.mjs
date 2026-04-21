@@ -5,6 +5,8 @@
  *
  * Run: pnpm run visual:snapshots
  * Desktop only: pnpm run visual:snapshots:desktop  (passes --desktop)
+ * Partial desktop QA: pnpm run visual:snapshots:qa-partial
+ *   (--shots=home-hero,home-mid,home-full,menu-full rebuilds only those PNGs)
  */
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
@@ -56,6 +58,77 @@ async function settlePage(page) {
   await page.waitForTimeout(200);
 }
 
+function partialShotToFilename(key) {
+  const map = {
+    "home-hero": "home-desktop-hero.png",
+    "home-mid": "home-desktop-mid.png",
+    "home-full": "home-desktop-full.png",
+    "menu-full": "menu-desktop-full.png",
+  };
+  return map[key] ?? null;
+}
+
+async function screenshotViewportClip(page, outPath) {
+  const size = page.viewportSize();
+  if (!size) return;
+  const total = await page.evaluate(() =>
+    Math.max(document.body?.scrollHeight ?? 0, document.documentElement?.scrollHeight ?? 0),
+  );
+  const clip = {
+    x: 0,
+    y: 0,
+    width: size.width,
+    height: Math.min(size.height, Math.max(total, size.height)),
+  };
+  await page.screenshot({ path: outPath, clip, timeout: 60_000 });
+}
+
+/** Desktop 1440×900 only; overwrites named files in design-snapshots/ */
+async function capturePartialDesktopShots(page, keys) {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
+  for (const key of keys) {
+    const file = partialShotToFilename(key);
+    if (!file) throw new Error(`Unknown --shots key: ${key}. Expected: home-hero, home-mid, home-full, menu-full`);
+    const outPath = path.join(outDir, file);
+    if (fs.existsSync(outPath)) fs.unlinkSync(outPath);
+
+    if (key === "menu-full") {
+      await page.goto(withVisualQa("/menu"), { waitUntil: "load", timeout: 90_000 });
+      await settlePage(page);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await settlePage(page);
+      await page.screenshot({ path: outPath, fullPage: true, timeout: 120_000 });
+      continue;
+    }
+
+    await page.goto(withVisualQa("/"), { waitUntil: "load", timeout: 90_000 });
+    await settlePage(page);
+    const total = await page.evaluate(() =>
+      Math.max(document.body?.scrollHeight ?? 0, document.documentElement?.scrollHeight ?? 0),
+    );
+    const size = page.viewportSize();
+    if (!size) continue;
+    const { width, height } = size;
+
+    if (key === "home-hero") {
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await settlePage(page);
+      await screenshotViewportClip(page, outPath);
+    } else if (key === "home-mid") {
+      const midY = Math.max(0, Math.floor(total * 0.42 - height / 2));
+      await page.evaluate((y) => window.scrollTo(0, y), midY);
+      await settlePage(page);
+      await screenshotViewportClip(page, outPath);
+    } else if (key === "home-full") {
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await settlePage(page);
+      await page.screenshot({ path: outPath, fullPage: true, timeout: 120_000 });
+    }
+  }
+}
+
 async function captureSegments(page, slug, vpName) {
   const size = page.viewportSize();
   if (!size) return;
@@ -103,9 +176,27 @@ async function captureSegments(page, slug, vpName) {
 }
 
 async function main() {
+  const shotsArg = process.argv.find((a) => a.startsWith("--shots="));
+  const partialShotKeys = shotsArg
+    ? shotsArg
+        .slice("--shots=".length)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : null;
+
   fs.mkdirSync(outDir, { recursive: true });
-  for (const f of fs.readdirSync(outDir)) {
-    if (f.endsWith(".png")) fs.unlinkSync(path.join(outDir, f));
+  if (partialShotKeys?.length) {
+    for (const key of partialShotKeys) {
+      const name = partialShotToFilename(key);
+      if (!name) throw new Error(`Unknown --shots key: ${key}`);
+      const p = path.join(outDir, name);
+      if (fs.existsSync(p)) fs.unlinkSync(p);
+    }
+  } else {
+    for (const f of fs.readdirSync(outDir)) {
+      if (f.endsWith(".png")) fs.unlinkSync(path.join(outDir, f));
+    }
   }
 
   const build = spawn("pnpm", ["exec", "vite", "build", "--config", "vite.config.ts"], {
@@ -128,26 +219,33 @@ async function main() {
     await waitForServer();
 
     const browser = await chromium.launch();
-    const paths = ["/", "/menu", "/catering", "/contact"];
-    const desktopOnly = process.argv.includes("--desktop");
-    const viewports = desktopOnly
-      ? [{ name: "desktop", width: 1440, height: 900 }]
-      : [
-          { name: "desktop", width: 1440, height: 900 },
-          { name: "iphone14", width: 390, height: 844 },
-        ];
 
-    for (const vp of viewports) {
-      const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
-      await page.emulateMedia({ reducedMotion: "reduce" });
-
-      for (const p of paths) {
-        const slug = p === "/" ? "home" : p.replace(/\//g, "");
-        await page.goto(withVisualQa(p), { waitUntil: "load", timeout: 90_000 });
-        await settlePage(page);
-        await captureSegments(page, slug, vp.name);
-      }
+    if (partialShotKeys?.length) {
+      const page = await browser.newPage();
+      await capturePartialDesktopShots(page, partialShotKeys);
       await page.close();
+    } else {
+      const paths = ["/", "/menu", "/catering", "/contact"];
+      const desktopOnly = process.argv.includes("--desktop");
+      const viewports = desktopOnly
+        ? [{ name: "desktop", width: 1440, height: 900 }]
+        : [
+            { name: "desktop", width: 1440, height: 900 },
+            { name: "iphone14", width: 390, height: 844 },
+          ];
+
+      for (const vp of viewports) {
+        const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+        await page.emulateMedia({ reducedMotion: "reduce" });
+
+        for (const p of paths) {
+          const slug = p === "/" ? "home" : p.replace(/\//g, "");
+          await page.goto(withVisualQa(p), { waitUntil: "load", timeout: 90_000 });
+          await settlePage(page);
+          await captureSegments(page, slug, vp.name);
+        }
+        await page.close();
+      }
     }
     await browser.close();
   } finally {
@@ -156,7 +254,11 @@ async function main() {
   }
 
   console.log("Screenshots →", outDir);
-  console.log("Per route: {slug}-{desktop|iphone14}-{hero|mid|footer|full}.png");
+  if (partialShotKeys?.length) {
+    console.log("Partial:", partialShotKeys.join(", "));
+  } else {
+    console.log("Per route: {slug}-{desktop|iphone14}-{hero|mid|footer|full}.png");
+  }
 }
 
 main().catch((e) => {

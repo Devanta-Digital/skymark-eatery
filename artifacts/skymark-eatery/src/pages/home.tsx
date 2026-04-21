@@ -95,7 +95,6 @@ export default function Home() {
         imageSrc={SITE_IMAGES.hero}
         imageAlt="Hot veal sandwich and lunch line favourites at Skymark Eatery by Caffe E Pranzo, Mississauga"
         imageClassName="media-crop-home-hero"
-        imageEmphasis="subdued"
         primaryCta={{ label: "Order pickup", href: "/menu" }}
         secondaryCta={{ label: "Catering packages", href: "/catering" }}
         infoLine={
@@ -127,56 +126,48 @@ export default function Home() {
             Catering runs as trays, buffets, and platters. Pickup runs as the weekday line — same kitchen, different portioning.
           </p>
 
-          <div className="relative mt-14 lg:mt-20">
-            <div
-              className="pointer-events-none absolute left-[4%] right-[6%] top-6 hidden h-[78%] rounded-[2rem] bg-[linear-gradient(118deg,hsl(var(--muted))_0%,transparent_58%)] opacity-90 lg:block"
-              aria-hidden
-            />
-            <div className="relative grid items-stretch gap-10 lg:grid-cols-12 lg:gap-8">
-              <div className="relative lg:col-span-7">
+          <div className="relative mt-12 lg:mt-16">
+            <div className="relative lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10">
+              <div className="relative lg:col-span-8">
                 <span
-                  className="pointer-events-none absolute -left-1 top-2 font-sans text-[clamp(3.75rem,10vw,6.5rem)] font-semibold leading-none tracking-tight text-[hsl(var(--foreground))]/[0.04] sm:left-0 lg:top-6"
+                  className="pointer-events-none absolute -top-1 left-0 font-sans text-[clamp(2.75rem,7vw,4.75rem)] font-semibold leading-none tracking-tight text-[hsl(var(--foreground))]/[0.04] lg:left-1"
                   aria-hidden
                 >
                   01
                 </span>
                 <a
                   href={primaryOffer.href}
-                  className="group relative mt-8 flex min-h-[min(100vw,400px)] flex-col overflow-hidden rounded-[1.65rem] bg-[hsl(220_46%_8%)] shadow-[0_40px_90px_-48px_rgba(15,23,42,0.72)] lg:mt-12 lg:min-h-[400px] lg:flex-row lg:rounded-[2rem]"
+                  className="group relative mt-7 block overflow-hidden bg-[hsl(220_50%_5%)] ring-1 ring-black/25 lg:mt-10 lg:grid lg:min-h-[min(440px,50vh)] lg:grid-cols-[1.22fr_0.78fr] lg:items-stretch"
                 >
-                  <div className="relative min-h-[240px] w-full overflow-hidden lg:min-h-0 lg:w-[56%] lg:max-w-none">
-                    <div className="depth-tilt absolute inset-0">
-                      <img
-                        src={primaryOffer.image}
-                        alt={primaryOffer.imageAlt}
-                        className="media-crop-offer-catering h-full w-full scale-[1.08] object-cover opacity-[0.9] transition duration-[720ms] ease-out group-hover:scale-[1.12] group-hover:opacity-100"
-                      />
-                    </div>
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent lg:bg-gradient-to-r lg:from-black/55 lg:via-black/20 lg:to-transparent" />
+                  <div className="relative min-h-[min(72vw,300px)] overflow-hidden sm:min-h-[320px] lg:min-h-0">
+                    <img
+                      src={primaryOffer.image}
+                      alt={primaryOffer.imageAlt}
+                      className="media-crop-offer-catering-two absolute inset-0 h-full w-full min-h-[300px] scale-[1.16] object-cover object-center opacity-[0.94] transition duration-[680ms] ease-out group-hover:scale-[1.2] group-hover:opacity-100 sm:min-h-[320px] lg:min-h-full"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent lg:bg-gradient-to-r lg:from-black/40 lg:via-transparent lg:to-transparent" />
                   </div>
-                  <div className="relative z-10 flex flex-1 flex-col justify-end px-7 py-9 lg:absolute lg:inset-0 lg:justify-center lg:bg-gradient-to-r lg:from-black/50 lg:via-black/25 lg:to-transparent lg:px-12 lg:py-12">
-                    <div className="lg:ml-[48%] lg:max-w-md">
-                      <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.32em] text-[hsl(var(--primary))]">
-                        Service lane
-                      </p>
-                      <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-[1.85rem]">
-                        {primaryOffer.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-relaxed text-white/78 sm:text-[0.95rem]">
-                        {primaryOffer.description}
-                      </p>
-                      <span className="mt-8 inline-flex items-center text-sm font-semibold text-white transition duration-300 group-hover:translate-x-0.5">
-                        Trays &amp; buffet packages
-                        <ArrowUpRight className="ml-1.5 h-4 w-4 transition duration-300 group-hover:-translate-y-0.5" />
-                      </span>
-                    </div>
+                  <div className="relative flex flex-col justify-center border-t border-white/10 px-7 py-9 lg:border-t-0 lg:border-l lg:border-white/10 lg:px-9 lg:py-11 xl:pr-14">
+                    <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.32em] text-[hsl(var(--primary))]">
+                      Service lane
+                    </p>
+                    <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-[1.85rem]">
+                      {primaryOffer.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-[0.95rem]">
+                      {primaryOffer.description}
+                    </p>
+                    <span className="mt-8 inline-flex items-center text-sm font-semibold text-white transition duration-300 group-hover:translate-x-0.5">
+                      Trays &amp; buffet packages
+                      <ArrowUpRight className="ml-1.5 h-4 w-4 transition duration-300 group-hover:-translate-y-0.5" />
+                    </span>
                   </div>
                 </a>
               </div>
 
-              <div className="relative flex flex-col justify-end pb-1 lg:col-span-5 lg:pb-6 lg:pl-2">
+              <div className="relative mt-10 lg:col-span-4 lg:mt-[4.5rem] lg:border-l lg:border-[hsla(220,14%,12%,0.14)] lg:pl-9 xl:pl-11">
                 <span
-                  className="pointer-events-none absolute right-0 top-0 font-sans text-[clamp(3rem,8vw,4.5rem)] font-semibold leading-none text-[hsl(var(--foreground))]/[0.055] lg:-top-4 lg:right-4"
+                  className="pointer-events-none absolute right-2 top-0 font-sans text-[clamp(2.5rem,6vw,3.75rem)] font-semibold leading-none text-[hsl(var(--foreground))]/[0.06] lg:-top-2 lg:right-6"
                   aria-hidden
                 >
                   02
@@ -184,24 +175,24 @@ export default function Home() {
                 <p className="relative font-sans text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[hsl(152_40%_28%)]">
                   Pickup lanes
                 </p>
-                <p className="relative mt-2 max-w-sm text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
+                <p className="relative mt-2 max-w-[18rem] text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
                   Weekday counter rhythm — same kitchen, single-plate portioning.
                 </p>
-                <div className="relative mt-6 divide-y divide-[hsla(220,14%,12%,0.1)]">
+                <div className="relative mt-6 space-y-0 border-t border-[hsla(220,14%,12%,0.12)]">
                   {supportingOffers.map((lane) => (
                     <a
                       key={lane.key}
                       href={lane.href}
-                      className="group flex gap-4 py-5 transition-[transform,opacity] duration-300 ease-out first:pt-1 hover:opacity-[0.98] sm:gap-5"
+                      className="group flex gap-4 border-b border-[hsla(220,14%,12%,0.08)] py-5 transition-colors duration-300 hover:bg-[hsl(var(--muted))]/35 sm:gap-5 lg:-ml-px lg:border-l-2 lg:border-transparent lg:pl-4 lg:hover:border-[hsl(var(--primary))]/40"
                     >
-                      <div className="depth-tilt relative h-[4.25rem] w-[4.5rem] shrink-0 overflow-hidden rounded-md ring-1 ring-[hsla(220,14%,12%,0.08)] transition duration-500 group-hover:ring-[hsl(var(--primary))]/25 sm:h-[4.75rem] sm:w-20">
+                      <div className="relative h-[4.25rem] w-[4.5rem] shrink-0 overflow-hidden rounded-sm sm:h-[4.75rem] sm:w-20">
                         <img
                           src={lane.image}
                           alt={lane.imageAlt}
-                          className="media-crop-lane h-full w-full object-cover transition duration-[520ms] ease-out group-hover:scale-[1.06]"
+                          className="media-crop-lane h-full w-full object-cover transition duration-[520ms] ease-out group-hover:scale-[1.05]"
                         />
                       </div>
-                      <div className="flex min-w-0 flex-1 flex-col justify-center border-l border-transparent pl-1 transition duration-300 group-hover:border-[hsl(var(--primary))]/35">
+                      <div className="flex min-w-0 flex-1 flex-col justify-center">
                         <h3 className="font-sans text-[1.02rem] font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-lg">
                           {lane.title}
                         </h3>
@@ -403,10 +394,10 @@ export default function Home() {
         tone="dark"
         density="default"
         withMotion
-        className="border-t border-white/[0.07] py-10 md:py-12 lg:py-14"
+        className="border-t border-white/[0.08] py-8 md:py-10 lg:py-11"
       >
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between lg:gap-12">
-          <div className="flex flex-1 flex-col gap-7 sm:max-lg:grid sm:max-lg:grid-cols-2 sm:max-lg:gap-x-8 lg:max-w-[min(52rem,100%)]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-7 border border-white/[0.06] bg-[hsla(220,28%,7%,0.35)] px-5 py-6 sm:px-7 sm:py-7 lg:flex-row lg:items-stretch lg:justify-between lg:gap-10 lg:px-8 lg:py-8">
+          <div className="flex flex-1 flex-col gap-6 sm:max-lg:grid sm:max-lg:grid-cols-2 sm:max-lg:gap-x-7 lg:max-w-[min(48rem,100%)]">
             <div className="flex gap-3 sm:max-lg:col-span-2 lg:max-w-xl">
               <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(152_40%_70%)]" />
               <div>

@@ -516,9 +516,14 @@ html[data-visual-qa="1"] .media-crop-catering-hero {
   }
 
   .media-crop-home-hero {
-    object-position: 54% 28%;
-    transform: scale(1.05);
-    transform-origin: 52% 38%;
+    object-position: 52% 26%;
+    transform: scale(1.09);
+    transform-origin: 50% 36%;
+  }
+
+  /** Two-rhythms catering panel — tighter editorial crop */
+  .media-crop-offer-catering-two {
+    object-position: 38% 32%;
   }
 
   .media-crop-catering-hero {
@@ -528,7 +533,7 @@ html[data-visual-qa="1"] .media-crop-catering-hero {
   }
 
   .media-crop-offer-catering {
-    object-position: 44% 36%;
+    object-position: 42% 34%;
   }
 
   .media-crop-lane {

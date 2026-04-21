@@ -22,8 +22,6 @@ type HeroProps = {
   density?: "default" | "compact";
   /** Optional crop / presentation class on hero image (e.g. `media-crop-hero`) */
   imageClassName?: string;
-  /** Subdued image column on desktop — lets typography lead */
-  imageEmphasis?: "default" | "subdued";
 };
 
 function isExternalHref(href: string) {
@@ -47,10 +45,8 @@ export function Hero({
   contentClassName,
   density = "default",
   imageClassName,
-  imageEmphasis = "default",
 }: HeroProps) {
   const compact = density === "compact";
-  const subdued = imageEmphasis === "subdued" && !compact;
   const qa = isVisualQaCapture();
   const motionInitial = qa ? ("visible" as const) : ("hidden" as const);
   const instantItem: Variants = {
@@ -69,14 +65,7 @@ export function Hero({
         className,
       )}
     >
-      <div
-        className={cn(
-          "mx-auto flex max-w-7xl flex-col lg:grid lg:min-h-0 lg:items-stretch",
-          subdued
-            ? "lg:grid-cols-[minmax(0,1.14fr)_minmax(0,0.52fr)]"
-            : "lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]",
-        )}
-      >
+      <div className="mx-auto flex max-w-7xl flex-col lg:grid lg:min-h-0 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-stretch">
         <div
           className={cn(
             "relative order-2 flex flex-col justify-center px-4 lg:order-1 lg:px-10",
@@ -158,29 +147,18 @@ export function Hero({
               "depth-tilt relative order-1 w-full overflow-hidden bg-[hsl(220_12%_88%)] lg:order-2",
               compact
                 ? "min-h-[200px] max-h-[280px] sm:min-h-[240px] sm:max-h-[320px]"
-                : subdued
-                  ? "aspect-[16/10] min-h-[200px] max-lg:max-h-[min(42vh,340px)] lg:aspect-auto lg:min-h-[min(52vh,500px)] lg:flex lg:items-center lg:justify-center lg:overflow-visible lg:bg-transparent lg:py-8"
-                  : "aspect-[16/10] min-h-[220px] max-lg:max-h-[min(48vh,380px)] lg:aspect-auto lg:min-h-[min(52vh,500px)]",
+                : "aspect-[16/10] min-h-[220px] max-lg:max-h-[min(48vh,380px)] lg:aspect-auto lg:min-h-[min(52vh,500px)]",
             )}
           >
             <img
               src={imageSrc}
               alt={imageAlt}
-              className={cn(
-                "h-full w-full object-cover object-center",
-                subdued
-                  ? "lg:h-auto lg:max-h-[min(380px,42vh)] lg:w-full lg:rounded-2xl lg:shadow-[0_28px_60px_-28px_rgba(15,23,42,0.35)]"
-                  : null,
-                imageClassName,
-              )}
+              className={cn("h-full w-full object-cover object-center", imageClassName)}
               sizes="(min-width: 1024px) 48vw, 100vw"
               decoding="async"
             />
             <div
-              className={cn(
-                "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-black/10 lg:to-black/25",
-                subdued ? "lg:rounded-2xl" : null,
-              )}
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent lg:bg-gradient-to-l lg:from-transparent lg:via-black/10 lg:to-black/25"
               aria-hidden
             />
           </div>

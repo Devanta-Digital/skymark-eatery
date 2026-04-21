@@ -589,8 +589,8 @@ export function Layout({ children }: { children: ReactNode }) {
           <span className="flex-1 bg-white/25" />
           <span className="flex-1 bg-[hsl(var(--primary))]" />
         </div>
-        <div className="container mx-auto max-w-6xl px-4 py-9 md:py-11">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr] lg:gap-10">
+        <div className="container mx-auto max-w-6xl px-4 py-8 md:py-10">
+          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr] lg:gap-9">
             <div>
               <img
                 src={BRAND_LOGO.onDark}
@@ -696,7 +696,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-[#f2e8dc]/45 md:flex-row md:items-center md:justify-between">
+          <div className="mt-7 flex flex-col gap-1.5 border-t border-white/10 pt-4 text-xs text-[#f2e8dc]/45 md:flex-row md:items-center md:justify-between">
             <p>
               © {new Date().getFullYear()} {BUSINESS_INFO.primaryName}
             </p>
