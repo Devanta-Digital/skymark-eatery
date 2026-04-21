@@ -54,14 +54,17 @@ export function restaurantStructuredData() {
     alternateName: BUSINESS_INFO.secondaryName,
     description: BUSINESS_INFO.tagline,
     image: absoluteUrl(SITE_IMAGES.og),
-    telephone: "+1-905-206-5550",
+    telephone: BUSINESS_INFO.telephoneSchema,
     email: BUSINESS_INFO.email,
     url: absoluteUrl("/"),
     menu: absoluteUrl("/menu"),
     hasMap: BUSINESS_INFO.mapsHref,
     servesCuisine: "Italian",
     priceRange: "$$",
-    areaServed: BUSINESS_INFO.city,
+    areaServed: [
+      { "@type": "City", name: "Mississauga" },
+      { "@type": "AdministrativeArea", name: "Ontario" },
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: BUSINESS_INFO.addressLine1,
@@ -85,7 +88,7 @@ export function restaurantStructuredData() {
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+1-905-206-5550",
+      telephone: BUSINESS_INFO.telephoneSchema,
       email: BUSINESS_INFO.email,
       contactType: "customer service",
       areaServed: "CA",

@@ -389,7 +389,7 @@ export default function Checkout() {
 
           {/* Order Summary Sidebar */}
           <div className="w-full lg:w-[400px]">
-            <div className="bg-muted border border-border/60 rounded-xl p-6 sticky top-24">
+            <div className="bg-muted border border-border/60 rounded-xl p-6 sticky top-[calc(var(--site-header-height)+1rem)]">
               <h3 className="font-serif text-xl font-semibold mb-6 pb-4 border-b border-border/50 flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5 text-primary" />
                 Order Summary

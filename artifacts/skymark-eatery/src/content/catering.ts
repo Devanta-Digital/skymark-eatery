@@ -24,7 +24,7 @@ export type CateringSection = {
 };
 
 export const CATERING_INTRO =
-  "Italian buffet packages, hot trays, and platters for Mississauga offices and celebrations — cooked in-house on Skymark Avenue, with clear pricing and portions.";
+  "Buffet packages, hot trays, and platters for Mississauga offices and celebrations — cooked in-house on Skymark Ave, with clear per-person pricing, minimums, and portions.";
 
 export const CATERING_OVERVIEW = [
   {
@@ -48,8 +48,14 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$16.75 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "A comforting Italian spread built around house lasagna, salad, and fresh bread.",
-    includedDishes: ["Lasagna", "Italian or Caesar salad", "Homemade bread and butter", "Parmesan"],
+    summary:
+      "A comforting Italian spread built around house lasagna, salad, and fresh bread.",
+    includedDishes: [
+      "Lasagna",
+      "Italian or Caesar salad",
+      "Homemade bread and butter",
+      "Parmesan",
+    ],
   },
   {
     legacyName: "Menu #2",
@@ -57,8 +63,15 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$16.75 per person",
     minimumOrder: "Minimum 12 guests",
     feeds: "Feeds 12-16 people",
-    summary: "A hearty buffet with meat and cheese cannelloni, salad, and fresh bread.",
-    includedDishes: ["Meat cannelloni", "Cheese cannelloni", "Italian or Caesar salad", "Homemade bread and butter", "Parmesan"],
+    summary:
+      "A hearty buffet with meat and cheese cannelloni, salad, and fresh bread.",
+    includedDishes: [
+      "Meat cannelloni",
+      "Cheese cannelloni",
+      "Italian or Caesar salad",
+      "Homemade bread and butter",
+      "Parmesan",
+    ],
   },
   {
     legacyName: "Menu #3",
@@ -66,8 +79,15 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$18.45 per person",
     minimumOrder: "Minimum 10 guests",
     feeds: "Feeds 10-14 people",
-    summary: "A crowd-pleasing buffet with roasted chicken or sausage, pasta, salad, and bread.",
-    includedDishes: ["Roasted chicken or roasted sausage", "Pasta in tomato sauce", "Salad", "Bread and butter", "Parmesan"],
+    summary:
+      "A crowd-pleasing buffet with roasted chicken or sausage, pasta, salad, and bread.",
+    includedDishes: [
+      "Roasted chicken or roasted sausage",
+      "Pasta in tomato sauce",
+      "Salad",
+      "Bread and butter",
+      "Parmesan",
+    ],
   },
   {
     legacyName: "Menu #4",
@@ -75,8 +95,15 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$19.60 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "A classic comfort-food buffet with chicken parmigiana, pasta, salad, and bread.",
-    includedDishes: ["Chicken parmigiana", "Pasta in tomato sauce", "Salad", "Bread and butter", "Parmesan"],
+    summary:
+      "A classic comfort-food buffet with chicken parmigiana, pasta, salad, and bread.",
+    includedDishes: [
+      "Chicken parmigiana",
+      "Pasta in tomato sauce",
+      "Salad",
+      "Bread and butter",
+      "Parmesan",
+    ],
   },
   {
     legacyName: "Menu #5",
@@ -84,8 +111,15 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$21.90 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "A more elevated Italian dinner with veal parmigiana, pasta, salad, and house bread.",
-    includedDishes: ["Veal parmigiana", "Pasta in tomato sauce", "Salad", "Bread and butter", "Parmesan"],
+    summary:
+      "A more elevated Italian dinner with veal parmigiana, pasta, salad, and house bread.",
+    includedDishes: [
+      "Veal parmigiana",
+      "Pasta in tomato sauce",
+      "Salad",
+      "Bread and butter",
+      "Parmesan",
+    ],
   },
   {
     legacyName: "Menu #6",
@@ -93,8 +127,14 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$25.40 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "An entree-style dinner with chicken scaloppina, vegetables, potatoes, and homemade bread.",
-    includedDishes: ["Chicken scaloppina", "Potatoes", "Vegetables", "Homemade bread and butter"],
+    summary:
+      "An entree-style dinner with chicken scaloppina, vegetables, potatoes, and homemade bread.",
+    includedDishes: [
+      "Chicken scaloppina",
+      "Potatoes",
+      "Vegetables",
+      "Homemade bread and butter",
+    ],
   },
   {
     legacyName: "Menu #7",
@@ -102,8 +142,14 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$30.00 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "A premium Italian dinner with veal scaloppina Marsala, vegetables, potatoes, and house bread.",
-    includedDishes: ["Veal scaloppina Marsala", "Potatoes", "Vegetables", "Homemade bread and butter"],
+    summary:
+      "A premium Italian dinner with veal scaloppina Marsala, vegetables, potatoes, and house bread.",
+    includedDishes: [
+      "Veal scaloppina Marsala",
+      "Potatoes",
+      "Vegetables",
+      "Homemade bread and butter",
+    ],
   },
   {
     legacyName: "Menu #8",
@@ -111,8 +157,16 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     pricePerPerson: "$30.00 per person",
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
-    summary: "A chef-selected spread with puttanesca, roasted chicken, rice, vegetables, salad, and house bread.",
-    includedDishes: ["Puttanesca", "Roasted chicken", "Mediterranean rice", "Carrots and green beans", "Salad", "Homemade bread and butter"],
+    summary:
+      "A chef-selected spread with puttanesca, roasted chicken, rice, vegetables, salad, and house bread.",
+    includedDishes: [
+      "Puttanesca",
+      "Roasted chicken",
+      "Mediterranean rice",
+      "Carrots and green beans",
+      "Salad",
+      "Homemade bread and butter",
+    ],
   },
 ];
 
@@ -120,7 +174,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "appetizers",
     title: "Appetizers & Hors d'oeuvres",
-    description: "Perfect for receptions, mingling events, and lighter office gatherings. Minimum counts apply on select items.",
+    description:
+      "Perfect for receptions, mingling events, and lighter office gatherings. Minimum counts apply on select items.",
     items: [
       {
         name: "Bruschetta",
@@ -171,7 +226,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Mini Bocconcini & Cherry Tomato Skewers",
-        description: "Fresh bocconcini and cherry tomatoes on easy grab-and-go skewers.",
+        description:
+          "Fresh bocconcini and cherry tomatoes on easy grab-and-go skewers.",
         price: "$2.15 each",
         serving: "Minimum 24 pieces or $51.70 per platter",
         dietary: ["Vegetarian", "Gluten free"],
@@ -181,23 +237,27 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "platters",
     title: "Party Platters",
-    description: "Easy group catering for meetings, open houses, client hosting, and casual events.",
+    description:
+      "Easy group catering for meetings, open houses, client hosting, and casual events.",
     items: [
       {
         name: "Assorted Sliced Cold Meat & Cheese Platter",
-        description: "A deli-style platter arranged for grazing, sandwich building, or office sharing.",
-        price: '$72.75 / $109.15 / $145.50 / $181.95',
+        description:
+          "A deli-style platter arranged for grazing, sandwich building, or office sharing.",
+        price: "$72.75 / $109.15 / $145.50 / $181.95",
         serving: '12" / 14" / 16" / 18"',
       },
       {
         name: "Cold Sandwich Platter",
-        description: "Choose from ham, turkey, prosciutto, capiccollo, salami, or caprese with your preferred cheese selections.",
+        description:
+          "Choose from ham, turkey, prosciutto, capiccollo, salami, or caprese with your preferred cheese selections.",
         price: "$12.15 each",
         serving: "Minimum 10 sandwiches",
       },
       {
         name: "Hot Sandwich Platter",
-        description: "Includes favourites such as veal, chicken, halal chicken, grilled veal, grilled chicken, meatballs, sausage, caprese, or grilled vegetables.",
+        description:
+          "Includes favourites such as veal, chicken, halal chicken, grilled veal, grilled chicken, meatballs, sausage, caprese, or grilled vegetables.",
         price: "$9.00 to $17.00 each",
         serving: "Minimum 8 sandwiches",
       },
@@ -206,11 +266,13 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "pasta-baked",
     title: "Pasta, Lasagna & Baked Dishes",
-    description: "Flexible tray catering for office lunches, family-style gatherings, and larger celebrations.",
+    description:
+      "Flexible tray catering for office lunches, family-style gatherings, and larger celebrations.",
     items: [
       {
         name: "Lasagna",
-        description: "Available in meat, vegetable, spinach and ricotta, three cheese, or chicken and red pepper.",
+        description:
+          "Available in meat, vegetable, spinach and ricotta, three cheese, or chicken and red pepper.",
         price: "$32.00 / $47.00 / $79.00 / $174.00",
         serving: "Small / medium / large / extra large trays",
       },
@@ -223,7 +285,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Eggplant Parmigiana",
-        description: "A hearty baked eggplant tray finished with tomato sauce and cheese.",
+        description:
+          "A hearty baked eggplant tray finished with tomato sauce and cheese.",
         price: "$34.00 / $52.00 / $84.00 / $187.00",
         serving: "Small / medium / large / extra large trays",
         dietary: ["Vegetarian"],
@@ -236,7 +299,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Tortellini, Ravioli, or Gnocchi in Tomato Sauce",
-        description: "A classic tomato sauce option for crowd-friendly pasta trays.",
+        description:
+          "A classic tomato sauce option for crowd-friendly pasta trays.",
         price: "$28.90 / $57.00 / $79.00 / $109.00",
         serving: "Small / medium / large / extra large trays",
       },
@@ -254,7 +318,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Penne, Rigatoni, Spaghetti, Linguine, or Fettuccine",
-        description: "Choose tomato, rose, Alfredo, aglio e olio, arrabbiata, or pesto. Extras and tray-size pricing are available for larger orders.",
+        description:
+          "Choose tomato, rose, Alfredo, aglio e olio, arrabbiata, or pesto. Extras and tray-size pricing are available for larger orders.",
         price: "$22.00 to $26.00 base",
         serving: "Sauce and add-on pricing available by pasta selection",
       },
@@ -263,11 +328,13 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "seafood",
     title: "Seafood",
-    description: "Prepared for more substantial catering orders. Select seafood items may be subject to market pricing.",
+    description:
+      "Prepared for more substantial catering orders. Select seafood items may be subject to market pricing.",
     items: [
       {
         name: "Grilled Salmon Fillet",
-        description: "Individually portioned grilled salmon for plated or buffet service.",
+        description:
+          "Individually portioned grilled salmon for plated or buffet service.",
         price: "$16.75 each",
         dietary: ["Pescatarian", "Gluten free"],
       },
@@ -280,7 +347,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Zuppa di Mare",
-        description: "Shrimp, scallops, calamari, and mussels in a seafood tray for larger gatherings.",
+        description:
+          "Shrimp, scallops, calamari, and mussels in a seafood tray for larger gatherings.",
         price: "$105.00 / $210.00 / $315.00",
         serving: "Medium / large / extra large trays",
         dietary: ["Pescatarian"],
@@ -290,18 +358,21 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "sides",
     title: "Vegetables & Sides",
-    description: "Simple, dependable accompaniments that pair well with buffet packages and tray catering.",
+    description:
+      "Simple, dependable accompaniments that pair well with buffet packages and tray catering.",
     items: [
       {
         name: "Mediterranean Rice with Vegetables",
-        description: "A versatile side for buffet service and plated group meals.",
+        description:
+          "A versatile side for buffet service and plated group meals.",
         price: "$25.00 / $50.00 / $101.00",
         serving: "Medium / large / extra large trays",
         dietary: ["Vegetarian"],
       },
       {
         name: "Roasted Parisienne Potatoes",
-        description: "Roasted potatoes prepared for buffet and family-style service.",
+        description:
+          "Roasted potatoes prepared for buffet and family-style service.",
         price: "$23.00 / $46.00 / $92.00",
         serving: "Medium / large / extra large trays",
         dietary: ["Vegetarian", "Gluten free"],
@@ -311,26 +382,32 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "salads",
     title: "Salads",
-    description: "Fresh tray salads sized for small gatherings, office spreads, and larger catered events.",
+    description:
+      "Fresh tray salads sized for small gatherings, office spreads, and larger catered events.",
     items: [
       {
         name: "Italian Salad",
-        description: "A fresh house salad option that pairs easily with pasta and buffet packages.",
+        description:
+          "A fresh house salad option that pairs easily with pasta and buffet packages.",
         price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
-        serving: "Family / large / XXL shallow / extra large / extra large deep",
+        serving:
+          "Family / large / XXL shallow / extra large / extra large deep",
         dietary: ["Vegetarian"],
       },
       {
         name: "Caesar Salad",
-        description: "A classic Caesar salad for tray catering and buffet service.",
+        description:
+          "A classic Caesar salad for tray catering and buffet service.",
         price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
-        serving: "Family / large / XXL shallow / extra large / extra large deep",
+        serving:
+          "Family / large / XXL shallow / extra large / extra large deep",
       },
       {
         name: "Greek Salad",
         description: "A brighter salad option with a Mediterranean profile.",
         price: "$25.95 / $29.95 / $47.95 / $60.00 / $70.00",
-        serving: "Family / large / XXL shallow / extra large / extra large deep",
+        serving:
+          "Family / large / XXL shallow / extra large / extra large deep",
         dietary: ["Vegetarian", "Gluten free"],
       },
     ],
@@ -338,7 +415,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "pizza",
     title: "Gourmet Pizza",
-    description: "Party-size pizza trays for casual events, office lunches, and easy group catering.",
+    description:
+      "Party-size pizza trays for casual events, office lunches, and easy group catering.",
     items: [
       {
         name: "Margherita Party Pizza",
@@ -355,13 +433,15 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Deluxe Party Pizza",
-        description: "Cacciatore sausage, mushrooms, red peppers, and green peppers.",
+        description:
+          "Cacciatore sausage, mushrooms, red peppers, and green peppers.",
         price: "$50.80",
         serving: "Party size",
       },
       {
         name: "Vegetarian Delight Party Pizza",
-        description: "Sweet peppers, mushrooms, olives, onions, and sliced tomato.",
+        description:
+          "Sweet peppers, mushrooms, olives, onions, and sliced tomato.",
         price: "$50.80",
         serving: "Party size",
         dietary: ["Vegetarian"],
@@ -371,7 +451,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "desserts",
     title: "Desserts & Pastries",
-    description: "Finish the table with classic Italian sweets and easy office-friendly dessert trays.",
+    description:
+      "Finish the table with classic Italian sweets and easy office-friendly dessert trays.",
     items: [
       {
         name: "Assorted Small Pastries",
@@ -381,13 +462,15 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Homemade Italian Cookies",
-        description: "A cookie assortment sized for dessert tables and coffee service.",
+        description:
+          "A cookie assortment sized for dessert tables and coffee service.",
         price: "$51.95 / $78.50 / $130.50",
         serving: '12" / 14" / 18" trays',
       },
       {
         name: "Homemade Tiramisu",
-        description: "A house-made tiramisu option for smaller gatherings or larger dessert service.",
+        description:
+          "A house-made tiramisu option for smaller gatherings or larger dessert service.",
         price: "$28.85 / $80.80",
         serving: "Small serves up to 6 / large serves up to 18",
       },
@@ -396,7 +479,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
   {
     id: "extras",
     title: "Beverages & Catering Extras",
-    description: "Add the finishing details for smooth event service, from drinks to disposables.",
+    description:
+      "Add the finishing details for smooth event service, from drinks to disposables.",
     items: [
       {
         name: "Homemade Bread",
@@ -405,17 +489,20 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Assorted Dinner Rolls",
-        description: "A simple add-on for plated service, buffet tables, or sandwich spreads.",
+        description:
+          "A simple add-on for plated service, buffet tables, or sandwich spreads.",
         price: "$0.95 each",
       },
       {
         name: "Assorted Bottled Pop, Brio, and Water",
-        description: "Includes spring water, San Pellegrino, San Pellegrino flavoured beverages, bottled pop, and Brio.",
+        description:
+          "Includes spring water, San Pellegrino, San Pellegrino flavoured beverages, bottled pop, and Brio.",
         price: "$1.95 to $3.75",
       },
       {
         name: "Disposable Plates, Napkins & Cutlery",
-        description: "Convenient disposable settings for office lunches and events.",
+        description:
+          "Convenient disposable settings for office lunches and events.",
         price: "$1.05 per person",
       },
       {
@@ -425,7 +512,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
       },
       {
         name: "Topping Trays",
-        description: "Extra toppings arranged by tray size for sandwiches, platters, and catered spreads.",
+        description:
+          "Extra toppings arranged by tray size for sandwiches, platters, and catered spreads.",
         price: "$31.15 / $60.65 / $90.80 / $115.30",
         serving: "Medium / large / XL shallow / extra large",
       },
@@ -433,7 +521,15 @@ export const CATERING_SECTIONS: CateringSection[] = [
   },
 ];
 
-export const DIETARY_BADGES = ["Halal options", "Gluten-free options", "Lactose-free options", "Nut-free options", "Pescatarian options", "Vegan options", "Vegetarian options"];
+export const DIETARY_BADGES = [
+  "Halal options",
+  "Gluten-free options",
+  "Lactose-free options",
+  "Nut-free options",
+  "Pescatarian options",
+  "Vegan options",
+  "Vegetarian options",
+];
 
 export const CATERING_NOTES = [
   "Catering is available buffet style, with boxed lunches or pre-portioned meals available on request.",

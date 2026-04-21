@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   ArrowUp,
@@ -6,7 +6,6 @@ import {
   Clock,
   Instagram,
   LogOut,
-  Mail,
   MapPin,
   Menu,
   Phone,
@@ -40,22 +39,72 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
+/** Sticky in-page section rail height for anchor offset (see sticky-section-nav). */
+const SECTION_NAV_RAIL_PX = 34;
+
 export function Layout({ children }: { children: ReactNode }) {
   const { items, total, updateQuantity, removeItem } = useCart();
   const { user, logout, isAdmin } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [location] = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
+  const scrollLastY = useRef(0);
+  const [headerCompact, setHeaderCompact] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
 
   const isStaff = user?.role === "staff";
   const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 480);
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    scrollLastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - scrollLastY.current;
+      scrollLastY.current = y;
+      setHeaderCompact(y > 16);
+      if (y < 48) {
+        setHeaderHidden(false);
+        return;
+      }
+      if (delta > 8) setHeaderHidden(true);
+      else if (delta < -8) setHeaderHidden(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const sync = () => {
+      if (headerHidden) {
+        document.documentElement.style.setProperty("--site-header-height", "0px");
+        document.documentElement.style.setProperty(
+          "--section-nav-offset",
+          `${SECTION_NAV_RAIL_PX + 12}px`,
+        );
+        return;
+      }
+      const h = Math.round(el.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--site-header-height", `${h}px`);
+      document.documentElement.style.setProperty(
+        "--section-nav-offset",
+        `${h + SECTION_NAV_RAIL_PX}px`,
+      );
+    };
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    sync();
+    return () => ro.disconnect();
+  }, [headerCompact, headerHidden]);
 
   const handleLogout = () => {
     logout();
@@ -66,115 +115,132 @@ export function Layout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       <a
         href="#main-content"
-        className="sr-only left-4 top-4 z-[60] rounded-md bg-white px-4 py-2 text-sm font-semibold text-[#2d1e18] shadow-lg ring-2 ring-[#8b4f39]/30 focus:not-sr-only focus:fixed focus:outline-none"
+        className="sr-only left-4 top-4 z-[60] rounded-md bg-white px-4 py-2 text-sm font-semibold text-[#1f1410] shadow-lg ring-2 ring-[#8b4f39]/25 focus:not-sr-only focus:fixed focus:outline-none"
       >
         Skip to main content
       </a>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-[rgba(79,50,34,0.1)] bg-[rgba(251,246,239,0.92)] shadow-[0_18px_44px_rgba(48,32,22,0.08)] backdrop-blur-xl">
-        <div className="border-b border-white/10 bg-[#2d1e18] text-[#f8f0e5]">
-          <div className="container mx-auto flex min-h-9 items-center justify-between gap-4 px-4 py-2 text-[11px] sm:text-xs">
-            <div className="flex min-w-0 items-center gap-4 text-[#f8f0e5]/78">
-              <a
-                href={BUSINESS_INFO.phoneHref}
-                className="inline-flex items-center gap-2 whitespace-nowrap hover:text-white"
+      <header
+        ref={headerRef}
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 border-b border-[rgba(26,18,14,0.07)] bg-[hsla(34,38%,97%,0.92)] backdrop-blur-md transition-[transform,box-shadow] duration-300 ease-out",
+          headerHidden ? "-translate-y-full shadow-none" : "translate-y-0",
+          headerCompact && !headerHidden
+            ? "shadow-[0_1px_0_rgba(26,18,14,0.04)]"
+            : "shadow-[0_8px_24px_rgba(26,18,14,0.04)]",
+        )}
+      >
+        <div
+          className={cn(
+            "container mx-auto flex max-w-6xl items-center gap-2 px-4 transition-[height] duration-200 sm:gap-3",
+            headerCompact ? "h-[48px] sm:h-[50px]" : "h-[52px] sm:h-[56px]",
+          )}
+        >
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
+          >
+            <img
+              src="/logo.webp"
+              alt={BUSINESS_INFO.primaryName}
+              className={cn(
+                "h-auto w-auto object-contain transition-all duration-200",
+                headerCompact ? "h-8 sm:h-8" : "h-9 sm:h-10",
+              )}
+            />
+            <div className="hidden min-w-0 sm:block">
+              <div
+                className={cn(
+                  "font-serif leading-none tracking-tight text-[#1f1410] transition-all duration-200",
+                  headerCompact
+                    ? "text-[1.05rem] sm:text-[1.12rem]"
+                    : "text-[1.12rem] sm:text-[1.22rem]",
+                )}
               >
-                <Phone className="h-3.5 w-3.5" />
-                {BUSINESS_INFO.phone}
-              </a>
-              <span className="hidden items-center gap-2 md:inline-flex">
-                <Clock className="h-3.5 w-3.5" />
-                {BUSINESS_INFO.hoursLabel}
-              </span>
-            </div>
-            <div className="hidden text-right text-[#f8f0e5]/68 lg:block">
-              Italian eatery, takeout, and catering in Mississauga
-            </div>
-          </div>
-        </div>
-
-        <div className="container mx-auto flex h-[82px] items-center justify-between gap-4 px-4">
-          <div className="flex min-w-0 items-center gap-6">
-            <Link href="/" className="flex min-w-0 items-center gap-3">
-              <img
-                src="/logo.webp"
-                alt={BUSINESS_INFO.primaryName}
-                className="h-12 w-auto shrink-0 object-contain sm:h-14"
-              />
-              <div className="hidden min-[460px]:block">
-                <div className="font-serif text-[1.55rem] leading-none text-[#2d1e18]">
-                  {BUSINESS_INFO.secondaryName}
-                </div>
-                <div className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#8b654e]">
-                  By Caffe E Pranzo
-                </div>
+                {BUSINESS_INFO.secondaryName}
               </div>
-            </Link>
+              <div className="font-sans text-[0.55rem] font-medium uppercase tracking-[0.2em] text-[#7a6558]">
+                by Caffe E Pranzo
+              </div>
+            </div>
+          </Link>
 
-            <nav className="hidden items-center gap-7 md:flex">
-              {NAV_LINKS.map((link) => {
-                const active = location === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "text-sm font-medium transition-colors",
-                      active
-                        ? "text-[#2d1e18]"
-                        : "text-[#6d5748] hover:text-[#8b4f39]",
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
+          <nav className="mx-2 hidden min-w-0 flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
+            {NAV_LINKS.map((link) => {
+              const active = location === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors",
+                    active
+                      ? "text-[#1f1410]"
+                      : "text-[#6d5c50] hover:text-[#8b3d2c]",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden h-4 w-px shrink-0 bg-[rgba(26,18,14,0.1)] lg:block" />
+
+          <div className="hidden shrink-0 flex-col text-right text-[10px] leading-tight text-[#6d5c50] lg:flex">
+            <a
+              href={BUSINESS_INFO.phoneHref}
+              className="font-semibold text-[#1f1410] hover:text-[#8b3d2c]"
+            >
+              {BUSINESS_INFO.phone}
+            </a>
+            <span className="mt-0.5 font-medium uppercase tracking-[0.1em] text-[#9a8a7e]">
+              Mon–Fri · 7:30a–4:30p
+            </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1">
+            <Link
+              href="/catering#inquire"
+              className="hidden px-2 text-[11px] font-semibold text-[#6d5c50] transition-colors hover:text-[#1f1410] xl:inline"
+            >
+              Catering quote
+            </Link>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
-              className="hidden rounded-full border-[rgba(45,30,24,0.12)] bg-white/80 px-4 text-[#2d1e18] lg:inline-flex"
+              className="hidden h-8 px-2.5 text-[11px] font-semibold text-[#1f1410] hover:bg-[rgba(26,18,14,0.05)] md:inline-flex"
               asChild
             >
-              <Link href="/catering#inquire">Request Catering</Link>
-            </Button>
-            <Button
-              size="sm"
-              className="hidden rounded-full bg-[#8b4f39] px-5 text-white hover:bg-[#75412f] md:inline-flex"
-              asChild
-            >
-              <Link href="/menu">Order Pickup</Link>
+              <Link href="/menu">View menu</Link>
             </Button>
 
             <Sheet>
               <SheetTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="icon"
-                  className="relative rounded-full border-[rgba(45,30,24,0.12)] bg-white/82 hover:bg-white"
+                  className="relative h-9 w-9 rounded-md text-[#1f1410] hover:bg-[rgba(26,18,14,0.06)]"
                 >
-                  <ShoppingBag className="h-5 w-5" />
+                  <ShoppingBag className="h-[1.15rem] w-[1.15rem]" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#8b4f39] text-[10px] font-bold text-white">
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#8b3d2c] px-1 text-[9px] font-bold text-white">
                       {cartItemCount}
                     </span>
                   )}
                   <span className="sr-only">Open cart</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent className="flex w-full flex-col border-l-[rgba(79,50,34,0.12)] bg-[#fbf6ef] sm:max-w-md">
+              <SheetContent className="flex w-full flex-col border-l border-[rgba(26,18,14,0.08)] bg-[hsl(34,42%,97%)] sm:max-w-md">
                 <SheetHeader>
-                  <SheetTitle className="font-serif text-2xl text-[#2d1e18]">
-                    Your Order
+                  <SheetTitle className="font-serif text-2xl text-[#1f1410]">
+                    Your order
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex-1 overflow-auto py-6">
                   {items.length === 0 ? (
-                    <div className="flex h-full flex-col items-center justify-center gap-4 text-center text-[#766357]">
-                      <ShoppingBag className="h-12 w-12 opacity-20" />
-                      <p>Your cart is empty.</p>
+                    <div className="flex h-full flex-col items-center justify-center gap-4 text-center text-[#6d5c50]">
+                      <ShoppingBag className="h-12 w-12 opacity-15" />
+                      <p className="text-sm">Your cart is empty.</p>
                       <SheetTrigger asChild>
                         <Button variant="outline" asChild>
                           <Link href="/menu">Browse the menu</Link>
@@ -186,22 +252,20 @@ export function Layout({ children }: { children: ReactNode }) {
                       {items.map((item) => (
                         <div
                           key={item.menuItem.id}
-                          className="flex gap-4 border-b border-[rgba(79,50,34,0.08)] pb-4 last:border-0"
+                          className="flex gap-4 border-b border-[rgba(26,18,14,0.08)] pb-4 last:border-0"
                         >
                           {item.menuItem.imageUrl && (
                             <img
                               src={item.menuItem.imageUrl}
                               alt={item.menuItem.name}
-                              className="h-20 w-20 rounded-[1.1rem] border border-[rgba(79,50,34,0.08)] object-cover"
+                              className="h-20 w-20 rounded-md border border-[rgba(26,18,14,0.08)] object-cover"
                             />
                           )}
                           <div className="flex flex-1 flex-col justify-between">
                             <div>
-                              <div className="flex justify-between gap-3 font-serif text-[#2d1e18]">
-                                <h4 className="font-medium">
-                                  {item.menuItem.name}
-                                </h4>
-                                <span className="font-medium">
+                              <div className="flex justify-between gap-3 font-serif text-[#1f1410]">
+                                <h4 className="font-medium">{item.menuItem.name}</h4>
+                                <span className="font-medium tabular-nums">
                                   $
                                   {(
                                     item.menuItem.price * item.quantity
@@ -209,15 +273,16 @@ export function Layout({ children }: { children: ReactNode }) {
                                 </span>
                               </div>
                               {item.specialInstructions && (
-                                <p className="mt-1 line-clamp-2 text-xs text-[#766357]">
+                                <p className="mt-1 line-clamp-2 text-xs text-[#6d5c50]">
                                   Note: {item.specialInstructions}
                                 </p>
                               )}
                             </div>
                             <div className="mt-3 flex items-center justify-between">
-                              <div className="flex items-center rounded-full border border-[rgba(79,50,34,0.14)] bg-white">
+                              <div className="flex items-center rounded-md border border-[rgba(26,18,14,0.12)] bg-white">
                                 <button
-                                  className="rounded-l-full px-3 py-1 text-[#766357] transition-colors hover:bg-[#f4eadf] hover:text-[#2d1e18]"
+                                  type="button"
+                                  className="rounded-l-md px-3 py-1 text-[#6d5c50] transition-colors hover:bg-[#f0e8df] hover:text-[#1f1410]"
                                   onClick={() =>
                                     updateQuantity(
                                       item.menuItem.id,
@@ -226,13 +291,14 @@ export function Layout({ children }: { children: ReactNode }) {
                                   }
                                   aria-label={`Decrease quantity for ${item.menuItem.name}`}
                                 >
-                                  -
+                                  −
                                 </button>
-                                <span className="px-2 text-sm font-medium text-[#2d1e18]">
+                                <span className="px-2 text-sm font-medium text-[#1f1410]">
                                   {item.quantity}
                                 </span>
                                 <button
-                                  className="rounded-r-full px-3 py-1 text-[#766357] transition-colors hover:bg-[#f4eadf] hover:text-[#2d1e18]"
+                                  type="button"
+                                  className="rounded-r-md px-3 py-1 text-[#6d5c50] transition-colors hover:bg-[#f0e8df] hover:text-[#1f1410]"
                                   onClick={() =>
                                     updateQuantity(
                                       item.menuItem.id,
@@ -245,8 +311,9 @@ export function Layout({ children }: { children: ReactNode }) {
                                 </button>
                               </div>
                               <button
+                                type="button"
                                 onClick={() => removeItem(item.menuItem.id)}
-                                className="text-xs font-medium text-[#8b4f39] hover:underline"
+                                className="text-xs font-medium text-[#8b3d2c] hover:underline"
                               >
                                 Remove
                               </button>
@@ -258,14 +325,14 @@ export function Layout({ children }: { children: ReactNode }) {
                   )}
                 </div>
                 {items.length > 0 && (
-                  <div className="mt-auto border-t border-[rgba(79,50,34,0.08)] pt-4">
-                    <div className="mb-4 flex justify-between font-serif text-lg font-bold text-[#2d1e18]">
+                  <div className="mt-auto border-t border-[rgba(26,18,14,0.08)] pt-4">
+                    <div className="mb-4 flex justify-between font-serif text-lg font-bold text-[#1f1410]">
                       <span>Total</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
                     <SheetTrigger asChild>
                       <Button
-                        className="w-full bg-[#8b4f39] text-lg text-white hover:bg-[#75412f]"
+                        className="w-full bg-[#8b3d2c] text-lg text-white hover:bg-[#722f22]"
                         size="lg"
                         asChild
                       >
@@ -281,21 +348,21 @@ export function Layout({ children }: { children: ReactNode }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    className="hidden items-center gap-2 rounded-full border-[rgba(45,30,24,0.12)] bg-white/80 md:flex"
+                    className="hidden h-8 items-center gap-1.5 rounded-md px-2 text-[#6d5c50] hover:bg-[rgba(26,18,14,0.05)] hover:text-[#1f1410] md:flex"
                   >
-                    <User className="h-4 w-4" />
-                    <span className="max-w-24 truncate">
+                    <User className="h-3.5 w-3.5" />
+                    <span className="max-w-20 truncate text-[11px] font-medium">
                       {user.name.split(" ")[0]}
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-48 border-[rgba(79,50,34,0.12)] bg-[#fbf6ef]"
+                  className="w-48 border-[rgba(26,18,14,0.1)] bg-[hsl(34,42%,97%)]"
                 >
-                  <div className="px-2 py-1.5 text-xs text-[#766357]">
+                  <div className="px-2 py-1.5 text-xs text-[#6d5c50]">
                     {user.email}
                   </div>
                   <DropdownMenuSeparator />
@@ -308,7 +375,7 @@ export function Layout({ children }: { children: ReactNode }) {
                           }}
                         >
                           <ChefHat className="mr-2 h-4 w-4" />
-                          Admin Dashboard
+                          Admin dashboard
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem
@@ -317,7 +384,7 @@ export function Layout({ children }: { children: ReactNode }) {
                         }}
                       >
                         <ChefHat className="mr-2 h-4 w-4" />
-                        Kitchen Display
+                        Kitchen display
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {
@@ -325,7 +392,7 @@ export function Layout({ children }: { children: ReactNode }) {
                         }}
                       >
                         <ChefHat className="mr-2 h-4 w-4" />
-                        Order Board
+                        Order board
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
@@ -335,7 +402,7 @@ export function Layout({ children }: { children: ReactNode }) {
                     className="text-destructive"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    Sign out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -343,10 +410,10 @@ export function Layout({ children }: { children: ReactNode }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden rounded-full text-[#6d5748] hover:text-[#2d1e18] md:inline-flex"
+                className="hidden h-8 rounded-md px-2 text-[11px] font-medium text-[#6d5c50] hover:bg-[rgba(26,18,14,0.05)] hover:text-[#1f1410] md:inline-flex"
                 asChild
               >
-                <Link href="/login">Sign In</Link>
+                <Link href="/login">Sign in</Link>
               </Button>
             )}
 
@@ -355,144 +422,136 @@ export function Layout({ children }: { children: ReactNode }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full text-[#2d1e18] md:hidden"
+                  className="h-9 w-9 rounded-md text-[#1f1410] md:hidden"
                 >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open navigation</span>
                 </Button>
               </SheetTrigger>
               <SheetContent
-                side="left"
-                className="w-[320px] border-r-[rgba(79,50,34,0.12)] bg-[#fbf6ef] sm:w-[380px]"
+                side="right"
+                className="w-[min(100%,380px)] border-l border-[rgba(26,18,14,0.08)] bg-[hsl(34,42%,97%)]"
               >
-                <div className="flex h-full flex-col py-6">
-                  <div className="rounded-[1.75rem] border border-[rgba(79,50,34,0.1)] bg-white/88 p-5 shadow-sm">
+                <div className="flex h-full flex-col py-2">
+                  <div className="border-b border-[rgba(26,18,14,0.08)] pb-5">
                     <img
                       src="/logo.webp"
                       alt={BUSINESS_INFO.primaryName}
-                      className="h-14 w-auto object-contain"
+                      className="h-11 w-auto object-contain"
                     />
-                    <div className="mt-4 font-serif text-2xl text-[#2d1e18]">
+                    <p className="mt-3 font-serif text-xl text-[#1f1410]">
                       {BUSINESS_INFO.secondaryName}
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-[#6d5748]">
-                      Italian takeout, weekday lunch, and catering from
-                      Mississauga.
+                    </p>
+                    <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[#8b6f5c]">
+                      Italian takeout &amp; catering · Mississauga
                     </p>
                   </div>
 
-                  <div className="mt-6 flex flex-col gap-3">
+                  <div className="mt-6 flex flex-col gap-1">
+                    {NAV_LINKS.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="rounded-md px-2 py-2.5 font-serif text-lg text-[#1f1410] transition-colors hover:bg-[rgba(26,18,14,0.05)]"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 grid gap-2">
                     <Button
-                      className="rounded-full bg-[#8b4f39] text-white hover:bg-[#75412f]"
+                      className="h-11 rounded-md bg-[#8b3d2c] font-sans text-sm text-white hover:bg-[#722f22]"
                       asChild
                     >
                       <Link
                         href="/menu"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Order Pickup
+                        Order pickup
                       </Link>
                     </Button>
                     <Button
                       variant="outline"
-                      className="rounded-full border-[rgba(45,30,24,0.12)] bg-white/82"
+                      className="h-11 rounded-md border-[rgba(26,18,14,0.14)] bg-white font-sans text-sm"
                       asChild
                     >
                       <Link
                         href="/catering#inquire"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Request Catering
+                        Request catering
                       </Link>
                     </Button>
                   </div>
 
-                  <nav className="mt-8 flex flex-col gap-4">
-                    {NAV_LINKS.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="text-lg font-serif text-[#2d1e18] transition-colors hover:text-[#8b4f39]"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
+                  <div className="mt-auto space-y-3 border-t border-[rgba(26,18,14,0.08)] pt-6 text-sm text-[#5c4d42]">
+                    <a
+                      href={BUSINESS_INFO.phoneHref}
+                      className="flex items-center gap-2 font-medium text-[#1f1410]"
+                    >
+                      <Phone className="h-4 w-4 text-[#8b3d2c]" />
+                      {BUSINESS_INFO.phone}
+                    </a>
+                    <div className="flex items-start gap-2">
+                      <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#8b3d2c]" />
+                      <span>{BUSINESS_INFO.hoursLabel}</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#8b3d2c]" />
+                      <span>
+                        {BUSINESS_INFO.addressLine1}
+                        <br />
+                        {BUSINESS_INFO.addressLine2}
+                      </span>
+                    </div>
                     {user ? (
                       <>
                         {isAdmin && (
                           <Link
                             href="/admin"
-                            className="text-lg font-serif text-[#2d1e18] hover:text-[#8b4f39]"
+                            className="block text-[#1f1410]"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
-                            Admin Dashboard
+                            Admin
                           </Link>
                         )}
                         {(isAdmin || isStaff) && (
                           <>
                             <Link
                               href="/kitchen"
-                              className="text-lg font-serif text-[#2d1e18] hover:text-[#8b4f39]"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
-                              Kitchen Display
+                              Kitchen
                             </Link>
                             <Link
                               href="/order-board"
-                              className="text-lg font-serif text-[#2d1e18] hover:text-[#8b4f39]"
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
-                              Order Board
+                              Order board
                             </Link>
                           </>
                         )}
                         <button
-                          className="text-left text-lg font-serif text-destructive"
+                          type="button"
+                          className="text-left text-destructive"
                           onClick={() => {
                             setIsMobileMenuOpen(false);
                             handleLogout();
                           }}
                         >
-                          Sign Out
+                          Sign out
                         </button>
                       </>
                     ) : (
                       <Link
                         href="/login"
-                        className="text-lg font-serif text-[#2d1e18] hover:text-[#8b4f39]"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Sign In
+                        Sign in
                       </Link>
                     )}
-                  </nav>
-
-                  <div className="mt-auto rounded-[1.75rem] border border-[rgba(79,50,34,0.1)] bg-[#f4eadf] p-5 text-sm text-[#6d5748]">
-                    <div className="mb-3 font-serif text-lg text-[#2d1e18]">
-                      Visit us
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2">
-                        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#8b4f39]" />
-                        <span>
-                          {BUSINESS_INFO.addressLine1}
-                          <br />
-                          {BUSINESS_INFO.addressLine2}
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#8b4f39]" />
-                        <span>{BUSINESS_INFO.hoursLabel}</span>
-                      </div>
-                      <a
-                        href={BUSINESS_INFO.phoneHref}
-                        className="flex items-center gap-2 text-[#2d1e18] hover:text-[#8b4f39]"
-                      >
-                        <Phone className="h-4 w-4 shrink-0 text-[#8b4f39]" />
-                        <span>{BUSINESS_INFO.phone}</span>
-                      </a>
-                    </div>
                   </div>
                 </div>
               </SheetContent>
@@ -509,40 +568,42 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      <footer className="border-t border-[rgba(79,50,34,0.14)] bg-[#241813] text-[#f8f0e5]">
-        <div className="container mx-auto px-4 py-14 md:py-16">
-          <div className="grid gap-10 lg:grid-cols-[1.25fr_0.75fr_0.9fr_0.95fr]">
+      <footer className="border-t border-[rgba(26,18,14,0.12)] bg-[#1a120e] text-[#f2e8dc]">
+        <div className="container mx-auto max-w-6xl px-4 py-12 md:py-14">
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr]">
             <div>
               <img
                 src="/logo.webp"
                 alt={BUSINESS_INFO.primaryName}
-                className="h-14 w-auto object-contain"
+                className="h-12 w-auto object-contain opacity-95"
               />
-              <p className="mt-5 max-w-sm text-sm leading-7 text-[#f8f0e5]/72">
-                {BUSINESS_INFO.primaryName} serves weekday breakfast and lunch,
-                takeout, trays, platters, and catering for Mississauga offices,
-                family gatherings, and hosted events.
+              <p className="mt-4 max-w-md text-sm leading-relaxed text-[#f2e8dc]/75">
+                {BUSINESS_INFO.primaryName} — Italian takeout, weekday lunch,
+                and catering for offices and events on Skymark Ave in
+                Mississauga, a short hop from Pearson when timing matters.
               </p>
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-2">
                 <Button
-                  className="rounded-full bg-[#8b4f39] text-white hover:bg-[#75412f]"
+                  className="h-9 rounded-md bg-[#b85c40] px-4 text-sm text-white hover:bg-[#9a4d35]"
                   asChild
                 >
-                  <Link href="/menu">Order Pickup</Link>
+                  <Link href="/menu">Order pickup</Link>
                 </Button>
                 <Button
                   variant="outline"
-                  className="rounded-full border-white/14 bg-white/5 text-white hover:bg-white/10"
+                  className="h-9 rounded-md border-white/20 bg-transparent px-4 text-sm text-[#f2e8dc] hover:bg-white/10"
                   asChild
                 >
-                  <Link href="/catering#inquire">Request Catering</Link>
+                  <Link href="/catering#inquire">Catering quote</Link>
                 </Button>
               </div>
             </div>
 
             <div>
-              <h4 className="font-serif text-lg font-semibold">Explore</h4>
-              <nav className="mt-4 flex flex-col gap-3 text-sm text-[#f8f0e5]/72">
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+                Explore
+              </h4>
+              <nav className="mt-3 flex flex-col gap-2 text-sm text-[#f2e8dc]/72">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
@@ -556,89 +617,82 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
 
             <div>
-              <h4 className="font-serif text-lg font-semibold">Contact</h4>
-              <div className="mt-4 space-y-3 text-sm text-[#f8f0e5]/72">
-                <div className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-                  <address className="not-italic">
-                    {BUSINESS_INFO.addressLine1}
-                    <br />
-                    {BUSINESS_INFO.addressLine2}
-                  </address>
-                </div>
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+                Contact
+              </h4>
+              <div className="mt-3 space-y-2 text-sm text-[#f2e8dc]/72">
+                <address className="not-italic leading-relaxed">
+                  {BUSINESS_INFO.addressLine1}
+                  <br />
+                  {BUSINESS_INFO.addressLine2}
+                </address>
                 <a
                   href={BUSINESS_INFO.phoneHref}
-                  className="flex items-center gap-2 transition-colors hover:text-white"
+                  className="block font-medium text-white/95 hover:text-white"
                 >
-                  <Phone className="h-4 w-4 shrink-0" />
-                  <span>{BUSINESS_INFO.phone}</span>
+                  {BUSINESS_INFO.phone}
                 </a>
                 <a
                   href={BUSINESS_INFO.emailHref}
-                  className="flex items-center gap-2 transition-colors hover:text-white"
+                  className="block hover:text-white"
                 >
-                  <Mail className="h-4 w-4 shrink-0" />
-                  <span>{BUSINESS_INFO.email}</span>
+                  {BUSINESS_INFO.email}
                 </a>
                 <a
                   href={BUSINESS_INFO.instagramHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 transition-colors hover:text-white"
+                  className="inline-flex items-center gap-2 hover:text-white"
                 >
-                  <Instagram className="h-4 w-4 shrink-0" />
-                  <span>@skymark___eatery</span>
+                  <Instagram className="h-4 w-4" />
+                  @skymark___eatery
                 </a>
               </div>
             </div>
 
             <div>
-              <h4 className="font-serif text-lg font-semibold">Hours</h4>
-              <div className="mt-4 space-y-3 text-sm text-[#f8f0e5]/72">
-                <div className="flex items-start gap-2">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0" />
-                  <div>
-                    <p>Monday to Friday</p>
-                    <p className="font-semibold text-white">
-                      7:30 AM - 4:30 PM
-                    </p>
-                    <p className="mt-1 text-xs text-[#f8f0e5]/48">
-                      Closed weekends and public holidays
-                    </p>
-                  </div>
-                </div>
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+                Hours
+              </h4>
+              <div className="mt-3 space-y-2 text-sm text-[#f2e8dc]/72">
+                <p className="font-medium text-white/95">
+                  Monday–Friday · 7:30a–4:30p
+                </p>
+                <p className="text-xs text-[#f2e8dc]/55">
+                  Closed weekends and public holidays
+                </p>
                 <a
                   href={BUSINESS_INFO.mapsHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-[#f8f0e5]/72 transition-colors hover:text-white"
+                  className="inline-flex items-center gap-2 text-sm hover:text-white"
                 >
-                  <MapPin className="h-4 w-4" />
-                  Get directions
+                  <MapPin className="h-4 w-4 shrink-0" />
+                  Directions
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-[#f8f0e5]/50 md:flex-row md:items-center md:justify-between">
+          <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-[#f2e8dc]/45 md:flex-row md:items-center md:justify-between">
             <p>
-              © {new Date().getFullYear()} {BUSINESS_INFO.primaryName}. All
-              rights reserved.
+              © {new Date().getFullYear()} {BUSINESS_INFO.primaryName}
             </p>
-            <p>{BUSINESS_INFO.tagline}</p>
+            <p className="max-w-xl md:text-right">{BUSINESS_INFO.tagline}</p>
           </div>
         </div>
       </footer>
 
       <button
+        type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Back to top"
         title="Back to top"
         className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#8b4f39] text-white shadow-[0_18px_34px_rgba(139,79,57,0.28)] transition-all duration-300 hover:scale-105 hover:bg-[#75412f]",
+          "fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#8b3d2c] text-white shadow-lg transition-all duration-300 hover:bg-[#722f22]",
           showBackToTop
             ? "translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-4 opacity-0",
+            : "pointer-events-none translate-y-3 opacity-0",
         )}
       >
         <ArrowUp className="h-4 w-4" />

@@ -74,13 +74,13 @@
   --elevate-1: rgba(58, 38, 27, 0.04);
   --elevate-2: rgba(58, 38, 27, 0.08);
 
-  --background: 34 39% 95%;
-  --foreground: 18 24% 17%;
-  --border: 28 22% 80%;
+  --background: 33 32% 93%;
+  --foreground: 18 26% 12%;
+  --border: 26 16% 82%;
 
-  --card: 36 43% 98%;
-  --card-foreground: 18 24% 17%;
-  --card-border: 28 22% 80%;
+  --card: 34 38% 96%;
+  --card-foreground: 18 26% 12%;
+  --card-border: 26 14% 78%;
 
   --sidebar: 36 43% 98%;
   --sidebar-foreground: 18 24% 17%;
@@ -98,8 +98,8 @@
   --primary: 18 38% 21%;
   --primary-foreground: 35 44% 95%;
 
-  --secondary: 16 50% 42%;
-  --secondary-foreground: 35 44% 95%;
+  --secondary: 12 55% 38%;
+  --secondary-foreground: 36 42% 97%;
 
   --muted: 33 30% 90%;
   --muted-foreground: 22 16% 39%;
@@ -123,10 +123,11 @@
   --app-font-serif: "Playfair Display", Georgia, serif;
   --app-font-mono: Menlo, monospace;
 
-  --radius: 0.65rem;
-  --site-header-height: 118px;
-  --sticky-nav-height: 2.75rem;
-  --section-nav-offset: 188px;
+  --radius: 0.45rem;
+  /* Single-row header + thin section rail; layout.tsx ResizeObserver overrides --site-header-height */
+  --site-header-height: 56px;
+  --sticky-nav-height: 2.125rem;
+  --section-nav-offset: 92px;
 
   --shadow-2xs: 0 1px 0 hsl(18 24% 17% / 0.02);
   --shadow-xs: 0 1px 2px hsl(18 24% 17% / 0.05);
@@ -184,9 +185,9 @@
 
 @media (min-width: 768px) {
   :root {
-    --site-header-height: 128px;
-    --sticky-nav-height: 3rem;
-    --section-nav-offset: 200px;
+    --site-header-height: 58px;
+    --sticky-nav-height: 2.25rem;
+    --section-nav-offset: 96px;
   }
 }
 
@@ -242,19 +243,19 @@
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
-    background-color: hsl(32 38% 94%);
+    background-color: hsl(33 32% 92%);
     background-image:
       radial-gradient(
-        ellipse 120% 80% at 0% -10%,
-        rgba(156, 79, 56, 0.09),
-        transparent 55%
+        ellipse 100% 60% at 0% 0%,
+        rgba(139, 61, 44, 0.06),
+        transparent 52%
       ),
       radial-gradient(
-        ellipse 90% 70% at 100% 0%,
-        rgba(74, 62, 42, 0.05),
-        transparent 50%
+        ellipse 80% 50% at 100% 0%,
+        rgba(42, 31, 25, 0.04),
+        transparent 48%
       ),
-      linear-gradient(180deg, hsl(34 42% 97%) 0%, hsl(32 36% 93%) 38%, transparent 72%);
+      linear-gradient(180deg, hsl(34 40% 96%) 0%, hsl(33 30% 91%) 42%, hsl(33 28% 90%) 100%);
     min-width: 320px;
   }
 
@@ -289,28 +290,41 @@
   }
 
   .section-shell {
-    @apply rounded-xl border border-[rgba(36,24,18,0.1)] bg-[rgba(252,249,244,0.88)] shadow-[0_20px_48px_rgba(36,24,18,0.06)];
+    @apply border border-[rgba(26,18,14,0.1)] bg-[hsl(34,42%,97%)];
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.55) inset;
   }
 
   .section-kicker {
-    @apply text-[0.65rem] font-semibold uppercase tracking-[0.32em] text-[#7a4a38];
+    @apply text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#8b4a3a];
   }
 
   .anchor-section {
     scroll-margin-top: calc(
-      var(--site-header-height) + var(--sticky-nav-height) + 0.85rem
+      var(--site-header-height) + var(--sticky-nav-height) + 0.5rem
     );
   }
 
   .menu-paper {
-    @apply rounded-lg border border-[rgba(36,24,18,0.11)] bg-[#fcf9f4];
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.65) inset,
-      0 22px 48px rgba(36, 24, 18, 0.05);
+    @apply border-y border-[rgba(26,18,14,0.09)] bg-[hsla(34,38%,97%,0.65)];
+    box-shadow: none;
   }
 
   .editorial-dark {
-    @apply bg-[#1c120e] text-[#f4ebe3];
+    @apply bg-[#16100d] text-[#f2e8dc];
+  }
+
+  .grain-hero {
+    position: relative;
+  }
+
+  .grain-hero::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   .scrollbar-none {

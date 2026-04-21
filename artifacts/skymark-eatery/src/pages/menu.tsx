@@ -1,7 +1,14 @@
 import { useMemo } from "react";
 import { Link } from "wouter";
 import { MenuItem, useListMenuItems } from "@workspace/api-client-react";
-import { ArrowRight, Clock, Minus, Phone, Plus, ShoppingBag } from "lucide-react";
+import {
+  ArrowRight,
+  Clock,
+  Minus,
+  Phone,
+  Plus,
+  ShoppingBag,
+} from "lucide-react";
 import { Layout } from "@/components/layout";
 import { StickySectionNav } from "@/components/sticky-section-nav";
 import { Button } from "@/components/ui/button";
@@ -14,13 +21,6 @@ import {
   useSeo,
 } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-
-function splitItems(items: StaticMenuItem[]) {
-  if (items.length <= 6) return [items];
-
-  const midpoint = Math.ceil(items.length / 2);
-  return [items.slice(0, midpoint), items.slice(midpoint)];
-}
 
 function formatPrice(staticPrice: string, liveItem?: MenuItem) {
   if (!liveItem) return staticPrice;
@@ -104,29 +104,39 @@ function MenuRow({
   compact = false,
   showDescription = true,
 }: MenuRowProps) {
+  const price = formatPrice(item.price, liveItem);
   return (
     <div
       className={cn(
-        "group flex gap-4 border-b border-[rgba(36,24,18,0.06)] last:border-b-0",
-        compact ? "px-4 py-3 sm:px-5" : "px-5 py-4 sm:px-6",
+        "group flex gap-3 border-b border-[rgba(36,24,18,0.07)] last:border-b-0 sm:gap-4",
+        compact ? "px-4 py-2.5 sm:px-5 sm:py-3" : "px-5 py-3.5 sm:px-6 sm:py-4",
       )}
     >
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+        <div className="flex min-w-0 items-end gap-2">
           <h3
             className={cn(
-              "font-serif tracking-tight text-[#1c120e]",
-              compact ? "text-[1.02rem]" : "text-lg",
+              "shrink-0 font-serif tracking-tight text-[#1c120e]",
+              compact
+                ? "max-w-[68%] truncate text-[1.02rem] sm:max-w-[72%]"
+                : "text-lg",
             )}
           >
             {item.name}
           </h3>
-          {item.featured ? (
-            <span className="font-sans text-[11px] font-medium uppercase tracking-[0.12em] text-[#9c4f38]">
-              House favourite
-            </span>
-          ) : null}
+          <span
+            className="mb-[0.32rem] min-h-px min-w-[0.5rem] flex-1 border-b border-dotted border-[rgba(36,24,18,0.22)]"
+            aria-hidden
+          />
+          <span className="shrink-0 font-serif text-base tabular-nums text-[#1c120e] sm:text-[1.05rem]">
+            {price}
+          </span>
         </div>
+        {item.featured ? (
+          <span className="mt-1 inline-block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-[#9c4f38]">
+            House favourite
+          </span>
+        ) : null}
         {showDescription && item.description ? (
           <p
             className={cn(
@@ -138,10 +148,7 @@ function MenuRow({
           </p>
         ) : null}
       </div>
-      <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
-        <span className="font-serif text-base tabular-nums text-[#1c120e] sm:text-[1.05rem]">
-          {formatPrice(item.price, liveItem)}
-        </span>
+      <div className="flex shrink-0 flex-col justify-end pb-0.5">
         <OrderControls
           liveItem={liveItem}
           quantity={quantity}
@@ -206,16 +213,18 @@ function SectionIntro({
   note?: string;
 }) {
   return (
-    <header className="mb-6 max-w-2xl">
+    <header className="mb-5 max-w-2xl border-l-2 border-[#9c4f38]/80 pl-4 sm:mb-6 sm:pl-5">
       <p className="section-kicker">{eyebrow}</p>
-      <h2 className="mt-2 font-serif text-3xl tracking-tight text-[#1c120e] sm:text-[2.1rem]">
+      <h2 className="mt-2 font-serif text-3xl tracking-tight text-[#1c120e] sm:text-[2.05rem]">
         {title}
       </h2>
-      <p className="mt-3 font-sans text-sm leading-relaxed text-[#5c4d42] sm:text-base">
+      <p className="mt-2.5 font-sans text-sm leading-relaxed text-[#5c4d42] sm:text-base">
         {description}
       </p>
       {note ? (
-        <p className="mt-2 font-sans text-xs text-[#7a4a38] sm:text-sm">{note}</p>
+        <p className="mt-2 font-sans text-xs text-[#7a4a38] sm:text-sm">
+          {note}
+        </p>
       ) : null}
     </header>
   );
@@ -284,36 +293,35 @@ export default function Menu() {
   return (
     <Layout>
       <section className="relative overflow-hidden border-b border-black/10 bg-[#16100d] text-white">
-        <div className="absolute inset-0 opacity-35">
+        <div className="absolute inset-0 opacity-32">
           <img
             src={SITE_IMAGES.menuHero}
-            alt=""
+            alt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
             className="h-full w-full object-cover"
-            aria-hidden
           />
         </div>
         <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(14,10,8,0.96),rgba(22,16,13,0.88)_55%,rgba(22,16,13,0.5))]" />
 
-        <div className="relative container mx-auto px-4 py-10 sm:py-12">
-          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+        <div className="relative container mx-auto max-w-6xl px-4 py-8 sm:py-10">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div className="max-w-2xl">
-              <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[#deb39a]">
+              <p className="font-sans text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[#deb39a]">
                 Takeout menu
               </p>
-              <h1 className="mt-3 font-serif text-[2rem] leading-[1.05] tracking-tight sm:text-4xl lg:text-[2.65rem]">
-                Italian lunch, written for a workday.
+              <h1 className="mt-2.5 font-serif text-[1.85rem] leading-[1.06] tracking-tight sm:text-4xl lg:text-[2.5rem]">
+                Italian lunch, built for a Mississauga workday.
               </h1>
-              <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-[#c9b5a6] sm:text-[0.95rem]">
+              <p className="mt-3 max-w-xl font-sans text-sm leading-relaxed text-[#c9b5a6] sm:text-[0.95rem]">
                 Breakfast through pasta and pizza — made in-house on Skymark
-                Avenue.{" "}
+                Ave.{" "}
                 {onlineOrderingReady
-                  ? "Add items where offered, or call for the fastest same-day help."
-                  : "Browse here, then call the kitchen to place your order."}
+                  ? "Add items where offered, or call for same-day help."
+                  : "Browse here, then call the kitchen to order."}
               </p>
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 <Button
                   size="sm"
-                  className="rounded-md bg-[#b55a3c] font-sans text-white hover:bg-[#9c4f38]"
+                  className="rounded-sm bg-[#b55a3c] font-sans text-white hover:bg-[#9c4f38]"
                   asChild
                 >
                   <a href={BUSINESS_INFO.phoneHref}>Call to order</a>
@@ -321,14 +329,14 @@ export default function Menu() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="rounded-md border-white/20 font-sans text-white hover:bg-white/10"
+                  className="rounded-sm border-white/20 font-sans text-white hover:bg-white/10"
                   asChild
                 >
-                  <Link href="/catering">Group catering</Link>
+                  <Link href="/catering">Catering</Link>
                 </Button>
               </div>
             </div>
-            <div className="flex shrink-0 flex-col gap-3 border-t border-white/10 pt-6 font-sans text-sm text-[#d8c8bc] sm:border-t-0 sm:pt-0 lg:border-l lg:border-t-0 lg:pl-8">
+            <div className="flex shrink-0 flex-col gap-2 border-t border-white/10 pt-5 font-sans text-[13px] text-[#d8c8bc] sm:border-t-0 sm:pt-0 lg:border-l lg:border-t-0 lg:pl-7">
               <span className="inline-flex items-center gap-2">
                 <Clock className="h-4 w-4 text-[#deb39a]" />
                 Mon–Fri · 7:30a–4:30p
@@ -342,43 +350,40 @@ export default function Menu() {
       </section>
 
       <StickySectionNav
-        label="Categories"
+        label="Menu sections"
         items={MAIN_MENU_SECTIONS.map((section) => ({
           id: section.id,
           label: section.shortLabel,
         }))}
         cta={
-          <Button
-            size="sm"
-            className="rounded-md bg-[#2a1f19] font-sans text-xs text-white hover:bg-black"
-            asChild
+          <a
+            href={BUSINESS_INFO.phoneHref}
+            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[#6d5c50] hover:text-[#8b3d2c]"
           >
-            <a href={BUSINESS_INFO.phoneHref}>{BUSINESS_INFO.phone}</a>
-          </Button>
+            {BUSINESS_INFO.phone}
+          </a>
         }
       />
 
-      <div className="border-b border-[rgba(36,24,18,0.06)] bg-[#e8dfd4] py-3">
-        <div className="container mx-auto flex flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-sans text-xs text-[#4a3d35] sm:text-sm">
-            Trays and buffets live on the{" "}
-            <Link href="/catering" className="font-semibold text-[#9c4f38]">
-              catering page
-            </Link>
-            . This menu is weekday takeout.
-          </p>
+      <div className="container mx-auto max-w-6xl px-4 py-2">
+        <p className="font-sans text-[11px] leading-relaxed text-[#6d5c50] sm:text-xs">
+          Trays and buffets live on{" "}
+          <Link href="/catering" className="font-semibold text-[#8b3d2c]">
+            catering
+          </Link>
+          . Below is weekday takeout.
           <Link
             href="/catering"
-            className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-[#2a1f19] hover:text-[#9c4f38] sm:text-sm"
+            className="ml-2 inline-flex items-center gap-0.5 font-semibold text-[#1f1410] hover:text-[#8b3d2c]"
           >
-            Open catering
-            <ArrowRight className="h-3.5 w-3.5" />
+            Catering menu
+            <ArrowRight className="h-3 w-3" />
           </Link>
-        </div>
+        </p>
       </div>
 
-      <section className="py-12 sm:py-14">
-        <div className="container mx-auto space-y-16 px-4 sm:space-y-20">
+      <section className="py-10 sm:py-12">
+        <div className="container mx-auto max-w-6xl space-y-14 px-4 sm:space-y-16">
           <section id={breakfast.id} className="anchor-section">
             <SectionIntro
               eyebrow={breakfast.eyebrow}
@@ -386,72 +391,57 @@ export default function Menu() {
               description={breakfast.description}
               note={breakfast.note}
             />
-            <div className="menu-paper overflow-hidden">
-              <div className="grid md:grid-cols-2">
-                {splitItems(breakfast.items ?? []).map((column, columnIndex) => (
-                  <div
-                    key={`${breakfast.id}-${columnIndex}`}
-                    className={cn(
-                      "divide-y divide-[rgba(36,24,18,0.06)]",
-                      columnIndex === 0 &&
-                        "md:border-r md:border-[rgba(36,24,18,0.06)]",
-                    )}
-                  >
-                    {column.map((entry) => {
-                      const liveItem = getLiveItem(entry.name);
-                      return (
-                        <MenuRow
-                          key={entry.name}
-                          item={entry}
-                          liveItem={liveItem}
-                          quantity={getCartQuantity(liveItem?.id)}
-                          onAdd={handleAdd}
-                          onIncrement={handleIncrement}
-                          onDecrement={handleDecrement}
-                          compact
-                          showDescription={entry.featured}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
+            <div className="menu-paper max-w-3xl overflow-hidden divide-y divide-[rgba(36,24,18,0.07)]">
+              {(breakfast.items ?? []).map((entry) => {
+                const liveItem = getLiveItem(entry.name);
+                return (
+                  <MenuRow
+                    key={entry.name}
+                    item={entry}
+                    liveItem={liveItem}
+                    quantity={getCartQuantity(liveItem?.id)}
+                    onAdd={handleAdd}
+                    onIncrement={handleIncrement}
+                    onDecrement={handleDecrement}
+                    compact
+                    showDescription={entry.featured}
+                  />
+                );
+              })}
             </div>
           </section>
 
           <section id={sandwiches.id} className="anchor-section">
-            <div className="grid gap-8 lg:grid-cols-[1fr_280px] lg:items-start">
-              <div>
-                <SectionIntro
-                  eyebrow={sandwiches.eyebrow}
-                  title={sandwiches.title}
-                  description={sandwiches.description}
-                />
-                <div className="menu-paper divide-y divide-[rgba(36,24,18,0.06)]">
-                  {sandwiches.items?.map((entry) => {
-                    const liveItem = getLiveItem(entry.name);
-                    return (
-                      <MenuRow
-                        key={entry.name}
-                        item={entry}
-                        liveItem={liveItem}
-                        quantity={getCartQuantity(liveItem?.id)}
-                        onAdd={handleAdd}
-                        onIncrement={handleIncrement}
-                        onDecrement={handleDecrement}
-                        showDescription={entry.featured}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              {sandwiches.addOns && sandwiches.addOnsTitle ? (
+            <SectionIntro
+              eyebrow={sandwiches.eyebrow}
+              title={sandwiches.title}
+              description={sandwiches.description}
+            />
+            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.06)]">
+              {sandwiches.items?.map((entry) => {
+                const liveItem = getLiveItem(entry.name);
+                return (
+                  <MenuRow
+                    key={entry.name}
+                    item={entry}
+                    liveItem={liveItem}
+                    quantity={getCartQuantity(liveItem?.id)}
+                    onAdd={handleAdd}
+                    onIncrement={handleIncrement}
+                    onDecrement={handleDecrement}
+                    showDescription={entry.featured}
+                  />
+                );
+              })}
+            </div>
+            {sandwiches.addOns && sandwiches.addOnsTitle ? (
+              <div className="mt-8 max-w-3xl">
                 <AddOnGrid
                   title={sandwiches.addOnsTitle}
                   items={sandwiches.addOns}
                 />
-              ) : null}
-            </div>
+              </div>
+            ) : null}
           </section>
 
           <section id={salads.id} className="anchor-section">
@@ -491,99 +481,81 @@ export default function Menu() {
               title={sides.title}
               description={sides.description}
             />
-            <div className="menu-paper">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3">
-                {sides.items?.map((entry, i) => {
-                  const liveItem = getLiveItem(entry.name);
-                  const colBorder =
-                    i % 3 !== 2 ? "lg:border-r lg:border-[rgba(36,24,18,0.06)]" : "";
-                  const smBorder =
-                    i % 2 === 0 ? "sm:border-r sm:border-[rgba(36,24,18,0.06)]" : "";
-                  return (
-                    <div
-                      key={entry.name}
-                      className={cn(
-                        "border-b border-[rgba(36,24,18,0.06)] sm:border-b-0",
-                        smBorder,
-                        colBorder,
-                      )}
-                    >
-                      <MenuRow
-                        item={entry}
-                        liveItem={liveItem}
-                        quantity={getCartQuantity(liveItem?.id)}
-                        onAdd={handleAdd}
-                        onIncrement={handleIncrement}
-                        onDecrement={handleDecrement}
-                        compact
-                        showDescription={false}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.07)] overflow-hidden">
+              {sides.items?.map((entry) => {
+                const liveItem = getLiveItem(entry.name);
+                return (
+                  <MenuRow
+                    key={entry.name}
+                    item={entry}
+                    liveItem={liveItem}
+                    quantity={getCartQuantity(liveItem?.id)}
+                    onAdd={handleAdd}
+                    onIncrement={handleIncrement}
+                    onDecrement={handleDecrement}
+                    compact
+                    showDescription={false}
+                  />
+                );
+              })}
             </div>
           </section>
 
           <section id={pizza.id} className="anchor-section">
-            <div className="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-start">
-              <div>
-                <SectionIntro
-                  eyebrow={pizza.eyebrow}
-                  title={pizza.title}
-                  description={pizza.description}
-                />
-                <div className="menu-paper divide-y divide-[rgba(36,24,18,0.06)]">
-                  {pizza.items?.map((entry) => {
-                    const liveItem = getLiveItem(entry.name);
-                    return (
-                      <MenuRow
-                        key={entry.name}
-                        item={entry}
-                        liveItem={liveItem}
-                        quantity={getCartQuantity(liveItem?.id)}
-                        onAdd={handleAdd}
-                        onIncrement={handleIncrement}
-                        onDecrement={handleDecrement}
-                        compact
-                        showDescription={entry.featured}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-              {pizza.addOns && pizza.addOnsTitle ? (
-                <div className="space-y-4">
-                  <AddOnGrid title={pizza.addOnsTitle} items={pizza.addOns} />
-                  <p className="font-sans text-xs leading-relaxed text-[#5c4d42]">
-                    Party-size pies stay easy for office drops — ask when you
-                    call if you need timing help.
-                  </p>
-                </div>
-              ) : null}
+            <SectionIntro
+              eyebrow={pizza.eyebrow}
+              title={pizza.title}
+              description={pizza.description}
+            />
+            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.06)]">
+              {pizza.items?.map((entry) => {
+                const liveItem = getLiveItem(entry.name);
+                return (
+                  <MenuRow
+                    key={entry.name}
+                    item={entry}
+                    liveItem={liveItem}
+                    quantity={getCartQuantity(liveItem?.id)}
+                    onAdd={handleAdd}
+                    onIncrement={handleIncrement}
+                    onDecrement={handleDecrement}
+                    compact
+                    showDescription={entry.featured}
+                  />
+                );
+              })}
             </div>
+            {pizza.addOns && pizza.addOnsTitle ? (
+              <div className="mt-8 max-w-3xl space-y-3">
+                <AddOnGrid title={pizza.addOnsTitle} items={pizza.addOns} />
+                <p className="font-sans text-xs leading-relaxed text-[#5c4d42]">
+                  Party-size pies stay easy for office drops — ask when you call
+                  if you need timing help.
+                </p>
+              </div>
+            ) : null}
           </section>
 
           <section id={pasta.id} className="anchor-section">
-            <div className="menu-paper p-6 sm:p-8">
+            <div className="menu-paper p-5 sm:p-7">
               <SectionIntro
                 eyebrow={pasta.eyebrow}
                 title={pasta.title}
                 description={pasta.description}
                 note={pasta.note}
               />
-              <div className="mt-8 grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
+              <div className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-2">
                 {pasta.pastaGroups?.map((group) => (
                   <div
                     key={group.title}
-                    className="rounded-md border border-[rgba(36,24,18,0.08)] bg-[#faf7f3]"
+                    className="overflow-hidden rounded-sm border border-[rgba(36,24,18,0.1)] bg-[#f7f2eb]"
                   >
-                    <div className="border-b border-[rgba(36,24,18,0.06)] px-4 py-3">
-                      <h3 className="font-serif text-lg text-[#1c120e]">
+                    <div className="border-b border-[rgba(36,24,18,0.08)] bg-[#2a1f19] px-4 py-2.5">
+                      <h3 className="font-serif text-base tracking-tight text-[#f4ebe3]">
                         {group.title}
                       </h3>
                     </div>
-                    <div className="divide-y divide-[rgba(36,24,18,0.06)]">
+                    <div className="divide-y divide-[rgba(36,24,18,0.07)]">
                       {group.items.map((entry) => {
                         const liveItem = getLiveItem(entry.name);
                         return (
@@ -635,9 +607,9 @@ export default function Menu() {
         </div>
       </section>
 
-      <section className="border-t border-[rgba(36,24,18,0.08)] bg-[#ede4d9] py-12">
-        <div className="container mx-auto px-4">
-          <div className="menu-paper flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:justify-between">
+      <section className="border-t border-[rgba(26,18,14,0.08)] bg-[hsl(33,28%,90%)] py-12">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="flex flex-col gap-6 border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,97%,0.85)] p-8 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="section-kicker">Larger orders</p>
               <h2 className="mt-2 font-serif text-2xl text-[#1c120e] sm:text-3xl">

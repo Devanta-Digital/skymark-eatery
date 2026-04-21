@@ -5,9 +5,11 @@ export const BUSINESS_INFO = {
   siteUrl: "https://skymarkeatery.ca",
   phone: "(905) 206-5550",
   phoneHref: "tel:+19052065550",
+  /** E.164-style string for JSON-LD `telephone`. */
+  telephoneSchema: "+1-905-206-5550",
   email: "info@skymarkeatery.ca",
   emailHref: "mailto:info@skymarkeatery.ca",
-  addressLine1: "2630 Skymark Ave., Unit 102",
+  addressLine1: "2630 Skymark Ave Unit 102",
   addressLine2: "Mississauga, ON L4W 5A4",
   city: "Mississauga",
   region: "ON",
@@ -20,12 +22,13 @@ export const BUSINESS_INFO = {
     "https://maps.google.com/maps?q=2630+Skymark+Ave+Unit+102+Mississauga+ON+L4W+5A4&hl=en&z=16&output=embed",
   instagramHref: "https://www.instagram.com/skymark___eatery/",
   tagline:
-    "Italian takeout, weekday lunch, and office catering from Skymark Avenue in Mississauga — near Pearson and the Skymark business corridor.",
+    "Italian takeout, weekday lunch, and office catering from Skymark Avenue in Mississauga — convenient for teams near Pearson Airport and across western Mississauga.",
 };
 
 export const SITE_IMAGES = {
   hero: "/images/instagram/hero-pasta.jpg",
-  menuHero: "/images/instagram/daily-special.jpg",
+  menuHero: "/images/instagram/veal-sandwich.jpg",
+  vealSandwich: "/images/instagram/veal-sandwich.jpg",
   cateringHero: "/images/instagram/greek-salad.jpg",
   caesar: "/images/instagram/caesar.jpg",
   focaccia: "/images/instagram/post-8.jpg",
@@ -37,16 +40,11 @@ export const SITE_IMAGES = {
   /** Interior photo used on home + contact; keep alt text aligned with this asset. */
   locationInterior: "/images/interior-3.jpg",
   locationInteriorAlt:
-    "Dining room and counter service at Skymark Eatery in Mississauga",
+    "Dining room and counter at Skymark Eatery by Caffe E Pranzo, Mississauga",
   og: "/images/instagram/hero-pasta.jpg",
-  ogImageAlt: "Pasta and lunch favourites from Skymark Eatery in Mississauga",
+  ogImageAlt:
+    "Pasta and lunch favourites from Skymark Eatery by Caffe E Pranzo, Mississauga",
 };
-
-export const HOME_TRUST_MARKERS = [
-  { label: "Hours", value: "Mon–Fri · 7:30a–4:30p" },
-  { label: "Pickup", value: "2630 Skymark Ave · Unit 102" },
-  { label: "Catering", value: "Buffets, trays & platters" },
-];
 
 export const WHY_SKYMARK = [
   {
@@ -64,4 +62,4 @@ export const WHY_SKYMARK = [
 ];
 
 export const CATERING_HELPER_TEXT =
-  "Need help choosing packages, tray sizes, or dietary accommodations? Email info@skymarkeatery.ca and we can help plan your catering order.";
+  "Email info@skymarkeatery.ca for tray counts, buffet pairings, or dietary notes — we help Mississauga offices and hosts near Pearson plan the right spread.";

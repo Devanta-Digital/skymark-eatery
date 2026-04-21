@@ -15,7 +15,6 @@ type StickySectionNavProps = {
 
 function readOffsetVariable(name: string, fallback: number) {
   if (typeof window === "undefined") return fallback;
-
   const raw = getComputedStyle(document.documentElement)
     .getPropertyValue(name)
     .trim()
@@ -49,7 +48,6 @@ export function StickySectionNav({
       items.forEach((item) => {
         const section = document.getElementById(item.id);
         if (!section) return;
-
         if (section.getBoundingClientRect().top - stickyOffset <= 0) {
           current = item.id;
         }
@@ -74,49 +72,34 @@ export function StickySectionNav({
     <nav
       aria-label={label}
       className={cn(
-        "sticky top-[var(--site-header-height)] z-40 border-b border-[rgba(36,24,18,0.14)] bg-[rgba(252,249,244,0.92)] shadow-[0_12px_32px_rgba(36,24,18,0.07)] backdrop-blur-md backdrop-saturate-150",
+        "sticky top-[var(--site-header-height)] z-40 border-b border-[rgba(26,18,14,0.07)] bg-[hsla(34,38%,97%,0.88)] backdrop-blur-sm",
         className,
       )}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col gap-2 py-2 sm:flex-row sm:items-stretch sm:justify-between sm:gap-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-center">
-            <span className="shrink-0 pt-0.5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-[#6b5346]">
-              {label}
-            </span>
-            <div className="scrollbar-none flex min-w-0 gap-0 overflow-x-auto border-t border-[rgba(36,24,18,0.08)] pt-2 sm:border-t-0 sm:pt-0">
-              {items.map((item) => {
-                const isActive = item.id === activeId;
-                return (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    aria-current={isActive ? "location" : undefined}
-                    className={cn(
-                      "relative shrink-0 px-3 py-2 pb-2.5 font-sans text-[13px] font-medium transition-colors sm:px-4",
-                      isActive
-                        ? "text-[#1a120e]"
-                        : "text-[#5c4a40] hover:text-[#1a120e]",
-                    )}
-                  >
-                    {item.label}
-                    <span
-                      className={cn(
-                        "pointer-events-none absolute inset-x-1 bottom-0 h-0.5 rounded-full transition-opacity duration-200",
-                        isActive ? "bg-[#9c4f38] opacity-100" : "opacity-0",
-                      )}
-                      aria-hidden
-                    />
-                  </a>
-                );
-              })}
-            </div>
+      <div className="container mx-auto max-w-6xl px-4">
+        <div className="flex items-end justify-between gap-3">
+          <div className="scrollbar-none flex min-w-0 flex-1 items-end gap-0 overflow-x-auto sm:gap-0.5">
+            {items.map((item) => {
+              const isActive = item.id === activeId;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  aria-current={isActive ? "location" : undefined}
+                  className={cn(
+                    "relative shrink-0 border-b-2 px-2 pb-2 pt-1.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors sm:px-2.5 sm:text-[12px] sm:tracking-[0.14em]",
+                    isActive
+                      ? "border-[#8b3d2c] text-[#1f1410]"
+                      : "border-transparent text-[#6d5c50] hover:text-[#1f1410]",
+                  )}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </div>
-
           {cta ? (
-            <div className="flex shrink-0 items-center border-t border-[rgba(36,24,18,0.08)] pt-2 sm:border-t-0 sm:border-l sm:border-[rgba(36,24,18,0.08)] sm:pl-4 sm:pt-0">
-              {cta}
-            </div>
+            <div className="flex shrink-0 items-center pb-1">{cta}</div>
           ) : null}
         </div>
       </div>
