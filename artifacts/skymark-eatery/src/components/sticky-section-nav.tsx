@@ -10,7 +10,6 @@ type StickySectionNavProps = {
   items: StickySectionNavItem[];
   label?: string;
   className?: string;
-  compact?: boolean;
   cta?: ReactNode;
 };
 
@@ -27,9 +26,8 @@ function readOffsetVariable(name: string, fallback: number) {
 
 export function StickySectionNav({
   items,
-  label = "Jump to",
+  label = "On this page",
   className,
-  compact = false,
   cta,
 }: StickySectionNavProps) {
   const initialId = useMemo(
@@ -45,7 +43,7 @@ export function StickySectionNav({
     if (!items.length) return;
 
     const updateActive = () => {
-      const stickyOffset = readOffsetVariable("--section-nav-offset", 220);
+      const stickyOffset = readOffsetVariable("--section-nav-offset", 200);
       let current = items[0].id;
 
       items.forEach((item) => {
@@ -73,44 +71,55 @@ export function StickySectionNav({
   if (!items.length) return null;
 
   return (
-    <section
+    <nav
+      aria-label={label}
       className={cn(
-        "sticky top-[var(--site-header-height)] z-40 border-y border-[rgba(79,50,34,0.12)] bg-[rgba(247,241,232,0.9)] shadow-[0_18px_40px_rgba(66,43,30,0.08)] backdrop-blur-xl",
+        "sticky top-[var(--site-header-height)] z-40 border-b border-[rgba(36,24,18,0.14)] bg-[rgba(252,249,244,0.92)] shadow-[0_12px_32px_rgba(36,24,18,0.07)] backdrop-blur-md backdrop-saturate-150",
         className,
       )}
     >
       <div className="container mx-auto px-4">
-        <div className="flex flex-col gap-3 py-3 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex min-w-0 items-center gap-3 overflow-x-auto">
-            <span className="shrink-0 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[#7d5f4d]">
+        <div className="flex flex-col gap-2 py-2 sm:flex-row sm:items-stretch sm:justify-between sm:gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-center">
+            <span className="shrink-0 pt-0.5 font-sans text-[10px] font-semibold uppercase tracking-[0.32em] text-[#6b5346]">
               {label}
             </span>
-            <div className="flex min-w-0 items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+            <div className="scrollbar-none flex min-w-0 gap-0 overflow-x-auto border-t border-[rgba(36,24,18,0.08)] pt-2 sm:border-t-0 sm:pt-0">
               {items.map((item) => {
                 const isActive = item.id === activeId;
                 return (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    aria-current={isActive ? "true" : undefined}
+                    aria-current={isActive ? "location" : undefined}
                     className={cn(
-                      "shrink-0 rounded-full border px-3.5 py-2 text-sm font-medium transition-all duration-200",
-                      compact ? "text-[0.82rem]" : "text-sm",
+                      "relative shrink-0 px-3 py-2 pb-2.5 font-sans text-[13px] font-medium transition-colors sm:px-4",
                       isActive
-                        ? "border-[#7e4330] bg-[#7e4330] text-white shadow-[0_10px_22px_rgba(126,67,48,0.22)]"
-                        : "border-[rgba(79,50,34,0.15)] bg-white/85 text-[#3b2b22] hover:border-[#c58968] hover:text-[#7e4330]",
+                        ? "text-[#1a120e]"
+                        : "text-[#5c4a40] hover:text-[#1a120e]",
                     )}
                   >
                     {item.label}
+                    <span
+                      className={cn(
+                        "pointer-events-none absolute inset-x-1 bottom-0 h-0.5 rounded-full transition-opacity duration-200",
+                        isActive ? "bg-[#9c4f38] opacity-100" : "opacity-0",
+                      )}
+                      aria-hidden
+                    />
                   </a>
                 );
               })}
             </div>
           </div>
 
-          {cta ? <div className="shrink-0">{cta}</div> : null}
+          {cta ? (
+            <div className="flex shrink-0 items-center border-t border-[rgba(36,24,18,0.08)] pt-2 sm:border-t-0 sm:border-l sm:border-[rgba(36,24,18,0.08)] sm:pl-4 sm:pt-0">
+              {cta}
+            </div>
+          ) : null}
         </div>
       </div>
-    </section>
+    </nav>
   );
 }

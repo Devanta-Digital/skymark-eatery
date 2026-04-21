@@ -24,7 +24,7 @@ export type CateringSection = {
 };
 
 export const CATERING_INTRO =
-  "Perfect for office lunches, events, and family gatherings. Choose from curated Italian buffet packages prepared fresh by Skymark Eatery in Mississauga.";
+  "Italian buffet packages, hot trays, and platters for Mississauga offices and celebrations — cooked in-house on Skymark Avenue, with clear pricing and portions.";
 
 export const CATERING_OVERVIEW = [
   {

@@ -70,6 +70,11 @@ export function restaurantStructuredData() {
       postalCode: BUSINESS_INFO.postalCode,
       addressCountry: BUSINESS_INFO.country,
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 43.6892,
+      longitude: -79.6214,
+    },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

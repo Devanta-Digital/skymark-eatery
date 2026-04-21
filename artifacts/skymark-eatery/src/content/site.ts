@@ -20,7 +20,7 @@ export const BUSINESS_INFO = {
     "https://maps.google.com/maps?q=2630+Skymark+Ave+Unit+102+Mississauga+ON+L4W+5A4&hl=en&z=16&output=embed",
   instagramHref: "https://www.instagram.com/skymark___eatery/",
   tagline:
-    "Italian takeout, weekday lunch, and catering from Skymark Avenue in Mississauga.",
+    "Italian takeout, weekday lunch, and office catering from Skymark Avenue in Mississauga — near Pearson and the Skymark business corridor.",
 };
 
 export const SITE_IMAGES = {
@@ -43,9 +43,9 @@ export const SITE_IMAGES = {
 };
 
 export const HOME_TRUST_MARKERS = [
-  "Weekday breakfast and lunch for office schedules",
-  "Italian trays, platters, and buffet catering",
-  "Easy pickup from Skymark Avenue in Mississauga",
+  { label: "Hours", value: "Mon–Fri · 7:30a–4:30p" },
+  { label: "Pickup", value: "2630 Skymark Ave · Unit 102" },
+  { label: "Catering", value: "Buffets, trays & platters" },
 ];
 
 export const WHY_SKYMARK = [

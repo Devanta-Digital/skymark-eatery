@@ -12,9 +12,9 @@ import {
 export default function Contact() {
   useSeo({
     title:
-      "Contact Skymark Eatery by Caffe E Pranzo | Mississauga Italian Catering & Takeout",
+      "Contact & Location — Skymark Eatery by Caffe E Pranzo | Skymark Ave, Mississauga",
     description:
-      "Visit, call, email, or request catering from Skymark Eatery by Caffe E Pranzo in Mississauga. Find the address, map, hours, and inquiry options in one place.",
+      "Directions, hours, phone, and email for Skymark Eatery by Caffe E Pranzo at 2630 Skymark Ave Unit 102, Mississauga. Italian takeout and catering pickup near Pearson and west Mississauga offices.",
     path: "/contact",
     image: SITE_IMAGES.locationInterior,
     imageAlt: SITE_IMAGES.locationInteriorAlt,

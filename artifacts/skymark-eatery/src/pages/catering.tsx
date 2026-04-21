@@ -3,15 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Link } from "wouter";
-import {
-  CalendarDays,
-  CheckCircle2,
-  Mail,
-  Phone,
-  Sparkles,
-  Truck,
-  Users,
-} from "lucide-react";
+import { CheckCircle2, Mail, Phone, Sparkles } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { StickySectionNav } from "@/components/sticky-section-nav";
 import { Button } from "@/components/ui/button";
@@ -86,39 +78,38 @@ function CateringRows({ sectionId }: { sectionId: string }) {
   if (!section) return null;
 
   return (
-    <article
-      id={section.id}
-      className="anchor-section overflow-hidden rounded-[1.9rem] border border-[rgba(79,50,34,0.08)] bg-white shadow-sm"
-    >
-      <div className="border-b border-[rgba(79,50,34,0.08)] px-6 py-5">
-        <h3 className="text-3xl text-[#2d1e18]">{section.title}</h3>
-        <p className="mt-2 max-w-3xl text-sm leading-7 text-[#6d5748]">
+    <article id={section.id} className="anchor-section menu-paper overflow-hidden">
+      <div className="border-b border-[rgba(36,24,18,0.08)] px-5 py-4 sm:px-6 sm:py-5">
+        <h3 className="font-serif text-2xl tracking-tight text-[#1c120e] sm:text-[1.65rem]">
+          {section.title}
+        </h3>
+        <p className="mt-2 max-w-3xl font-sans text-sm leading-relaxed text-[#5c4d42]">
           {section.description}
         </p>
       </div>
 
-      <div className="divide-y divide-[rgba(79,50,34,0.08)]">
+      <div className="divide-y divide-[rgba(36,24,18,0.06)]">
         {section.items.map((item) => (
           <div
             key={`${section.id}-${item.name}`}
-            className="grid gap-4 px-6 py-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-start"
+            className="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:px-6 sm:py-4"
           >
             <div className="min-w-0">
-              <h4 className="text-lg font-semibold leading-tight text-[#2d1e18]">
+              <h4 className="font-serif text-base text-[#1c120e] sm:text-lg">
                 {item.name}
               </h4>
-              <p className="mt-2 text-sm leading-6 text-[#6d5748]">
+              <p className="mt-1 font-sans text-sm leading-relaxed text-[#5c4d42]">
                 {item.description}
               </p>
-              {metaLine(item.serving, item.dietary) && (
-                <p className="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-[#8b5f48]">
+              {metaLine(item.serving, item.dietary) ? (
+                <p className="mt-2 font-sans text-[11px] font-medium uppercase tracking-[0.16em] text-[#7a4a38]">
                   {metaLine(item.serving, item.dietary)}
                 </p>
-              )}
+              ) : null}
             </div>
-            <div className="whitespace-nowrap text-base font-semibold text-[#2d1e18]">
+            <p className="shrink-0 font-serif text-base tabular-nums text-[#1c120e] sm:text-right">
               {item.price}
-            </div>
+            </p>
           </div>
         ))}
       </div>
@@ -131,9 +122,9 @@ export default function Catering() {
 
   useSeo({
     title:
-      "Skymark Eatery by Caffe E Pranzo Catering | Italian Catering in Mississauga",
+      "Catering & Buffets — Skymark Eatery by Caffe E Pranzo | Mississauga Office & Event Italian",
     description:
-      "Browse buffet packages, platters, hot trays, party pizza, desserts, beverages, and catering inquiry options from Skymark Eatery by Caffe E Pranzo in Mississauga.",
+      "Italian office catering on Skymark Avenue, Mississauga: buffet packages, hot trays, sandwich platters, appetizers, desserts, and inquiry support from Skymark Eatery by Caffe E Pranzo.",
     path: "/catering",
     image: SITE_IMAGES.og,
     imageAlt: SITE_IMAGES.ogImageAlt,
@@ -181,148 +172,86 @@ export default function Catering() {
 
   return (
     <Layout>
-      <section className="relative overflow-hidden border-b border-black/5 bg-[#2d1e18] text-white">
-        <div className="absolute inset-0">
+      <section className="relative overflow-hidden border-b border-black/10 bg-[#16100d] text-white">
+        <div className="absolute inset-0 opacity-30">
           <img
             src={SITE_IMAGES.cateringHero}
-            alt="Greek salad catering tray from Skymark Eatery"
-            className="h-full w-full object-cover opacity-20"
+            alt=""
+            className="h-full w-full object-cover"
+            aria-hidden
           />
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(24,15,11,0.94),rgba(45,30,24,0.86)_55%,rgba(120,70,47,0.66))]" />
         </div>
+        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(14,10,8,0.96),rgba(22,16,13,0.9)_50%,rgba(22,16,13,0.55))]" />
 
-        <div className="relative container mx-auto px-4 py-14 sm:py-18 lg:py-20">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-end">
-            <div className="max-w-3xl">
-              <div className="text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-[#dfc2b1]">
-                Catering
-              </div>
-              <h1 className="mt-4 text-5xl leading-[0.96] text-white sm:text-6xl">
-                Italian catering for office lunches, family gatherings, and
-                group events.
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/76 sm:text-lg">
-                {CATERING_INTRO}
-              </p>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/62">
-                Perfect for office lunches, family gatherings, and group events.
-                Need help choosing? Contact us and we&apos;ll help plan your
-                catering order.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <Button
-                  size="lg"
-                  className="rounded-full bg-[#8b4f39] px-7 text-white hover:bg-[#75412f]"
-                  asChild
-                >
-                  <a href="#packages">View Packages</a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-white/14 bg-white/7 px-7 text-white hover:bg-white/10"
-                  asChild
-                >
-                  <a href="#inquire">Request Catering</a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-white/14 bg-white/7 px-7 text-white hover:bg-white/10"
-                  asChild
-                >
-                  <a href={BUSINESS_INFO.phoneHref}>Call Us</a>
-                </Button>
-              </div>
-            </div>
-
-            <div className="rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-[0_24px_54px_rgba(0,0,0,0.2)] backdrop-blur-sm">
-              <div className="space-y-5">
-                <div className="flex items-start gap-3">
-                  <Users className="mt-0.5 h-5 w-5 text-[#f1caa9]" />
-                  <div>
-                    <div className="font-semibold text-white">
-                      Clear package structure
-                    </div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      Buffet menus, platters, hot trays, desserts, and service
-                      extras are separated below so planning feels easier.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Truck className="mt-0.5 h-5 w-5 text-[#f1caa9]" />
-                  <div>
-                    <div className="font-semibold text-white">
-                      Pickup or delivery
-                    </div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      Flexible for office catering, hosted lunches, and private
-                      events.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CalendarDays className="mt-0.5 h-5 w-5 text-[#f1caa9]" />
-                  <div>
-                    <div className="font-semibold text-white">
-                      Better event planning
-                    </div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      Price per person, minimums, and included dishes stay
-                      visible where they matter.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-3">
-                <Button
-                  className="rounded-full bg-white text-[#2d1e18] hover:bg-white/92"
-                  asChild
-                >
-                  <a href={BUSINESS_INFO.phoneHref}>{BUSINESS_INFO.phone}</a>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="rounded-full border-white/14 bg-white/7 text-white hover:bg-white/10"
-                  asChild
-                >
-                  <a href={BUSINESS_INFO.emailHref}>{BUSINESS_INFO.email}</a>
-                </Button>
-              </div>
+        <div className="relative container mx-auto px-4 py-10 sm:py-12">
+          <div className="max-w-3xl">
+            <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[#deb39a]">
+              Events &amp; offices
+            </p>
+            <h1 className="mt-3 font-serif text-[2rem] leading-[1.05] tracking-tight sm:text-4xl lg:text-[2.6rem]">
+              Italian catering that reads like a menu — not a spreadsheet.
+            </h1>
+            <p className="mt-4 max-w-2xl font-sans text-sm leading-relaxed text-[#c9b5a6] sm:text-base">
+              {CATERING_INTRO}
+            </p>
+            <p className="mt-3 max-w-2xl font-sans text-xs leading-relaxed text-[#a8988c] sm:text-sm">
+              Perfect for office lunches, family gatherings, and group events.
+              Need help choosing? Call or email and we&apos;ll help you plan.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                className="rounded-md bg-[#b55a3c] font-sans text-white hover:bg-[#9c4f38]"
+                asChild
+              >
+                <a href="#packages">Buffet packages</a>
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-md border-white/20 font-sans text-white hover:bg-white/10"
+                asChild
+              >
+                <a href="#inquire">Request catering</a>
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-md border-white/20 font-sans text-white hover:bg-white/10"
+                asChild
+              >
+                <a href={BUSINESS_INFO.phoneHref}>{BUSINESS_INFO.phone}</a>
+              </Button>
             </div>
           </div>
         </div>
       </section>
 
       <StickySectionNav
-        label="Browse"
+        label="Explore"
         items={anchorLinks}
         cta={
           <Button
             size="sm"
-            className="rounded-full bg-[#8b4f39] text-white hover:bg-[#75412f]"
+            className="rounded-md bg-[#2a1f19] font-sans text-xs text-white hover:bg-black"
             asChild
           >
-            <a href="#inquire">Get a Quote</a>
+            <a href="#inquire">Get a quote</a>
           </Button>
         }
       />
 
-      <section className="border-b border-[rgba(79,50,34,0.08)] bg-background py-8">
+      <section className="border-b border-[rgba(36,24,18,0.06)] bg-[#e8dfd4] py-6">
         <div className="container mx-auto px-4">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="menu-paper divide-y divide-[rgba(36,24,18,0.06)] sm:grid sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {CATERING_OVERVIEW.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.6rem] border border-[rgba(79,50,34,0.08)] bg-[#fbf6ef] px-5 py-5 text-sm leading-7 text-[#6d5748]"
-              >
-                <div className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#8b5f48]">
+              <div key={item.title} className="px-5 py-4 sm:px-6">
+                <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[#7a4a38]">
                   {item.title}
-                </div>
-                <p className="mt-3">{item.text}</p>
+                </p>
+                <p className="mt-2 font-sans text-sm leading-relaxed text-[#4a3d35]">
+                  {item.text}
+                </p>
               </div>
             ))}
           </div>
@@ -353,62 +282,57 @@ export default function Catering() {
             {BUFFET_PACKAGES.map((pkg) => (
               <article
                 key={pkg.publicName}
-                className="overflow-hidden rounded-[2rem] border border-[rgba(79,50,34,0.08)] bg-white shadow-[0_20px_44px_rgba(66,43,30,0.08)]"
+                className="menu-paper overflow-hidden"
               >
-                <div className="border-b border-[rgba(79,50,34,0.08)] bg-[#2d1e18] px-6 py-5 text-white">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="border-b border-[rgba(36,24,18,0.1)] bg-[#1c120e] px-6 py-5 text-[#f4ebe3]">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <div className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/56">
+                      <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#c49a7e]">
                         Buffet package
-                      </div>
-                      <h3 className="mt-2 text-3xl leading-tight text-white">
+                      </p>
+                      <h3 className="mt-2 font-serif text-2xl leading-tight sm:text-3xl">
                         {pkg.publicName}
                       </h3>
-                      <p className="mt-3 max-w-2xl text-sm leading-6 text-white/72">
+                      <p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-[#c9b8ab]">
                         {pkg.summary}
                       </p>
                     </div>
-                    <div className="rounded-[1.4rem] bg-white/10 px-4 py-3 text-left sm:text-center">
-                      <div className="text-[0.65rem] uppercase tracking-[0.22em] text-white/56">
-                        Price
-                      </div>
-                      <div className="mt-1 text-lg font-semibold text-white">
+                    <div className="shrink-0 border border-white/15 bg-white/5 px-4 py-3 text-left">
+                      <p className="font-sans text-[0.6rem] uppercase tracking-[0.2em] text-[#a8897a]">
+                        From
+                      </p>
+                      <p className="mt-1 font-serif text-xl text-white">
                         {pkg.pricePerPerson}
-                      </div>
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <div className="grid gap-8 p-6 lg:grid-cols-[1fr_200px]">
                   <div>
-                    <div className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[#8b5f48]">
-                      Included
-                    </div>
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[#7a4a38]">
+                      Included in the package
+                    </p>
+                    <ul className="mt-4 space-y-2 border-l-2 border-[#c49a7e]/50 pl-4 font-sans text-sm text-[#3d3028]">
                       {pkg.includedDishes.map((dish) => (
-                        <div
-                          key={dish}
-                          className="rounded-[1.2rem] border border-[rgba(79,50,34,0.08)] bg-[#fbf6ef] px-4 py-3 text-sm text-[#3f3027]"
-                        >
-                          {dish}
-                        </div>
+                        <li key={dish}>{dish}</li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
 
-                  <div className="rounded-[1.5rem] border border-[rgba(79,50,34,0.08)] bg-[#fbf6ef] p-5">
-                    <div className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-[#8b5f48]">
-                      Good to know
-                    </div>
-                    <p className="mt-4 text-sm font-semibold text-[#2d1e18]">
+                  <div className="border-t border-[rgba(36,24,18,0.08)] pt-6 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
+                    <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#7a4a38]">
+                      Portions
+                    </p>
+                    <p className="mt-3 font-serif text-base text-[#1c120e]">
                       {pkg.minimumOrder}
                     </p>
-                    <p className="mt-2 text-sm leading-6 text-[#6d5748]">
+                    <p className="mt-2 font-sans text-sm text-[#5c4d42]">
                       {pkg.feeds}
                     </p>
-                    <p className="mt-4 text-sm leading-6 text-[#6d5748]">
-                      Perfect for office lunches, family gatherings, and group
-                      events.
+                    <p className="mt-4 font-sans text-xs leading-relaxed text-[#6d5c50]">
+                      Ideal for Mississauga office lunches, meetings, and
+                      family-style gatherings.
                     </p>
                   </div>
                 </div>
@@ -518,16 +442,14 @@ export default function Catering() {
                     Common accommodations
                   </h3>
                 </div>
-                <div className="mt-5 flex flex-wrap gap-2.5">
+                <ul className="mt-5 columns-1 gap-x-8 font-sans text-sm leading-relaxed text-[#4a3d35] sm:columns-2">
                   {DIETARY_BADGES.map((badge) => (
-                    <span
-                      key={badge}
-                      className="rounded-full border border-[rgba(139,79,57,0.14)] bg-[#f8ece5] px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#8b4f39]"
-                    >
+                    <li key={badge} className="break-inside-avoid py-1">
+                      <span className="mr-2 text-[#9c4f38]">·</span>
                       {badge}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
 
               <div className="rounded-[1.8rem] border border-[rgba(79,50,34,0.08)] bg-white p-6 shadow-sm">
@@ -853,38 +775,33 @@ export default function Catering() {
         </div>
       </section>
 
-      <section className="border-t border-[rgba(79,50,34,0.08)] bg-[#f3eadf] py-16">
+      <section className="border-t border-[rgba(36,24,18,0.08)] bg-[#ede4d9] py-12">
         <div className="container mx-auto px-4">
-          <div className="section-shell px-7 py-8 sm:px-10 sm:py-10">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-              <div>
-                <div className="section-kicker">Need the everyday menu?</div>
-                <h2 className="mt-3 text-4xl text-[#2d1e18] sm:text-5xl">
-                  Keep regular lunch pickup separate from larger event orders.
-                </h2>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-[#6d5748]">
-                  Use the main menu for weekday takeout and lunch pickup. Use
-                  this page when you need buffet packages, trays, platters,
-                  desserts, beverages, and event support.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <Button
-                  size="lg"
-                  className="rounded-full bg-[#8b4f39] px-7 text-white hover:bg-[#75412f]"
-                  asChild
-                >
-                  <Link href="/menu">View Main Menu</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full border-[rgba(45,30,24,0.12)] bg-white px-7"
-                  asChild
-                >
-                  <a href={BUSINESS_INFO.phoneHref}>Call the Restaurant</a>
-                </Button>
-              </div>
+          <div className="menu-paper flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="section-kicker">Weekday lunch</p>
+              <h2 className="mt-2 font-serif text-2xl text-[#1c120e] sm:text-3xl">
+                Takeout orders use the main menu.
+              </h2>
+              <p className="mt-2 max-w-xl font-sans text-sm text-[#5c4d42]">
+                Catering stays here; sandwiches and pasta for one stay on the
+                takeout menu.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:items-end">
+              <Button
+                className="rounded-md bg-[#2a1f19] font-sans text-white hover:bg-black"
+                asChild
+              >
+                <Link href="/menu">Open takeout menu</Link>
+              </Button>
+              <Button
+                variant="outline"
+                className="rounded-md border-[rgba(36,24,18,0.12)] bg-white font-sans"
+                asChild
+              >
+                <a href={BUSINESS_INFO.phoneHref}>Call the kitchen</a>
+              </Button>
             </div>
           </div>
         </div>
