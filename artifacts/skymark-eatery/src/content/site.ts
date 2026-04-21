@@ -26,12 +26,14 @@ export const BUSINESS_INFO = {
 };
 
 export const SITE_IMAGES = {
-  /** Tight, high-texture food lead — weekday appetite */
-  hero: "/images/instagram/daily-special.jpg",
-  menuHero: "/images/instagram/salad-sandwich.jpg",
+  /** Strong food-forward hero — texture + appetite (not storefront) */
+  hero: "/images/instagram/veal-sandwich.jpg",
+  /** Menu page — lead with high-texture hot line, not a mild dual shot */
+  menuHero: "/images/instagram/veal-sandwich.jpg",
   vealSandwich: "/images/instagram/veal-sandwich.jpg",
   saladSandwich: "/images/instagram/salad-sandwich.jpg",
-  cateringHero: "/images/instagram/hot-table.jpg",
+  /** Tray-forward colour — reads as catering, not the same as menu hero crop */
+  cateringHero: "/images/instagram/greek-salad.jpg",
   caesar: "/images/instagram/caesar.jpg",
   focaccia: "/images/instagram/post-8.jpg",
   veggieTray: "/images/instagram/veggie-tray.jpg",

@@ -118,7 +118,7 @@ function MenuRow({
         <div className="flex min-w-0 items-end gap-2">
           <h3
             className={cn(
-              "shrink-0 font-serif tracking-tight text-[#1c120e]",
+              "shrink-0 font-sans font-semibold tracking-tight text-[hsl(var(--foreground))]",
               compact
                 ? "max-w-[68%] truncate text-[1.02rem] sm:max-w-[72%]"
                 : "text-lg",
@@ -130,19 +130,19 @@ function MenuRow({
             className="mb-[0.32rem] min-h-px min-w-[0.5rem] flex-1 border-b border-dotted border-[rgba(36,24,18,0.22)]"
             aria-hidden
           />
-          <span className="shrink-0 font-serif text-base tabular-nums text-[#1c120e] sm:text-[1.05rem]">
+          <span className="shrink-0 font-sans text-base font-semibold tabular-nums text-[hsl(var(--foreground))] sm:text-[1.05rem]">
             {price}
           </span>
         </div>
         {item.featured ? (
-          <span className="mt-1 inline-block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-[#9c4f38]">
+          <span className="mt-1 inline-block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-[hsl(var(--primary))]">
             House favourite
           </span>
         ) : null}
         {showDescription && item.description ? (
           <p
             className={cn(
-              "mt-1 font-sans leading-snug text-[#5c4d42]",
+              "mt-1 font-sans leading-snug text-[hsl(var(--muted-foreground))]",
               compact ? "text-[12px]" : "text-sm",
             )}
           >
@@ -171,25 +171,21 @@ function AddOnGrid({
   items: StaticMenuItem[];
 }) {
   return (
-    <div className="menu-paper">
-      <div className="border-b border-[rgba(36,24,18,0.08)] px-5 py-3">
-        <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[#7a4a38]">
-          {title}
-        </p>
-      </div>
-      <div className="divide-y divide-[rgba(36,24,18,0.06)]">
+    <div>
+      <p className="section-kicker mb-4">{title}</p>
+      <div className="menu-list-rail max-w-xl">
         {items.map((entry) => (
           <div
             key={entry.name}
-            className="flex items-start justify-between gap-4 px-5 py-3"
+            className="group flex items-start justify-between gap-4 py-3.5 first:pt-0"
           >
             <div className="min-w-0">
-              <p className="font-serif text-sm text-[#1c120e]">{entry.name}</p>
-              <p className="mt-0.5 font-sans text-xs leading-relaxed text-[#6d5c50]">
+              <p className="font-sans text-sm font-semibold text-[hsl(var(--foreground))]">{entry.name}</p>
+              <p className="mt-0.5 font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
                 {entry.description}
               </p>
             </div>
-            <p className="shrink-0 font-serif text-sm tabular-nums text-[#1c120e]">
+            <p className="shrink-0 font-sans text-sm font-semibold tabular-nums text-[hsl(var(--foreground))]">
               {entry.price}
             </p>
           </div>
@@ -208,14 +204,24 @@ function SectionIntro({
   title,
   description,
   note,
+  accent,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   note?: string;
+  /** Alternate rail colour for visual pacing between long sections */
+  accent?: boolean;
 }) {
   return (
-    <header className="mb-6 max-w-2xl border-l-[3px] border-[hsl(var(--primary))] pl-4 sm:mb-7 sm:pl-5">
+    <header
+      className={cn(
+        "mb-8 max-w-2xl border-l-[3px] pl-4 sm:mb-10 sm:pl-5",
+        accent
+          ? "border-[hsl(152_48%_30%)]"
+          : "border-[hsl(var(--primary))]",
+      )}
+    >
       <p className="section-kicker">{eyebrow}</p>
       <h2 className="mt-2 font-sans text-2xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-[1.85rem]">
         {title}
@@ -320,15 +326,17 @@ export default function Menu() {
   return (
     <Layout>
       <Hero
-        eyebrow="Takeout menu"
-        title="Italian lunch, built for a Mississauga workday."
-        subtitle={`Breakfast through pasta and pizza, made in-house on Skymark Ave. ${
+        eyebrow="Skymark Ave takeout · weekday only"
+        title="Italian lunch you can actually order before the meeting starts."
+        subtitle={`Breakfast through pasta from the Skymark Ave line. ${
           onlineOrderingReady
             ? "Add items where offered, or call for same-day help."
             : "Browse here, then call the kitchen to order."
         }`}
         imageSrc={SITE_IMAGES.menuHero}
         imageAlt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
+        imageClassName="media-crop-menu-hero"
+        imageEmphasis="subdued"
         primaryCta={{ label: "Call to order", href: BUSINESS_INFO.phoneHref }}
         secondaryCta={{ label: "Catering", href: "/catering" }}
         infoLine={
@@ -357,7 +365,7 @@ export default function Menu() {
                 return (
                   <div
                     key={`${section.id}-${item.name}`}
-                    className="flex flex-col justify-between gap-4 rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white p-4 shadow-sm sm:p-5"
+                    className="flex flex-col justify-between gap-4 rounded-xl border-0 bg-white/95 p-4 ring-1 ring-[hsla(220,14%,12%,0.07)] sm:p-5 transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-36px_rgba(15,23,42,0.14)]"
                   >
                     <div>
                       <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[hsl(152_30%_28%)]">
@@ -365,13 +373,13 @@ export default function Menu() {
                       </p>
                       <h3 className="mt-2 font-sans text-lg font-semibold text-[hsl(var(--foreground))]">{item.name}</h3>
                       {item.description ? (
-                        <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-[#5c4d42] sm:text-sm">
+                        <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
                           {item.description}
                         </p>
                       ) : null}
                     </div>
                     <div className="flex items-end justify-between gap-3 border-t border-[rgba(26,18,14,0.08)] pt-3">
-                      <span className="font-serif text-lg tabular-nums text-[#1c120e]">
+                      <span className="font-sans text-lg font-semibold tabular-nums text-[hsl(var(--foreground))]">
                         {formatPrice(item.price, liveItem)}
                       </span>
                       {liveItem ? (
@@ -443,15 +451,16 @@ export default function Menu() {
       </div>
 
       <section className="py-10 sm:py-12">
-        <div className="container mx-auto max-w-6xl space-y-14 px-4 sm:space-y-16">
+        <div className="container mx-auto max-w-6xl space-y-16 px-4 sm:space-y-20 lg:space-y-24">
           <section id={breakfast.id} className="anchor-section">
             <SectionIntro
               eyebrow={breakfast.eyebrow}
               title={breakfast.title}
               description={breakfast.description}
               note={breakfast.note}
+              accent={false}
             />
-            <div className="menu-paper max-w-3xl overflow-hidden divide-y divide-[rgba(36,24,18,0.07)]">
+            <div className="menu-list-rail overflow-hidden transition-[box-shadow] duration-300">
               {(breakfast.items ?? []).map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -476,8 +485,9 @@ export default function Menu() {
               eyebrow={sandwiches.eyebrow}
               title={sandwiches.title}
               description={sandwiches.description}
+              accent
             />
-            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.06)]">
+            <div className="menu-list-shelf overflow-hidden transition-[box-shadow] duration-300">
               {sandwiches.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -509,8 +519,9 @@ export default function Menu() {
               eyebrow={salads.eyebrow}
               title={salads.title}
               description={salads.description}
+              accent={false}
             />
-            <div className="menu-paper divide-y divide-[rgba(36,24,18,0.06)]">
+            <div className="menu-list-rail transition-[box-shadow] duration-300">
               {salads.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -540,8 +551,9 @@ export default function Menu() {
               eyebrow={sides.eyebrow}
               title={sides.title}
               description={sides.description}
+              accent
             />
-            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.07)] overflow-hidden">
+            <div className="menu-list-shelf max-w-3xl overflow-hidden transition-[box-shadow] duration-300">
               {sides.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -566,8 +578,9 @@ export default function Menu() {
               eyebrow={pizza.eyebrow}
               title={pizza.title}
               description={pizza.description}
+              accent={false}
             />
-            <div className="menu-paper max-w-3xl divide-y divide-[rgba(36,24,18,0.06)]">
+            <div className="menu-list-rail max-w-3xl transition-[box-shadow] duration-300">
               {pizza.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -588,7 +601,7 @@ export default function Menu() {
             {pizza.addOns && pizza.addOnsTitle ? (
               <div className="mt-8 max-w-3xl space-y-3">
                 <AddOnGrid title={pizza.addOnsTitle} items={pizza.addOns} />
-                <p className="font-sans text-xs leading-relaxed text-[#5c4d42]">
+                <p className="font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
                   Party-size pies stay easy for office drops — ask when you call
                   if you need timing help.
                 </p>
@@ -597,25 +610,29 @@ export default function Menu() {
           </section>
 
           <section id={pasta.id} className="anchor-section">
-            <div className="menu-paper p-5 sm:p-7">
+            <div className="max-w-3xl">
               <SectionIntro
                 eyebrow={pasta.eyebrow}
                 title={pasta.title}
                 description={pasta.description}
                 note={pasta.note}
+                accent
               />
-              <div className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-2">
+              <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-2">
                 {pasta.pastaGroups?.map((group) => (
                   <div
                     key={group.title}
-                    className="overflow-hidden rounded-sm border border-[rgba(36,24,18,0.1)] bg-[#f7f2eb]"
+                    className="overflow-hidden rounded-xl bg-[hsl(43_42%_98%)] shadow-[0_22px_52px_-42px_rgba(15,23,42,0.14)] ring-1 ring-[hsla(220,14%,12%,0.06)]"
                   >
-                    <div className="border-b border-[rgba(36,24,18,0.08)] bg-[#2a1f19] px-4 py-2.5">
-                      <h3 className="font-serif text-base tracking-tight text-[#f4ebe3]">
+                    <div className="border-b border-[hsla(220,14%,12%,0.1)] bg-[hsl(220_32%_12%)] px-4 py-2.5 sm:px-5 sm:py-3">
+                      <p className="font-sans text-[0.55rem] font-semibold uppercase tracking-[0.2em] text-[hsl(var(--primary))]">
+                        Build your bowl
+                      </p>
+                      <h3 className="mt-0.5 font-sans text-base font-semibold tracking-tight text-white sm:text-[1.05rem]">
                         {group.title}
                       </h3>
                     </div>
-                    <div className="divide-y divide-[rgba(36,24,18,0.07)]">
+                    <div className="divide-y divide-[hsla(220,14%,12%,0.08)]">
                       {group.items.map((entry) => {
                         const liveItem = getLiveItem(entry.name);
                         return (
@@ -640,11 +657,11 @@ export default function Menu() {
               {pasta.signatureItems ? (
                 <div className="mt-10 border-t border-[rgba(36,24,18,0.08)] pt-8">
                   <p className="section-kicker">Signature plates</p>
-                  <p className="mt-2 max-w-xl font-sans text-sm text-[#5c4d42]">
+                  <p className="mt-2 max-w-xl font-sans text-sm text-[hsl(var(--muted-foreground))]">
                     Fuller plates when you do not want to build a custom pasta
                     bowl.
                   </p>
-                  <div className="mt-4 divide-y divide-[rgba(36,24,18,0.06)] rounded-md border border-[rgba(36,24,18,0.08)] bg-[#faf7f3]">
+                  <div className="menu-list-shelf mt-5 max-w-2xl">
                     {pasta.signatureItems.map((entry) => {
                       const liveItem = getLiveItem(entry.name);
                       return (
@@ -669,13 +686,13 @@ export default function Menu() {
 
       <Section tone="muted" className="border-t border-[rgba(26,18,14,0.08)] py-12">
         <div>
-          <div className="flex flex-col gap-6 border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,97%,0.85)] p-8 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-6 rounded-2xl bg-[hsl(var(--muted))]/50 p-8 ring-1 ring-[hsla(220,14%,12%,0.06)] sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="section-kicker">Larger orders</p>
-              <h2 className="mt-2 font-serif text-2xl text-[#1c120e] sm:text-3xl">
+              <h2 className="mt-2 font-sans text-2xl font-semibold text-[hsl(var(--foreground))] sm:text-3xl">
                 Trays, platters, and buffets stay on catering.
               </h2>
-              <p className="mt-2 max-w-xl font-sans text-sm text-[#5c4d42]">
+              <p className="mt-2 max-w-xl font-sans text-sm text-[hsl(var(--muted-foreground))]">
                 One place for appetizers through dessert, with per-person
                 packages when that fits your event.
               </p>

@@ -5,6 +5,8 @@ export type CateringPackage = {
   minimumOrder: string;
   feeds: string;
   summary: string;
+  /** One logistics / portion line — must not repeat `feeds` or the generic blurb across cards. */
+  atAGlance: string;
   includedDishes: string[];
 };
 
@@ -24,20 +26,20 @@ export type CateringSection = {
 };
 
 export const CATERING_INTRO =
-  "Buffet packages, hot trays, and platters for Mississauga offices and celebrations — cooked in-house on Skymark Ave, with clear per-person pricing, minimums, and portions.";
+  "Buffet packages, hot trays, and platters for Mississauga offices — cooked on Skymark Ave with per-person pricing, guest minimums, and portion notes you can paste into a PO.";
 
 export const CATERING_OVERVIEW = [
   {
     title: "Buffet packages",
-    text: "Curated per-person menus with salads, pasta, mains, bread, and classic Italian sides.",
+    text: "Fixed per-guest menus with one quote line: mains, salad, bread, and sides scaled to your headcount.",
   },
   {
     title: "Tray catering",
-    text: "Order lasagna, pasta, salads, seafood, sides, and desserts by tray for flexible group service.",
+    text: "Build-a-meal from hot pasta trays, baked dishes, seafood, and sides — portions are for groups, not single lunch plates.",
   },
   {
     title: "Office-ready platters",
-    text: "Cold sandwich trays, hot sandwich platters, party pizzas, pastries, and service extras for easy hosting.",
+    text: "Cold cuts, sandwich boards, and party pies cut for conference rooms — minimums are built in so ordering stays predictable.",
   },
 ];
 
@@ -50,6 +52,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 8-12 people",
     summary:
       "A comforting Italian spread built around house lasagna, salad, and fresh bread.",
+    atAGlance:
+      "Lasagna-first buffet: easy to portion on disposable or rental chafers; add extra bread if headcount is at the top of the range.",
     includedDishes: [
       "Lasagna",
       "Italian or Caesar salad",
@@ -65,6 +69,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 12-16 people",
     summary:
       "A hearty buffet with meat and cheese cannelloni, salad, and fresh bread.",
+    atAGlance:
+      "Dual cannelloni trays stretch further when you pair with extra salad — ideal when vegetarians and meat-eaters share the same table.",
     includedDishes: [
       "Meat cannelloni",
       "Cheese cannelloni",
@@ -80,7 +86,9 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     minimumOrder: "Minimum 10 guests",
     feeds: "Feeds 10-14 people",
     summary:
-      "A crowd-pleasing buffet with roasted chicken or sausage, pasta, salad, and bread.",
+      "Roast chicken or sausage with a tomato-sauced pasta tray, salad, and bread — built for mixed appetites at one table.",
+    atAGlance:
+      "Choose chicken or sausage before pickup so the kitchen can roast in one batch — pasta tray scales linearly with guest count.",
     includedDishes: [
       "Roasted chicken or roasted sausage",
       "Pasta in tomato sauce",
@@ -96,7 +104,9 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     minimumOrder: "Minimum 8 guests",
     feeds: "Feeds 8-12 people",
     summary:
-      "A classic comfort-food buffet with chicken parmigiana, pasta, salad, and bread.",
+      "Crispy chicken parm with sauced pasta, salad, and bread — the office-friendly crowd default when you need a sure hit.",
+    atAGlance:
+      "Crispy parm holds best when sauced on-site — we pack sauce separately on request for drives past 20 minutes.",
     includedDishes: [
       "Chicken parmigiana",
       "Pasta in tomato sauce",
@@ -113,6 +123,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 8-12 people",
     summary:
       "A more elevated Italian dinner with veal parmigiana, pasta, salad, and house bread.",
+    atAGlance:
+      "Veal portions are trimmed for plated pickup; if you need buffet-style self-serve, note it in the inquiry so we slice for trays.",
     includedDishes: [
       "Veal parmigiana",
       "Pasta in tomato sauce",
@@ -129,6 +141,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 8-12 people",
     summary:
       "An entree-style dinner with chicken scaloppina, vegetables, potatoes, and homemade bread.",
+    atAGlance:
+      "Plated mains route: fewer moving parts than a pasta buffet — best when you want a sit-down feel without full table service.",
     includedDishes: [
       "Chicken scaloppina",
       "Potatoes",
@@ -144,6 +158,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 8-12 people",
     summary:
       "A premium Italian dinner with veal scaloppina Marsala, vegetables, potatoes, and house bread.",
+    atAGlance:
+      "Marsala sauce is finished with wine in-house — confirm delivery distance so we can adjust packaging for heat retention.",
     includedDishes: [
       "Veal scaloppina Marsala",
       "Potatoes",
@@ -159,6 +175,8 @@ export const BUFFET_PACKAGES: CateringPackage[] = [
     feeds: "Feeds 8-12 people",
     summary:
       "A chef-selected spread with puttanesca, roasted chicken, rice, vegetables, salad, and house bread.",
+    atAGlance:
+      "Most components tray separately so guests can build plates; tell us if you need vegetarian-only puttanesca on the line.",
     includedDishes: [
       "Puttanesca",
       "Roasted chicken",
@@ -175,7 +193,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "appetizers",
     title: "Appetizers & Hors d'oeuvres",
     description:
-      "Perfect for receptions, mingling events, and lighter office gatherings. Minimum counts apply on select items.",
+      "Passed bites and skewers — not on the weekday lunch board. Every line below is priced for platter or piece minimums (see each line).",
     items: [
       {
         name: "Bruschetta",
@@ -238,7 +256,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "platters",
     title: "Party Platters",
     description:
-      "Easy group catering for meetings, open houses, client hosting, and casual events.",
+      "Deli boards and sandwich spreads sized for headcount — different SKUs and minimums than ordering single sandwiches at the counter.",
     items: [
       {
         name: "Assorted Sliced Cold Meat & Cheese Platter",
@@ -267,7 +285,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "pasta-baked",
     title: "Pasta, Lasagna & Baked Dishes",
     description:
-      "Flexible tray catering for office lunches, family-style gatherings, and larger celebrations.",
+      "Tray and bake formats only — same kitchen as the pasta line, but portioning and tray sizes are for groups. Counter pasta plates stay on the menu.",
     items: [
       {
         name: "Lasagna",
@@ -319,9 +337,9 @@ export const CATERING_SECTIONS: CateringSection[] = [
       {
         name: "Penne, Rigatoni, Spaghetti, Linguine, or Fettuccine",
         description:
-          "Choose tomato, rose, Alfredo, aglio e olio, arrabbiata, or pesto. Extras and tray-size pricing are available for larger orders.",
+          "Bulk tray build: pick shape and sauce for the group — pricing scales by tray size and add-ons, not by the single-plate menu board.",
         price: "$22.00 to $26.00 base",
-        serving: "Sauce and add-on pricing available by pasta selection",
+        serving: "Sauce and add-on pricing quoted by tray selection",
       },
     ],
   },
@@ -329,12 +347,12 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "seafood",
     title: "Seafood",
     description:
-      "Prepared for more substantial catering orders. Select seafood items may be subject to market pricing.",
+      "Catering-scale fish and shellfish — fillets and trays are portioned for buffets and hosted meals, not the same as adding shrimp to a counter salad.",
     items: [
       {
         name: "Grilled Salmon Fillet",
         description:
-          "Individually portioned grilled salmon for plated or buffet service.",
+          "Per-fillet catering add-on for plated service or buffet lines — ordered by count for the kitchen to grill in one run.",
         price: "$16.75 each",
         dietary: ["Pescatarian", "Gluten free"],
       },
@@ -359,7 +377,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "sides",
     title: "Vegetables & Sides",
     description:
-      "Simple, dependable accompaniments that pair well with buffet packages and tray catering.",
+      "Rice and potato trays that anchor a buffet — sized medium through extra large so you can match starch to headcount.",
     items: [
       {
         name: "Mediterranean Rice with Vegetables",
@@ -383,12 +401,12 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "salads",
     title: "Salads",
     description:
-      "Fresh tray salads sized for small gatherings, office spreads, and larger catered events.",
+      "Tray and deep-pan formats below — not the same price grid as Italian / Caesar / Greek bowls on the takeout menu.",
     items: [
       {
         name: "Italian Salad",
         description:
-          "A fresh house salad option that pairs easily with pasta and buffet packages.",
+          "House Italian mix in disposable or rental pans — best as a buffet side beside pasta or parm trays.",
         price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
         serving:
           "Family / large / XXL shallow / extra large / extra large deep",
@@ -397,14 +415,15 @@ export const CATERING_SECTIONS: CateringSection[] = [
       {
         name: "Caesar Salad",
         description:
-          "A classic Caesar salad for tray catering and buffet service.",
+          "Classic Caesar in catering depths — good when you want a familiar green that holds dressing on a long service window.",
         price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
         serving:
           "Family / large / XXL shallow / extra large / extra large deep",
       },
       {
         name: "Greek Salad",
-        description: "A brighter salad option with a Mediterranean profile.",
+        description:
+          "Feta-forward tray for brighter tables — works when half the room wants something lighter next to hot mains.",
         price: "$25.95 / $29.95 / $47.95 / $60.00 / $70.00",
         serving:
           "Family / large / XXL shallow / extra large / extra large deep",
@@ -416,7 +435,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "pizza",
     title: "Gourmet Pizza",
     description:
-      "Party-size pizza trays for casual events, office lunches, and easy group catering.",
+      "Party-size gourmet pies below — counter personal and 16\" pies stay on the menu for individual pickup.",
     items: [
       {
         name: "Margherita Party Pizza",
@@ -452,7 +471,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "desserts",
     title: "Desserts & Pastries",
     description:
-      "Finish the table with classic Italian sweets and easy office-friendly dessert trays.",
+      "Tray desserts and pastry counts for coffee service — not mirrored item-for-item on the breakfast pastry list.",
     items: [
       {
         name: "Assorted Small Pastries",
@@ -480,7 +499,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "extras",
     title: "Beverages & Catering Extras",
     description:
-      "Add the finishing details for smooth event service, from drinks to disposables.",
+      "Disposables, bread add-ons, drinks, and topping trays — logistics layer on top of food, quoted per head or per piece.",
     items: [
       {
         name: "Homemade Bread",
@@ -532,8 +551,7 @@ export const DIETARY_BADGES = [
 ];
 
 export const CATERING_NOTES = [
-  "Catering is available buffet style, with boxed lunches or pre-portioned meals available on request.",
-  "Minimum quantities vary by section. Appetizers may require 12 to 24 pieces, while sandwich platters begin at 8 to 10 sandwiches.",
-  "Seafood pricing and select larger-format items may change with market conditions.",
-  "For office lunches, private events, and recurring catering needs, Skymark Eatery can help you build the right mix of packages, trays, platters, and extras.",
+  "Service styles: buffet lines, tray drop-off, or boxed / pre-portioned meals on request — say which you need in the inquiry.",
+  "Minimums are per line item (e.g. 12–24 pieces on bites, 8–10 sandwiches on platters). We confirm counts when we reply.",
+  "Some seafood and market items may re-quote if your event date is far out.",
 ];

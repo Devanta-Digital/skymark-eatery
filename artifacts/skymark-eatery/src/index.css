@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..1000;1,9..40,400..1000&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -74,56 +74,56 @@
   --elevate-1: rgba(18, 24, 20, 0.04);
   --elevate-2: rgba(18, 24, 20, 0.08);
 
-  /* Warm paper, charcoal ink, tomato appetite, basil discipline */
-  --background: 40 36% 97%;
-  --foreground: 220 22% 11%;
-  --border: 40 14% 88%;
+  /* Logo-adjacent: warm paper, navy wordmark ink, tomato + basil from mark */
+  --background: 43 100% 98%;
+  --foreground: 220 38% 12%;
+  --border: 220 16% 86%;
 
   --card: 0 0% 100%;
-  --card-foreground: 220 22% 11%;
-  --card-border: 40 12% 90%;
+  --card-foreground: 220 38% 12%;
+  --card-border: 220 14% 88%;
 
-  --sidebar: 40 30% 98%;
-  --sidebar-foreground: 220 20% 12%;
-  --sidebar-border: 40 14% 90%;
-  --sidebar-primary: 4 86% 50%;
+  --sidebar: 43 100% 99%;
+  --sidebar-foreground: 220 34% 11%;
+  --sidebar-border: 220 14% 90%;
+  --sidebar-primary: 358 90% 52%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 152 22% 92%;
-  --sidebar-accent-foreground: 220 20% 12%;
-  --sidebar-ring: 4 86% 50%;
+  --sidebar-accent: 152 40% 92%;
+  --sidebar-accent-foreground: 220 34% 11%;
+  --sidebar-ring: 358 90% 52%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 220 22% 11%;
-  --popover-border: 40 12% 90%;
+  --popover-foreground: 220 38% 12%;
+  --popover-border: 220 14% 88%;
 
-  --primary: 4 86% 50%;
+  --primary: 358 90% 52%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 18% 14%;
-  --secondary-foreground: 40 30% 98%;
+  --secondary: 220 44% 10%;
+  --secondary-foreground: 43 100% 98%;
 
-  --muted: 40 18% 93%;
-  --muted-foreground: 220 10% 38%;
+  --muted: 220 14% 92%;
+  --muted-foreground: 220 12% 36%;
 
-  --accent: 152 28% 34%;
-  --accent-foreground: 40 36% 98%;
+  --accent: 152 56% 28%;
+  --accent-foreground: 43 100% 98%;
 
-  --surface-light: hsl(40 42% 99%);
-  --surface-muted: hsl(40 22% 94%);
-  --surface-dark: hsl(220 20% 9%);
+  --surface-light: hsl(43 100% 99.2%);
+  --surface-muted: hsl(220 14% 93%);
+  --surface-dark: hsl(222 48% 6%);
 
-  --type-h1-size: clamp(2.35rem, 4.8vw, 4.65rem);
-  --type-h2-size: clamp(1.85rem, 3.1vw, 3rem);
-  --type-h3-size: clamp(1.28rem, 2.1vw, 1.9rem);
-  --type-body-size: clamp(0.97rem, 1.2vw, 1.05rem);
-  --type-small-size: 0.84rem;
-  --type-measure: 68ch;
+  --type-h1-size: clamp(2.05rem, 5.2vw, 3.65rem);
+  --type-h2-size: clamp(1.55rem, 2.9vw, 2.55rem);
+  --type-h3-size: clamp(1.2rem, 2vw, 1.72rem);
+  --type-body-size: clamp(0.96rem, 1.15vw, 1.04rem);
+  --type-small-size: 0.82rem;
+  --type-measure: 56ch;
 
   --destructive: 0 72% 42%;
-  --destructive-foreground: 40 40% 98%;
+  --destructive-foreground: 44 100% 98%;
 
-  --input: 40 16% 82%;
-  --ring: 4 86% 50%;
+  --input: 220 14% 84%;
+  --ring: 358 90% 52%;
 
   --chart-1: 18 38% 21%;
   --chart-2: 16 50% 42%;
@@ -131,8 +131,8 @@
   --chart-4: 26 38% 56%;
   --chart-5: 42 60% 58%;
 
-  --app-font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --app-font-serif: "Plus Jakarta Sans", system-ui, sans-serif;
+  --app-font-sans: "DM Sans", system-ui, sans-serif;
+  --app-font-serif: "DM Sans", system-ui, sans-serif;
   --app-font-mono: Menlo, monospace;
 
   --radius: 0.45rem;
@@ -203,6 +203,37 @@
   }
 }
 
+/* Playwright / visual QA: ?visualQa=1 — kill smooth scroll + CSS transitions */
+html[data-visual-qa="1"] {
+  scroll-behavior: auto !important;
+}
+
+html[data-visual-qa="1"] *,
+html[data-visual-qa="1"] *::before,
+html[data-visual-qa="1"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+}
+
+/* Flatten 3D / parallax during capture so PNGs match what users see at rest */
+html[data-visual-qa="1"] .depth-tilt,
+html[data-visual-qa="1"] .depth-tilt img,
+html[data-visual-qa="1"] .depth-tilt video {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+html[data-visual-qa="1"] .depth-tilt {
+  perspective: none !important;
+}
+
+html[data-visual-qa="1"] .media-crop-home-hero,
+html[data-visual-qa="1"] .media-crop-catering-hero {
+  transform: none !important;
+}
+
 .dark {
   --button-outline: rgba(255, 255, 255, 0.12);
   --badge-outline: rgba(255, 255, 255, 0.12);
@@ -258,8 +289,8 @@
     background-color: hsl(var(--background));
     background-image: linear-gradient(
       180deg,
-      hsl(40 42% 98.5%) 0%,
-      hsl(40 28% 95%) 100%
+      hsl(43 100% 99.5%) 0%,
+      hsl(220 14% 94%) 100%
     );
     min-width: 320px;
     font-size: var(--type-body-size);
@@ -310,7 +341,7 @@
   }
 
   ::selection {
-    background: hsla(4, 86%, 50%, 0.2);
+    background: hsla(358, 90%, 52%, 0.22);
     color: inherit;
   }
 }
@@ -333,11 +364,11 @@
 
   .section-kicker {
     @apply text-[0.62rem] font-semibold uppercase tracking-[0.28em];
-    color: hsl(152 30% 30%);
+    color: hsl(152 58% 26%);
   }
 
   .section-dark .section-kicker {
-    color: hsl(152 36% 72%);
+    color: hsl(152 45% 72%);
   }
 
   .section-light {
@@ -369,7 +400,7 @@
   }
 
   .brand-rail-muted {
-    border-left: 3px solid hsl(152 28% 36%);
+    border-left: 3px solid hsl(152 52% 32%);
     padding-left: 1rem;
   }
 
@@ -386,6 +417,42 @@
   .menu-paper {
     @apply border border-[hsla(220,14%,12%,0.09)] bg-white;
     box-shadow: 0 12px 36px -28px rgba(15, 23, 42, 0.12);
+  }
+
+  /** Menu: rail = list rhythm only, no white slab */
+  .menu-list-rail {
+    @apply max-w-3xl divide-y divide-[hsla(220,14%,12%,0.08)] border-0 bg-transparent shadow-none;
+  }
+
+  /** Menu: soft shelf for occasional contrast */
+  .menu-list-shelf {
+    @apply max-w-3xl divide-y divide-[hsla(220,14%,12%,0.07)] rounded-2xl border-0 bg-[hsl(220_40%_99%/0.92)] shadow-none ring-1 ring-[hsla(220,14%,12%,0.05)];
+    box-shadow: 0 20px 50px -38px rgba(15, 23, 42, 0.1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .menu-list-shelf:hover {
+      box-shadow: 0 26px 56px -34px rgba(15, 23, 42, 0.12);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .menu-list-rail > .group:hover {
+      background-color: hsl(43 90% 99% / 0.72);
+    }
+  }
+
+  /** Proof imagery — small, credible, not hero */
+  .trust-proof-thumb {
+    filter: saturate(0.92) contrast(1.02);
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .trust-proof-thumb:hover {
+      filter: saturate(1) contrast(1.04);
+      opacity: 1;
+    }
   }
 
   .editorial-dark {
@@ -417,6 +484,67 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /**
+   * Restrained depth on hero / feature media — hover only, disabled in visual QA.
+   */
+  .depth-tilt {
+    perspective: 1100px;
+    transform-style: preserve-3d;
+  }
+
+  .depth-tilt > img,
+  .depth-tilt > video {
+    transform: translateZ(0) rotateX(0deg) rotateY(0deg);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .depth-tilt:hover > img,
+    .depth-tilt:hover > video {
+      transform: translateZ(12px) rotateX(2deg) rotateY(-2.5deg) scale(1.02);
+      box-shadow: -18px 28px 48px -24px rgba(15, 23, 42, 0.35);
+    }
+  }
+
+  /** Tighter appetite crops on known marketing photos */
+  .media-crop-menu-hero {
+    object-position: 58% 38%;
+  }
+
+  .media-crop-home-hero {
+    object-position: 54% 28%;
+    transform: scale(1.05);
+    transform-origin: 52% 38%;
+  }
+
+  .media-crop-catering-hero {
+    object-position: 50% 26%;
+    transform: scale(1.04);
+    transform-origin: 48% 36%;
+  }
+
+  .media-crop-offer-catering {
+    object-position: 44% 36%;
+  }
+
+  .media-crop-lane {
+    object-position: 52% 42%;
+  }
+
+  .media-crop-trust-interior {
+    object-position: 55% 58%;
+  }
+
+  .media-crop-contact-hero {
+    object-position: 48% 40%;
+  }
+
+  .media-crop-showcase-tray {
+    object-position: 42% 38%;
   }
 
   .ratio-hero {

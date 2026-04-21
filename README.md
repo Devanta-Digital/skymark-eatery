@@ -18,4 +18,11 @@
 
   ## Location
   2630 Skymark Ave., Unit 102, Mississauga, ON L4W 5A4
-  
+
+  ## Cursor agent skills
+
+  All skills from `~/.cursor/skills/` are vendored under `.cursor/skills/` so the repo stays self-contained. After installing or updating skills on your machine, run:
+
+  `./scripts/sync-cursor-skills-from-global.sh`
+
+  See `content/design-agent/CURSOR-SKILLS-ADDED.md` for the full list and sync policy.

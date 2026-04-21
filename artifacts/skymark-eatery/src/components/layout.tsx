@@ -128,13 +128,18 @@ export function Layout({ children }: { children: ReactNode }) {
       <header
         ref={headerRef}
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[hsla(220,22%,8%,0.94)] text-slate-200 backdrop-blur-md transition-[transform,box-shadow] duration-300 ease-out",
+          "fixed inset-x-0 top-0 z-50 flex flex-col border-b border-white/10 bg-[hsla(220,28%,7%,0.96)] text-slate-200 backdrop-blur-md transition-[transform,box-shadow] duration-300 ease-out",
           headerHidden ? "-translate-y-full shadow-none" : "translate-y-0",
           headerCompact && !headerHidden
             ? "shadow-[0_1px_0_rgba(255,255,255,0.06)]"
             : "shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
         )}
       >
+        <div className="flex h-0.5 w-full shrink-0" aria-hidden>
+          <span className="flex-1 bg-[hsl(152_52%_34%)]" />
+          <span className="flex-1 bg-white" />
+          <span className="flex-1 bg-[hsl(var(--primary))]" />
+        </div>
         <div
           className={cn(
             "container mx-auto flex max-w-6xl items-center gap-2 px-4 transition-[height] duration-200 sm:gap-3",
@@ -150,14 +155,14 @@ export function Layout({ children }: { children: ReactNode }) {
               src={BRAND_LOGO.onDark}
               alt=""
               className={cn(
-                "h-auto w-auto object-contain object-left transition-all duration-200",
+                "h-auto w-auto object-contain object-left contrast-[1.06] saturate-[1.12] transition-all duration-200",
                 headerCompact ? "h-10 sm:h-11" : "h-11 sm:h-[3.1rem]",
               )}
             />
             <div className="hidden min-w-0 sm:block">
               <div
                 className={cn(
-                  "font-serif leading-none tracking-tight text-white transition-all duration-200",
+                  "font-sans font-semibold leading-none tracking-tight text-white transition-all duration-200",
                   headerCompact
                     ? "text-[1.08rem] sm:text-[1.14rem]"
                     : "text-[1.15rem] sm:text-[1.28rem]",
@@ -579,13 +584,18 @@ export function Layout({ children }: { children: ReactNode }) {
       </main>
 
       <footer className="border-t border-white/10 bg-[hsl(220_22%_8%)] text-[hsl(40_24%_96%)]">
-        <div className="container mx-auto max-w-6xl px-4 py-12 md:py-14">
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr]">
+        <div className="flex h-px w-full shrink-0 opacity-80" aria-hidden>
+          <span className="flex-1 bg-[hsl(152_52%_34%)]" />
+          <span className="flex-1 bg-white/25" />
+          <span className="flex-1 bg-[hsl(var(--primary))]" />
+        </div>
+        <div className="container mx-auto max-w-6xl px-4 py-9 md:py-11">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-[1.1fr_0.45fr_0.45fr_0.55fr] lg:gap-10">
             <div>
               <img
                 src={BRAND_LOGO.onDark}
                 alt={BUSINESS_INFO.primaryName}
-                className="h-[3.25rem] w-auto object-contain object-left opacity-95 sm:h-14"
+                className="h-[3.25rem] w-auto object-contain object-left contrast-[1.06] saturate-[1.12] sm:h-14"
               />
               <p className="mt-4 max-w-md text-sm leading-relaxed text-[#f2e8dc]/75">
                 {BUSINESS_INFO.primaryName} — Italian takeout, weekday lunch,
@@ -610,24 +620,26 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
 
             <div>
-              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
                 Explore
               </h4>
-              <nav className="mt-3 flex flex-col gap-2 text-sm text-[#f2e8dc]/72">
+              <nav className="mt-3 flex flex-col gap-1.5 text-sm text-[#f2e8dc]/72">
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="transition-colors hover:text-white"
+                    className="w-fit py-0.5 transition-colors hover:text-white"
                   >
-                    {link.label}
+                    <span className="bg-gradient-to-r from-white to-white bg-[length:0%_1px] bg-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 hover:bg-[length:100%_1px]">
+                      {link.label}
+                    </span>
                   </Link>
                 ))}
               </nav>
             </div>
 
             <div>
-              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
                 Contact
               </h4>
               <div className="mt-3 space-y-2 text-sm text-[#f2e8dc]/72">
@@ -638,13 +650,13 @@ export function Layout({ children }: { children: ReactNode }) {
                 </address>
                 <a
                   href={BUSINESS_INFO.phoneHref}
-                  className="block font-medium text-white/95 hover:text-white"
+                  className="block w-fit font-medium text-white/95 transition hover:text-[hsl(var(--primary))]"
                 >
                   {BUSINESS_INFO.phone}
                 </a>
                 <a
                   href={BUSINESS_INFO.emailHref}
-                  className="block hover:text-white"
+                  className="block w-fit transition hover:text-[hsl(var(--primary))]"
                 >
                   {BUSINESS_INFO.email}
                 </a>
@@ -652,7 +664,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   href={BUSINESS_INFO.instagramHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 hover:text-white"
+                  className="inline-flex w-fit items-center gap-2 transition hover:text-[hsl(var(--primary))]"
                 >
                   <Instagram className="h-4 w-4" />
                   @skymark___eatery
@@ -661,7 +673,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
 
             <div>
-              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c4a995]">
+              <h4 className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
                 Hours
               </h4>
               <div className="mt-3 space-y-2 text-sm text-[#f2e8dc]/72">
@@ -675,7 +687,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   href={BUSINESS_INFO.mapsHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm hover:text-white"
+                  className="inline-flex items-center gap-2 text-sm transition hover:text-[hsl(var(--primary))]"
                 >
                   <MapPin className="h-4 w-4 shrink-0" />
                   Directions
@@ -684,7 +696,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-[#f2e8dc]/45 md:flex-row md:items-center md:justify-between">
+          <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 text-xs text-[#f2e8dc]/45 md:flex-row md:items-center md:justify-between">
             <p>
               © {new Date().getFullYear()} {BUSINESS_INFO.primaryName}
             </p>

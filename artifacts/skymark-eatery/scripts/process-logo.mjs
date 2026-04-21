@@ -3,7 +3,8 @@
  * - Knocks out near-black plate (edge-connected flood) so black line art inside colors stays.
  * - Knocks out near-white / warm-paper plate (legacy webp exports).
  * - Trims transparent margins, light sharpen, high-quality WebP/PNG.
- * - Writes `logo-header.webp` (lifted + cream tint) for dark chrome.
+ * - Writes `logo-header.webp` for dark chrome: lifts luminance so navy reads,
+ *   boosts saturation so Italian greens/reds stay vivid (no grey/cream tint).
  *
  * Run from package root: pnpm run process-logo
  */
@@ -123,13 +124,12 @@ async function main() {
     .webp({ quality: 93, alphaQuality: 100, effort: 6, smartSubsample: true })
     .toFile(webpPath);
 
-  // Dark chrome: lift mids so navy reads on charcoal; keep reds/greens legible
+  // Dark chrome: brighten wordmark without grey-wash — avoid .tint() / low saturation
+  // (those flatten Italy colours). Saturate so red/green stripes and marks pop.
   const headerPath = path.join(root, "public", "logo-header.webp");
   await sharp(webpPath)
     .ensureAlpha()
-    .modulate({ brightness: 1.32, saturation: 0.95 })
-    .linear(1.05, -(12 * 1.05))
-    .tint({ r: 252, g: 249, b: 244 })
+    .modulate({ brightness: 1.52, saturation: 1.28 })
     .webp({ quality: 93, alphaQuality: 100, effort: 6 })
     .toFile(headerPath);
 

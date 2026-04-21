@@ -5,7 +5,6 @@ import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
 import { Button } from "@/components/ui/button";
 import { BUSINESS_INFO, SITE_IMAGES } from "@/content/site";
-import { cn } from "@/lib/utils";
 import {
   breadcrumbStructuredData,
   restaurantStructuredData,
@@ -33,12 +32,13 @@ export default function Contact() {
   return (
     <Layout>
       <Hero
-        eyebrow="Contact & location"
-        title="Call, email, or walk in — we keep the lines simple."
-        subtitle="Weekday hours, Skymark Ave address, and a live map. For tray counts and buffet planning, use the catering page so portions and packages stay in one thread."
+        eyebrow="Location · hours · direct line"
+        title="Skymark Ave, on the record."
+        subtitle="Address, weekday hours, map, phone, and email in one place. For trays and buffets, start on catering so headcounts stay in one thread."
         imageSrc={SITE_IMAGES.contactHero}
         imageAlt={SITE_IMAGES.contactHeroAlt}
         density="compact"
+        imageClassName="media-crop-contact-hero"
         primaryCta={{ label: `Call ${BUSINESS_INFO.phone}`, href: BUSINESS_INFO.phoneHref }}
         secondaryCta={{ label: "Email", href: BUSINESS_INFO.emailHref }}
       />
@@ -49,134 +49,130 @@ export default function Contact() {
         className="border-b border-[hsla(220,14%,12%,0.07)]"
       >
         <div>
-          <p className="section-kicker">Visit &amp; reach us</p>
-          <h2 className="brand-rail-muted mt-3 max-w-2xl text-2xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-[1.85rem]">
-            Hours, phone, email, map — plus a look at the dining room when you want the full picture.
+          <p className="section-kicker">Dispatch desk</p>
+          <h2 className="brand-rail-muted mt-3 max-w-xl text-xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-2xl">
+            Everything you need to show up or send someone — nothing extra.
           </h2>
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-stretch">
-            <div
-              className={cn(
-                "section-shell space-y-8 rounded-sm p-6 sm:p-8",
-                "border border-[rgba(26,18,14,0.08)] bg-[hsla(40,42%,99%,0.9)]",
-              )}
-            >
-              <div>
-                <h2 className="font-serif text-2xl text-[#1f1410]">Address</h2>
-                <p className="mt-3 font-sans text-sm leading-relaxed text-[#5c4d42]">
-                  {BUSINESS_INFO.addressLine1}
-                  <br />
-                  {BUSINESS_INFO.addressLine2}
-                </p>
-                <a
-                  href={BUSINESS_INFO.mapsHref}
-                  className="mt-4 inline-flex items-center gap-2 font-sans text-sm font-semibold text-[#8b3d2c] hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MapPin className="h-4 w-4" />
-                  Get directions
-                </a>
-              </div>
 
-              <div className="border-t border-[rgba(26,18,14,0.1)] pt-8">
-                <h2 className="font-serif text-2xl text-[#1f1410]">Hours</h2>
-                <p className="mt-3 font-sans text-sm text-[#5c4d42]">
-                  Monday to Friday
-                </p>
-                <p className="mt-1 font-sans text-lg font-semibold text-[#1f1410]">
-                  7:30 AM to 4:30 PM
-                </p>
-                <p className="mt-2 flex items-start gap-2 font-sans text-sm text-[#5c4d42]">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[#8b3d2c]" />
-                  Closed weekends and public holidays.
-                </p>
-              </div>
+          <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.12fr)] lg:items-stretch lg:gap-10">
+            <div className="flex flex-col justify-between gap-8">
+              <dl className="space-y-6 font-sans text-sm">
+                <div>
+                  <dt className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--muted-foreground))]">
+                    Address
+                  </dt>
+                  <dd className="mt-2 text-base font-medium leading-snug text-[hsl(var(--foreground))]">
+                    {BUSINESS_INFO.addressLine1}
+                    <br />
+                    {BUSINESS_INFO.addressLine2}
+                  </dd>
+                  <dd className="mt-2">
+                    <a
+                      href={BUSINESS_INFO.mapsHref}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-[hsl(var(--primary))] hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MapPin className="h-3.5 w-3.5 shrink-0" />
+                      Open in Maps
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--muted-foreground))]">
+                    Hours
+                  </dt>
+                  <dd className="mt-2 flex items-start gap-2 text-[hsl(var(--foreground))]">
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[hsl(152_36%_32%)]" />
+                    <span>
+                      <span className="font-semibold">Mon–Fri · 7:30a–4:30p</span>
+                      <span className="mt-1 block text-[hsl(var(--muted-foreground))]">
+                        Closed weekends and statutory holidays.
+                      </span>
+                    </span>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[hsl(var(--muted-foreground))]">
+                    Phone &amp; email
+                  </dt>
+                  <dd className="mt-2">
+                    <a
+                      href={BUSINESS_INFO.phoneHref}
+                      className="inline-flex items-center gap-2 text-base font-semibold text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))]"
+                    >
+                      <Phone className="h-4 w-4 text-[hsl(var(--primary))]" />
+                      {BUSINESS_INFO.phone}
+                    </a>
+                  </dd>
+                  <dd className="mt-2">
+                    <a
+                      href={BUSINESS_INFO.emailHref}
+                      className="inline-flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
+                    >
+                      <Mail className="h-4 w-4 shrink-0" />
+                      {BUSINESS_INFO.email}
+                    </a>
+                  </dd>
+                </div>
+              </dl>
 
-              <div className="border-t border-[rgba(26,18,14,0.1)] pt-8">
-                <h2 className="font-serif text-2xl text-[#1f1410]">
-                  Phone &amp; email
-                </h2>
-                <a
-                  href={BUSINESS_INFO.phoneHref}
-                  className="mt-3 block font-sans text-lg font-semibold text-[#1f1410] hover:text-[#8b3d2c]"
-                >
-                  <span className="inline-flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-[#8b3d2c]" />
-                    {BUSINESS_INFO.phone}
-                  </span>
-                </a>
-                <a
-                  href={BUSINESS_INFO.emailHref}
-                  className="mt-3 inline-flex items-center gap-2 font-sans text-sm font-medium text-[#5c4d42] hover:text-[#8b3d2c]"
-                >
-                  <Mail className="h-4 w-4" />
-                  {BUSINESS_INFO.email}
-                </a>
-              </div>
-
-              <div className="flex flex-col gap-2 border-t border-[rgba(26,18,14,0.1)] pt-8 sm:flex-row sm:flex-wrap">
-                <Button
-                  className="h-10 rounded-md bg-[#1f1410] font-sans text-sm text-white hover:bg-black"
-                  asChild
-                >
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <Button className="h-10 font-sans text-sm" asChild>
                   <Link href="/menu">
                     <ShoppingBag className="mr-2 h-4 w-4" />
-                    Order pickup
+                    Menu / pickup
                   </Link>
                 </Button>
-                <Button
-                  variant="outline"
-                  className="h-10 rounded-md border-[rgba(26,18,14,0.14)] bg-transparent font-sans text-sm"
-                  asChild
-                >
+                <Button variant="outline" className="h-10 font-sans text-sm" asChild>
                   <Link href="/catering#inquire">
                     <Users className="mr-2 h-4 w-4" />
-                    Request catering
+                    Catering inquiry
                   </Link>
                 </Button>
+              </div>
+
+              <div className="flex gap-3 border-t border-[hsla(220,14%,12%,0.08)] pt-6">
+                <img
+                  src={SITE_IMAGES.locationInterior}
+                  alt={SITE_IMAGES.locationInteriorAlt}
+                  className="media-crop-trust-interior h-14 w-[5.5rem] shrink-0 rounded-md object-cover ring-1 ring-[hsla(220,14%,12%,0.1)]"
+                />
+                <p className="text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
+                  Counter and seating for weekday pickup — proof of location only; book catering from the catering page.
+                </p>
               </div>
             </div>
 
-            <div className="flex flex-col overflow-hidden rounded-md border border-[hsla(220,14%,12%,0.12)] bg-[hsl(220_22%_8%)] shadow-lg">
-              <div className="border-b border-white/10 px-5 py-4 sm:px-6">
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[hsl(152_36%_72%)]">
-                  Map
-                </p>
-                <p className="mt-1 font-sans text-lg font-semibold text-white">
-                  Skymark Ave · Mississauga
-                </p>
+            <div className="flex min-h-[320px] flex-col overflow-hidden rounded-xl border border-[hsla(220,14%,12%,0.1)] bg-[hsl(220_28%_7%)] shadow-[0_24px_60px_-38px_rgba(15,23,42,0.35)] sm:min-h-[420px] lg:min-h-0">
+              <div className="flex items-end justify-between gap-3 border-b border-white/10 px-4 py-3 sm:px-5">
+                <div>
+                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">
+                    Map
+                  </p>
+                  <p className="mt-0.5 font-sans text-sm font-semibold text-white">
+                    2630 Skymark Ave · Unit 102
+                  </p>
+                </div>
+                <a
+                  href={BUSINESS_INFO.mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 text-[11px] font-semibold text-[hsl(var(--primary))] hover:underline"
+                >
+                  Larger map
+                </a>
               </div>
               <iframe
                 src={BUSINESS_INFO.mapsEmbedHref}
                 width="100%"
                 height="100%"
-                className="min-h-[380px] flex-1 bg-[hsl(220_24%_6%)] sm:min-h-[480px]"
+                className="min-h-[280px] flex-1 bg-[hsl(220_24%_6%)] sm:min-h-[360px]"
                 style={{ border: 0 }}
                 loading="lazy"
                 title="Google Map: Skymark Eatery by Caffe E Pranzo, 2630 Skymark Ave Unit 102, Mississauga"
               />
             </div>
-          </div>
-        </div>
-      </Section>
-
-      <Section tone="muted" density="default" className="border-b border-[hsla(220,14%,12%,0.06)]">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
-          <div>
-            <p className="section-kicker">The room</p>
-            <h2 className="mt-2 text-xl font-semibold text-[hsl(var(--foreground))] sm:text-2xl">
-              Counter service and seating on Skymark Ave — built for a quick in-and-out.
-            </h2>
-            <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">
-              Bright counter and dining room when you want to grab lunch or meet the team before a catering pickup.
-            </p>
-          </div>
-          <div className="overflow-hidden rounded-md border border-[hsla(220,14%,12%,0.1)] shadow-sm">
-            <img
-              src={SITE_IMAGES.locationInterior}
-              alt={SITE_IMAGES.locationInteriorAlt}
-              className="aspect-[16/10] w-full object-cover"
-            />
           </div>
         </div>
       </Section>

@@ -15,6 +15,19 @@ import { restaurantStructuredData, useSeo } from "@/lib/seo";
 
 const featuredPackages = BUFFET_PACKAGES.slice(0, 3);
 
+function signatureLaneImage(sectionId: string) {
+  switch (sectionId) {
+    case "breakfast":
+      return SITE_IMAGES.focaccia;
+    case "sandwiches":
+      return SITE_IMAGES.saladSandwich;
+    case "pasta":
+      return SITE_IMAGES.hotTable;
+    default:
+      return SITE_IMAGES.vealSandwich;
+  }
+}
+
 const categoryOffers = [
   {
     key: "catering",
@@ -50,11 +63,14 @@ const categoryOffers = [
     title: "Pasta & pizza",
     description: "Comfort plates and party-size pies when the team is ordering together.",
     href: "/menu#pasta",
-    image: SITE_IMAGES.hotTable,
-    imageAlt: "Hot lunch line at Skymark Eatery",
+    image: SITE_IMAGES.og,
+    imageAlt: "Daily pasta and hot plates from Skymark Eatery",
     emphasis: false,
   },
 ] as const;
+
+const primaryOffer = categoryOffers.find((o) => o.emphasis)!;
+const supportingOffers = categoryOffers.filter((o) => !o.emphasis);
 
 export default function Home() {
   useSeo({
@@ -73,11 +89,13 @@ export default function Home() {
   return (
     <Layout>
       <Hero
-        eyebrow="Modern Italian · Mississauga weekday lunch"
-        title={`${BUSINESS_INFO.secondaryName} — fast pickup, real catering`}
-        subtitle="Italian breakfast and lunch on Skymark Ave: sharp flavours, dependable timing, and portions that make sense for offices near Pearson and across western Mississauga."
+        eyebrow="Italian weekday counter · Skymark Ave · Pearson-west"
+        title="Lunch that moves fast. Catering that holds up in email."
+        subtitle="Weekday breakfast through pasta for Airport Corporate Centre, Dixon–Rathburn offices, and teams who need pickup on a clock — plus trays and buffets from the same Skymark Ave kitchen."
         imageSrc={SITE_IMAGES.hero}
-        imageAlt="Daily lunch favourites prepared at Skymark Eatery by Caffe E Pranzo"
+        imageAlt="Hot veal sandwich and lunch line favourites at Skymark Eatery by Caffe E Pranzo, Mississauga"
+        imageClassName="media-crop-home-hero"
+        imageEmphasis="subdued"
         primaryCta={{ label: "Order pickup", href: "/menu" }}
         secondaryCta={{ label: "Catering packages", href: "/catering" }}
         infoLine={
@@ -101,54 +119,105 @@ export default function Home() {
         className="border-b border-[hsla(220,14%,12%,0.06)]"
       >
         <div>
-          <p className="section-kicker">What we do best</p>
+          <p className="section-kicker">How you order</p>
           <h2 className="brand-rail-muted mt-3 max-w-2xl text-[hsl(var(--foreground))]">
-            Weekday Italian for the office rhythm — pickup when it&apos;s one, trays when it&apos;s everyone.
+            One counter — two rhythms.
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-[hsl(var(--muted-foreground))] md:text-base">
-            Same kitchen for the line and the boardroom. Start with the lane you need — everything links to the full menu or catering detail.
+            Catering runs as trays, buffets, and platters. Pickup runs as the weekday line — same kitchen, different portioning.
           </p>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:gap-5">
-            {categoryOffers.map((block) => (
-              <a
-                key={block.key}
-                href={block.href}
-                className={`group overflow-hidden rounded-md border bg-white shadow-sm transition hover:shadow-md ${
-                  block.emphasis
-                    ? "border-[hsl(var(--primary))]/35 ring-1 ring-[hsl(var(--primary))]/15"
-                    : "border-[hsla(220,14%,12%,0.08)]"
-                }`}
-              >
-                <div className="relative aspect-[16/9] max-h-[200px] sm:max-h-[220px]">
-                  <img
-                    src={block.image}
-                    alt={block.imageAlt}
-                    className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-2">
-                    <h3 className="font-sans text-lg font-semibold tracking-tight text-white drop-shadow-sm md:text-xl">
-                      {block.title}
-                    </h3>
-                    {block.emphasis ? (
-                      <span className="shrink-0 rounded bg-[hsl(var(--primary))] px-2 py-0.5 font-sans text-[10px] font-bold uppercase tracking-wide text-white">
-                        Popular
-                      </span>
-                    ) : null}
+          <div className="relative mt-14 lg:mt-20">
+            <div
+              className="pointer-events-none absolute left-[4%] right-[6%] top-6 hidden h-[78%] rounded-[2rem] bg-[linear-gradient(118deg,hsl(var(--muted))_0%,transparent_58%)] opacity-90 lg:block"
+              aria-hidden
+            />
+            <div className="relative grid items-stretch gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="relative lg:col-span-7">
+                <span
+                  className="pointer-events-none absolute -left-1 top-2 font-sans text-[clamp(3.75rem,10vw,6.5rem)] font-semibold leading-none tracking-tight text-[hsl(var(--foreground))]/[0.04] sm:left-0 lg:top-6"
+                  aria-hidden
+                >
+                  01
+                </span>
+                <a
+                  href={primaryOffer.href}
+                  className="group relative mt-8 flex min-h-[min(100vw,400px)] flex-col overflow-hidden rounded-[1.65rem] bg-[hsl(220_46%_8%)] shadow-[0_40px_90px_-48px_rgba(15,23,42,0.72)] lg:mt-12 lg:min-h-[400px] lg:flex-row lg:rounded-[2rem]"
+                >
+                  <div className="relative min-h-[240px] w-full overflow-hidden lg:min-h-0 lg:w-[56%] lg:max-w-none">
+                    <div className="depth-tilt absolute inset-0">
+                      <img
+                        src={primaryOffer.image}
+                        alt={primaryOffer.imageAlt}
+                        className="media-crop-offer-catering h-full w-full scale-[1.08] object-cover opacity-[0.9] transition duration-[720ms] ease-out group-hover:scale-[1.12] group-hover:opacity-100"
+                      />
+                    </div>
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent lg:bg-gradient-to-r lg:from-black/55 lg:via-black/20 lg:to-transparent" />
                   </div>
+                  <div className="relative z-10 flex flex-1 flex-col justify-end px-7 py-9 lg:absolute lg:inset-0 lg:justify-center lg:bg-gradient-to-r lg:from-black/50 lg:via-black/25 lg:to-transparent lg:px-12 lg:py-12">
+                    <div className="lg:ml-[48%] lg:max-w-md">
+                      <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.32em] text-[hsl(var(--primary))]">
+                        Service lane
+                      </p>
+                      <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-[1.85rem]">
+                        {primaryOffer.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-white/78 sm:text-[0.95rem]">
+                        {primaryOffer.description}
+                      </p>
+                      <span className="mt-8 inline-flex items-center text-sm font-semibold text-white transition duration-300 group-hover:translate-x-0.5">
+                        Trays &amp; buffet packages
+                        <ArrowUpRight className="ml-1.5 h-4 w-4 transition duration-300 group-hover:-translate-y-0.5" />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div className="relative flex flex-col justify-end pb-1 lg:col-span-5 lg:pb-6 lg:pl-2">
+                <span
+                  className="pointer-events-none absolute right-0 top-0 font-sans text-[clamp(3rem,8vw,4.5rem)] font-semibold leading-none text-[hsl(var(--foreground))]/[0.055] lg:-top-4 lg:right-4"
+                  aria-hidden
+                >
+                  02
+                </span>
+                <p className="relative font-sans text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[hsl(152_40%_28%)]">
+                  Pickup lanes
+                </p>
+                <p className="relative mt-2 max-w-sm text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
+                  Weekday counter rhythm — same kitchen, single-plate portioning.
+                </p>
+                <div className="relative mt-6 divide-y divide-[hsla(220,14%,12%,0.1)]">
+                  {supportingOffers.map((lane) => (
+                    <a
+                      key={lane.key}
+                      href={lane.href}
+                      className="group flex gap-4 py-5 transition-[transform,opacity] duration-300 ease-out first:pt-1 hover:opacity-[0.98] sm:gap-5"
+                    >
+                      <div className="depth-tilt relative h-[4.25rem] w-[4.5rem] shrink-0 overflow-hidden rounded-md ring-1 ring-[hsla(220,14%,12%,0.08)] transition duration-500 group-hover:ring-[hsl(var(--primary))]/25 sm:h-[4.75rem] sm:w-20">
+                        <img
+                          src={lane.image}
+                          alt={lane.imageAlt}
+                          className="media-crop-lane h-full w-full object-cover transition duration-[520ms] ease-out group-hover:scale-[1.06]"
+                        />
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-center border-l border-transparent pl-1 transition duration-300 group-hover:border-[hsl(var(--primary))]/35">
+                        <h3 className="font-sans text-[1.02rem] font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-lg">
+                          {lane.title}
+                        </h3>
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
+                          {lane.description}
+                        </p>
+                        <span className="mt-2.5 inline-flex items-center text-[11px] font-semibold uppercase tracking-[0.12em] text-[hsl(var(--primary))]">
+                          Menu
+                          <ArrowUpRight className="ml-1 h-3.5 w-3.5 opacity-80 transition duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                        </span>
+                      </div>
+                    </a>
+                  ))}
                 </div>
-                <div className="p-4 md:p-5">
-                  <p className="text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
-                    {block.description}
-                  </p>
-                  <span className="mt-3 inline-flex items-center text-sm font-semibold text-[hsl(var(--primary))]">
-                    {block.emphasis ? "Plan catering" : "View"}
-                    <ArrowUpRight className="ml-1 h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                </div>
-              </a>
-            ))}
+              </div>
+            </div>
           </div>
         </div>
       </Section>
@@ -188,7 +257,7 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-md border border-[hsla(220,14%,12%,0.1)] shadow-sm lg:col-span-6">
+          <div className="depth-tilt relative overflow-hidden rounded-xl border border-[hsla(220,14%,12%,0.1)] shadow-md lg:col-span-6">
             <img
               src={SITE_IMAGES.veggieTray}
               alt="Colourful catering tray from Skymark Eatery"
@@ -211,29 +280,75 @@ export default function Home() {
               Signature picks from the weekday line.
             </h2>
             <p className="mt-2 max-w-2xl text-sm text-[hsl(var(--muted-foreground))] md:text-base">
-              House favourites across the menu — tap through to the full section for every option and price.
+              One hero plate plus three fast jumps — each opens the right menu section with full pricing.
             </p>
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {signaturePicks.map(({ section, item }) => (
-                <a
-                  key={`${section.id}-${item.name}`}
-                  href={`/menu#${section.id}`}
-                  className="rounded-md border border-[hsla(220,14%,12%,0.08)] bg-white p-4 shadow-sm transition hover:border-[hsl(var(--primary))]/35 hover:shadow-md"
-                >
-                  <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[hsl(152_30%_30%)]">
-                    {section.shortLabel}
-                  </p>
-                  <h3 className="mt-2 font-sans text-base font-semibold leading-snug text-[hsl(var(--foreground))]">
-                    {item.name}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[hsl(var(--muted-foreground))]">
-                    {item.description}
-                  </p>
-                  <p className="mt-3 font-sans text-sm font-semibold tabular-nums text-[hsl(var(--foreground))]">
-                    {item.price}
-                  </p>
-                </a>
-              ))}
+            <div className="mt-8 grid gap-4 lg:grid-cols-12">
+              {(() => {
+                const [lead, ...rest] = signaturePicks;
+                if (!lead) return null;
+                const leadImg = signatureLaneImage(lead.section.id);
+                return (
+                  <>
+                    <a
+                      key={`${lead.section.id}-${lead.item.name}`}
+                      href={`/menu#${lead.section.id}`}
+                      className="group relative flex min-h-[280px] flex-col justify-end overflow-hidden rounded-xl border border-[hsla(220,14%,12%,0.1)] bg-[hsl(220_44%_8%)] shadow-lg lg:col-span-7"
+                    >
+                      <img
+                        src={leadImg}
+                        alt={`${lead.item.name} — ${lead.section.shortLabel} at Skymark Eatery`}
+                        className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-[1.05] group-hover:opacity-100"
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                      <div className="relative p-6 md:p-8">
+                        <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+                          {lead.section.shortLabel}
+                        </p>
+                        <h3 className="mt-2 font-sans text-xl font-semibold leading-snug text-white md:text-2xl">
+                          {lead.item.name}
+                        </h3>
+                        <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/80">
+                          {lead.item.description}
+                        </p>
+                        <p className="mt-4 font-sans text-lg font-semibold tabular-nums text-white">
+                          {lead.item.price}
+                        </p>
+                      </div>
+                    </a>
+                    <div className="flex flex-col gap-3 lg:col-span-5">
+                      {rest.map(({ section, item }) => (
+                        <a
+                          key={`${section.id}-${item.name}`}
+                          href={`/menu#${section.id}`}
+                          className="group flex gap-3 rounded-xl border border-[hsla(220,14%,12%,0.08)] bg-white p-3 shadow-sm transition hover:border-[hsl(var(--primary))]/28 hover:shadow-md sm:p-4"
+                        >
+                          <div className="depth-tilt relative h-16 w-20 shrink-0 overflow-hidden rounded-lg sm:h-[4.5rem] sm:w-24">
+                            <img
+                              src={signatureLaneImage(section.id)}
+                              alt={`${item.name} — ${section.shortLabel}`}
+                              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.06]"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.16em] text-[hsl(152_40%_28%)]">
+                              {section.shortLabel}
+                            </p>
+                            <h3 className="mt-1 font-sans text-sm font-semibold leading-snug text-[hsl(var(--foreground))] sm:text-base">
+                              {item.name}
+                            </h3>
+                            <p className="mt-1 line-clamp-2 text-xs text-[hsl(var(--muted-foreground))]">
+                              {item.description}
+                            </p>
+                            <p className="mt-2 font-sans text-sm font-semibold tabular-nums text-[hsl(var(--foreground))]">
+                              {item.price}
+                            </p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </Section>
@@ -284,48 +399,64 @@ export default function Home() {
         </div>
       </section>
 
-      <Section tone="dark" density="default" withMotion>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 lg:gap-8">
-            <div className="flex gap-3">
+      <Section
+        tone="dark"
+        density="default"
+        withMotion
+        className="border-t border-white/[0.07] py-10 md:py-12 lg:py-14"
+      >
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between lg:gap-12">
+          <div className="flex flex-1 flex-col gap-7 sm:max-lg:grid sm:max-lg:grid-cols-2 sm:max-lg:gap-x-8 lg:max-w-[min(52rem,100%)]">
+            <div className="flex gap-3 sm:max-lg:col-span-2 lg:max-w-xl">
               <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(152_40%_70%)]" />
               <div>
-                <h3 className="font-sans text-lg font-semibold text-white">{BUSINESS_INFO.addressLine1}</h3>
-                <p className="mt-1 text-sm text-white/70">{BUSINESS_INFO.addressLine2}</p>
+                <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-white/45">
+                  Location
+                </p>
+                <h3 className="mt-1.5 font-sans text-base font-semibold text-white sm:text-lg">{BUSINESS_INFO.addressLine1}</h3>
+                <p className="mt-1 text-sm text-white/68">{BUSINESS_INFO.addressLine2}</p>
                 <a
                   href={BUSINESS_INFO.mapsHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-block text-sm font-semibold text-[hsl(var(--primary))] hover:underline"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-[hsl(var(--primary))] transition hover:text-white"
                 >
                   Open in Maps
                 </a>
               </div>
             </div>
-            <div className="flex gap-3 sm:col-span-2 lg:col-span-1">
+            <div className="flex gap-3">
               <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(152_40%_70%)]" />
               <div>
-                <h3 className="font-sans text-lg font-semibold text-white">Weekday hours</h3>
-                <p className="mt-1 text-sm text-white/70">{BUSINESS_INFO.hoursLabel}</p>
+                <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-white/45">
+                  Hours
+                </p>
+                <h3 className="mt-1.5 font-sans text-base font-semibold text-white sm:text-lg">Weekday service</h3>
+                <p className="mt-1 text-sm text-white/68">{BUSINESS_INFO.hoursLabel}</p>
               </div>
             </div>
-            <div className="flex gap-3 sm:col-span-2 lg:col-span-1">
+            <div className="flex gap-3 sm:max-lg:col-span-2 lg:max-w-lg">
               <UtensilsCrossed className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(152_40%_70%)]" />
               <div>
-                <h3 className="font-sans text-lg font-semibold text-white">Trusted pickup rhythm</h3>
-                <p className="mt-1 text-sm text-white/70">
-                  Same crew for the counter line and catering prep — built for repeat office visits on Skymark Ave.
+                <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-white/45">
+                  Proof of pickup
+                </p>
+                <h3 className="mt-1.5 font-sans text-base font-semibold text-white sm:text-lg">Same crew, two lanes</h3>
+                <p className="mt-1 text-sm text-white/68">
+                  Counter line and catering prep under one roof — built for repeat Skymark Ave visits.
                 </p>
               </div>
             </div>
           </div>
-          <div className="relative overflow-hidden rounded-md border border-white/10">
+          <div className="relative w-full shrink-0 lg:w-[min(240px,28vw)]">
             <img
               src={SITE_IMAGES.locationInterior}
               alt={SITE_IMAGES.locationInteriorAlt}
-              className="aspect-[16/10] w-full object-cover sm:aspect-[5/3]"
+              className="trust-proof-thumb media-crop-trust-interior aspect-[5/3] w-full rounded-lg object-cover opacity-90 ring-1 ring-white/10 sm:aspect-[4/3] lg:aspect-[4/5] lg:max-h-[200px]"
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <p className="mt-2 font-sans text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">
+              Storefront reference
+            </p>
           </div>
         </div>
       </Section>

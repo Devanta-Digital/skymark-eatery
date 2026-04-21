@@ -9,7 +9,8 @@
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "process-logo": "node scripts/process-logo.mjs",
-    "visual:snapshots": "node scripts/visual-snapshots.mjs"
+    "visual:snapshots": "node scripts/visual-snapshots.mjs",
+    "visual:snapshots:desktop": "node scripts/visual-snapshots.mjs --desktop"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",

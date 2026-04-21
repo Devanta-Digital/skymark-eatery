@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fadeUp } from "@/lib/motion";
+import { isVisualQaCapture } from "@/lib/visual-qa";
 
 type SectionTone = "light" | "muted" | "dark" | "transparent";
 type SectionDensity = "default" | "airy";
@@ -39,19 +40,21 @@ export function Section({
   withMotion = false,
   density = "default",
 }: SectionProps) {
-  const content = withMotion ? (
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={fadeUp}
-      className={cn("w-full", contentClassName)}
-    >
-      {children}
-    </motion.div>
-  ) : (
-    <div className={cn("w-full", contentClassName)}>{children}</div>
-  );
+  const qa = isVisualQaCapture();
+  const content =
+    withMotion && !qa ? (
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeUp}
+        className={cn("w-full", contentClassName)}
+      >
+        {children}
+      </motion.div>
+    ) : (
+      <div className={cn("w-full", contentClassName)}>{children}</div>
+    );
 
   return (
     <section
