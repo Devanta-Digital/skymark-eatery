@@ -1,0 +1,15 @@
+---
+description: Public marketing site — SEO, schema, and conversion discipline for the Skymark Vite app
+globs: artifacts/skymark-eatery/**/*.tsx,artifacts/skymark-eatery/**/*.ts,artifacts/skymark-eatery/index.html
+alwaysApply: false
+---
+
+# Public site & SEO (Skymark app)
+
+When editing files under `artifacts/skymark-eatery/` that affect **pages users and Google see** (routes, `src/lib/seo.ts`, `src/content/site.ts`, layout, marketing copy, images referenced by OG):
+
+1. **Read** the Cursor skill **`local-seo-spa-traffic`** (`~/.cursor/skills/local-seo-spa-traffic/SKILL.md` or `.cursor/skills/local-seo-spa-traffic/SKILL.md`) before shipping title/meta/schema/FAQ changes.
+2. **Keep NAP and `siteUrl`** in `src/content/site.ts` aligned with **visible** footer/header/contact and **JSON-LD** in `src/lib/seo.ts`.
+3. **Every indexable route** must call **`useSeo`** with a unique title and description; adjust `structuredData` when FAQs or business facts change.
+4. For **large copy or layout overhauls**, also apply **`client-bespoke-web`**, **`seo-conversion-copy`**, and optionally **`client-site-excellence-pass`**.
+5. After substantive SEO or routing changes, run **`pnpm run build`** from `artifacts/skymark-eatery/`.
