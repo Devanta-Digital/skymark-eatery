@@ -1,6 +1,8 @@
 import { Link } from "wouter";
 import { Clock, Mail, MapPin, Phone, ShoppingBag, Users } from "lucide-react";
 import { Layout } from "@/components/layout";
+import { Hero } from "@/components/sections/hero";
+import { Section } from "@/components/sections/section";
 import { Button } from "@/components/ui/button";
 import { BUSINESS_INFO, SITE_IMAGES } from "@/content/site";
 import {
@@ -29,50 +31,18 @@ export default function Contact() {
 
   return (
     <Layout>
-      <section className="grain-hero relative overflow-hidden border-b border-[rgba(26,18,14,0.1)] bg-[#14100e] text-[#f4ebe3]">
-        <div className="absolute inset-0">
-          <img
-            src={SITE_IMAGES.locationInterior}
-            alt={SITE_IMAGES.locationInteriorAlt}
-            className="h-full min-h-[320px] w-full object-cover opacity-28 sm:min-h-[360px]"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(12,9,8,0.94),rgba(28,20,16,0.82)_52%,rgba(60,38,28,0.45))]" />
-        </div>
+      <Hero
+        eyebrow="Contact"
+        title={`Visit ${BUSINESS_INFO.primaryName}.`}
+        subtitle="Directions, weekday hours, and direct lines for pickup questions. For tray counts and buffet planning, the catering page keeps everything in one place."
+        imageSrc={SITE_IMAGES.locationInterior}
+        imageAlt={SITE_IMAGES.locationInteriorAlt}
+        primaryCta={{ label: `Call ${BUSINESS_INFO.phone}`, href: BUSINESS_INFO.phoneHref }}
+        secondaryCta={{ label: "Email", href: BUSINESS_INFO.emailHref }}
+      />
 
-        <div className="relative container mx-auto max-w-6xl px-4 py-14 sm:py-16">
-          <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.28em] text-[#e2c4b0]">
-            Contact
-          </p>
-          <h1 className="mt-4 max-w-3xl font-serif text-[2.25rem] leading-[1.02] tracking-tight sm:text-5xl">
-            Visit {BUSINESS_INFO.primaryName}.
-          </h1>
-          <p className="mt-5 max-w-2xl font-sans text-sm leading-relaxed text-[#d8c8bc] sm:text-base">
-            Directions, weekday hours, and direct lines for pickup questions.
-            For tray counts and buffet planning, the catering page keeps
-            everything in one place.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              className="h-11 rounded-md bg-[#b85c40] px-6 text-sm text-white hover:bg-[#9e4e36]"
-              asChild
-            >
-              <a href={BUSINESS_INFO.phoneHref}>Call {BUSINESS_INFO.phone}</a>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-11 rounded-md border-white/22 bg-transparent px-6 text-sm text-[#f4ebe3] hover:bg-white/10"
-              asChild
-            >
-              <a href={BUSINESS_INFO.emailHref}>Email</a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-[rgba(26,18,14,0.07)] py-14 sm:py-16">
-        <div className="container mx-auto max-w-6xl px-4">
+      <Section tone="light" className="border-b border-[rgba(26,18,14,0.07)] py-14 sm:py-16">
+        <div>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
             <div className="space-y-8">
               <div>
@@ -164,7 +134,7 @@ export default function Contact() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
     </Layout>
   );
 }

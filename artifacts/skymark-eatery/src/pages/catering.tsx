@@ -5,8 +5,11 @@ import * as z from "zod";
 import { Link } from "wouter";
 import { CheckCircle2, Mail, Phone, Sparkles } from "lucide-react";
 import { Layout } from "@/components/layout";
+import { Hero } from "@/components/sections/hero";
+import { Section } from "@/components/sections/section";
 import { StickySectionNav } from "@/components/sticky-section-nav";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -152,6 +155,7 @@ function CateringRows({
 
 export default function Catering() {
   const [submitted, setSubmitted] = useState(false);
+  const [occasion, setOccasion] = useState("office-lunch");
 
   useSeo({
     title:
@@ -205,61 +209,15 @@ export default function Catering() {
 
   return (
     <Layout>
-      <section className="relative overflow-hidden border-b border-black/10 bg-[#16100d] text-white">
-        <div className="absolute inset-0 opacity-30">
-          <img
-            src={SITE_IMAGES.cateringHero}
-            alt="Catering salads and trays from Skymark Eatery by Caffe E Pranzo"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(14,10,8,0.96),rgba(22,16,13,0.9)_50%,rgba(22,16,13,0.55))]" />
-
-        <div className="relative container mx-auto max-w-6xl px-4 py-10 sm:py-12">
-          <div className="max-w-3xl">
-            <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.34em] text-[#deb39a]">
-              Events &amp; offices
-            </p>
-            <h1 className="mt-3 font-serif text-[2rem] leading-[1.05] tracking-tight sm:text-4xl lg:text-[2.6rem]">
-              Italian catering that reads like a menu — not a spreadsheet.
-            </h1>
-            <p className="mt-4 max-w-2xl font-sans text-sm leading-relaxed text-[#c9b5a6] sm:text-base">
-              {CATERING_INTRO}
-            </p>
-            <p className="mt-3 max-w-2xl font-sans text-xs leading-relaxed text-[#a8988c] sm:text-sm">
-              Perfect for office lunches near Pearson, group meetings, and
-              family gatherings on Skymark Ave. Need help choosing the right
-              catering package? Call or email — we&apos;ll help you plan the
-              order.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                className="rounded-md bg-[#b55a3c] font-sans text-white hover:bg-[#9c4f38]"
-                asChild
-              >
-                <a href="#packages">Buffet packages</a>
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-md border-white/20 font-sans text-white hover:bg-white/10"
-                asChild
-              >
-                <a href="#inquire">Request catering</a>
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-md border-white/20 font-sans text-white hover:bg-white/10"
-                asChild
-              >
-                <a href={BUSINESS_INFO.phoneHref}>{BUSINESS_INFO.phone}</a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero
+        eyebrow="Events & offices"
+        title="Italian catering that reads like a menu, not a spreadsheet."
+        subtitle={CATERING_INTRO}
+        imageSrc={SITE_IMAGES.cateringHero}
+        imageAlt="Catering salads and trays from Skymark Eatery by Caffe E Pranzo"
+        primaryCta={{ label: "Buffet packages", href: "/catering#packages" }}
+        secondaryCta={{ label: "Request catering", href: "/catering#inquire" }}
+      />
 
       <StickySectionNav
         label="Catering sections"
@@ -274,7 +232,41 @@ export default function Catering() {
         }
       />
 
-      <section className="border-b border-[rgba(26,18,14,0.06)] bg-[hsl(33,28%,90%)] py-8">
+      <Section tone="light" withMotion className="py-8">
+        <div className="section-shell rounded-sm p-4 sm:p-6">
+          <p className="section-kicker">Occasion selector</p>
+          <Tabs value={occasion} onValueChange={setOccasion} className="mt-4">
+            <TabsList className="h-auto flex-wrap bg-[hsl(34,30%,92%)] p-1">
+              <TabsTrigger value="office-lunch">Office lunch</TabsTrigger>
+              <TabsTrigger value="meeting">Meeting</TabsTrigger>
+              <TabsTrigger value="family-event">Family event</TabsTrigger>
+              <TabsTrigger value="corporate-event">Corporate event</TabsTrigger>
+            </TabsList>
+            <TabsContent value="office-lunch">
+              <p className="mt-3 text-sm text-[#5c4d42]">
+                Fast setup, easy portions, and dependable timing for teams near Pearson and Skymark offices.
+              </p>
+            </TabsContent>
+            <TabsContent value="meeting">
+              <p className="mt-3 text-sm text-[#5c4d42]">
+                Balanced trays and buffet combinations that stay practical for meeting schedules and room turnovers.
+              </p>
+            </TabsContent>
+            <TabsContent value="family-event">
+              <p className="mt-3 text-sm text-[#5c4d42]">
+                Comfort-first combinations with generous servings and flexible trays for mixed preferences.
+              </p>
+            </TabsContent>
+            <TabsContent value="corporate-event">
+              <p className="mt-3 text-sm text-[#5c4d42]">
+                Presentation-forward package planning with appetizers, mains, and add-ons for hosted events.
+              </p>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </Section>
+
+      <section className="border-b border-[rgba(26,18,14,0.06)] section-muted py-8">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="grid gap-6 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-[rgba(26,18,14,0.1)]">
             {CATERING_OVERVIEW.map((item) => (
@@ -341,9 +333,8 @@ export default function Catering() {
                           / guest
                         </span>
                       </p>
-                      <p className="mt-2 border-t border-white/10 pt-2 font-sans text-[11px] leading-snug text-[#e8d5cc]">
-                        {pkg.minimumOrder}
-                      </p>
+                      <p className="mt-2 border-t border-white/10 pt-2 font-sans text-[11px] leading-snug text-[#e8d5cc]">{pkg.minimumOrder}</p>
+                      <p className="mt-1 font-sans text-[11px] leading-snug text-[#e8d5cc]">Serves: {pkg.feeds}</p>
                     </div>
                   </div>
                 </div>
@@ -602,6 +593,14 @@ export default function Catering() {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-6"
                   >
+                    <div className="rounded-xl border border-[rgba(26,18,14,0.08)] bg-[hsl(33,30%,94%)] p-4">
+                      <p className="section-kicker">Planner steps</p>
+                      <div className="mt-2 grid gap-2 text-xs text-[#6d5748] sm:grid-cols-3">
+                        <span className="rounded-md border border-[rgba(26,18,14,0.12)] bg-white px-3 py-2">1. Event basics</span>
+                        <span className="rounded-md border border-[rgba(26,18,14,0.12)] bg-white px-3 py-2">2. Service preferences</span>
+                        <span className="rounded-md border border-[rgba(26,18,14,0.12)] bg-white px-3 py-2">3. Notes and submit</span>
+                      </div>
+                    </div>
                     <div className="grid gap-6 sm:grid-cols-2">
                       <FormField
                         control={form.control}

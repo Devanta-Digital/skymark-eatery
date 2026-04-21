@@ -54,6 +54,11 @@ export function Layout({ children }: { children: ReactNode }) {
   const [headerHidden, setHeaderHidden] = useState(false);
 
   const isStaff = user?.role === "staff";
+  const isPublicRoute =
+    location === "/" ||
+    location.startsWith("/menu") ||
+    location.startsWith("/catering") ||
+    location.startsWith("/contact");
   const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
@@ -135,16 +140,13 @@ export function Layout({ children }: { children: ReactNode }) {
             headerCompact ? "h-[48px] sm:h-[50px]" : "h-[52px] sm:h-[56px]",
           )}
         >
-          <Link
-            href="/"
-            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
-          >
+          <Link href="/" className="flex shrink-0 items-center gap-2 sm:gap-2.5">
             <img
               src="/logo.webp"
               alt={BUSINESS_INFO.primaryName}
               className={cn(
-                "h-auto w-auto object-contain transition-all duration-200",
-                headerCompact ? "h-8 sm:h-8" : "h-9 sm:h-10",
+                "h-auto w-auto object-contain drop-shadow-[0_3px_8px_rgba(0,0,0,0.14)] transition-all duration-200",
+                headerCompact ? "h-8 sm:h-9" : "h-10 sm:h-11",
               )}
             />
             <div className="hidden min-w-0 sm:block">
@@ -563,7 +565,10 @@ export function Layout({ children }: { children: ReactNode }) {
       <main
         id="main-content"
         tabIndex={-1}
-        className="flex min-h-screen flex-col pt-[var(--site-header-height)] outline-none"
+        className={cn(
+          "flex min-h-screen flex-col pt-[var(--site-header-height)] outline-none",
+          isPublicRoute ? "pb-20 md:pb-0" : "",
+        )}
       >
         {children}
       </main>
@@ -697,6 +702,23 @@ export function Layout({ children }: { children: ReactNode }) {
       >
         <ArrowUp className="h-4 w-4" />
       </button>
+
+      {isPublicRoute ? (
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[rgba(26,18,14,0.12)] bg-[hsla(34,42%,97%,0.96)] px-3 py-2 backdrop-blur md:hidden">
+          <div className="mx-auto flex max-w-6xl items-center gap-2">
+            <Button className="min-h-10 flex-1 rounded-md text-xs" asChild>
+              <Link href="/menu">View menu</Link>
+            </Button>
+            <Button
+              variant="outline"
+              className="min-h-10 flex-1 rounded-md border-[rgba(26,18,14,0.16)] bg-white text-xs"
+              asChild
+            >
+              <Link href="/catering#inquire">Catering quote</Link>
+            </Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

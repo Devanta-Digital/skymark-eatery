@@ -10,6 +10,8 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { Layout } from "@/components/layout";
+import { Hero } from "@/components/sections/hero";
+import { Section } from "@/components/sections/section";
 import { StickySectionNav } from "@/components/sticky-section-nav";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
@@ -292,62 +294,25 @@ export default function Menu() {
 
   return (
     <Layout>
-      <section className="relative overflow-hidden border-b border-black/10 bg-[#16100d] text-white">
-        <div className="absolute inset-0 opacity-32">
-          <img
-            src={SITE_IMAGES.menuHero}
-            alt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(14,10,8,0.96),rgba(22,16,13,0.88)_55%,rgba(22,16,13,0.5))]" />
-
-        <div className="relative container mx-auto max-w-6xl px-4 py-8 sm:py-10">
-          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div className="max-w-2xl">
-              <p className="font-sans text-[0.6rem] font-semibold uppercase tracking-[0.34em] text-[#deb39a]">
-                Takeout menu
-              </p>
-              <h1 className="mt-2.5 font-serif text-[1.85rem] leading-[1.06] tracking-tight sm:text-4xl lg:text-[2.5rem]">
-                Italian lunch, built for a Mississauga workday.
-              </h1>
-              <p className="mt-3 max-w-xl font-sans text-sm leading-relaxed text-[#c9b5a6] sm:text-[0.95rem]">
-                Breakfast through pasta and pizza — made in-house on Skymark
-                Ave.{" "}
-                {onlineOrderingReady
-                  ? "Add items where offered, or call for same-day help."
-                  : "Browse here, then call the kitchen to order."}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Button
-                  size="sm"
-                  className="rounded-sm bg-[#b55a3c] font-sans text-white hover:bg-[#9c4f38]"
-                  asChild
-                >
-                  <a href={BUSINESS_INFO.phoneHref}>Call to order</a>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="rounded-sm border-white/20 font-sans text-white hover:bg-white/10"
-                  asChild
-                >
-                  <Link href="/catering">Catering</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="flex shrink-0 flex-col gap-2 border-t border-white/10 pt-5 font-sans text-[13px] text-[#d8c8bc] sm:border-t-0 sm:pt-0 lg:border-l lg:border-t-0 lg:pl-7">
-              <span className="inline-flex items-center gap-2">
-                <Clock className="h-4 w-4 text-[#deb39a]" />
-                Mon–Fri · 7:30a–4:30p
-              </span>
-              <span className="text-xs leading-relaxed text-[#b5a090]">
-                {BUSINESS_INFO.addressLine1}, {BUSINESS_INFO.city}
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero
+        eyebrow="Takeout menu"
+        title="Italian lunch, built for a Mississauga workday."
+        subtitle={`Breakfast through pasta and pizza, made in-house on Skymark Ave. ${
+          onlineOrderingReady
+            ? "Add items where offered, or call for same-day help."
+            : "Browse here, then call the kitchen to order."
+        }`}
+        imageSrc={SITE_IMAGES.menuHero}
+        imageAlt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
+        primaryCta={{ label: "Call to order", href: BUSINESS_INFO.phoneHref }}
+        secondaryCta={{ label: "Catering", href: "/catering" }}
+        infoLine={
+          <span className="inline-flex items-center gap-2">
+            <Clock className="h-4 w-4 text-[#deb39a]" />
+            Mon–Fri · 7:30a–4:30p · {BUSINESS_INFO.addressLine1}
+          </span>
+        }
+      />
 
       <StickySectionNav
         label="Menu sections"
@@ -607,8 +572,8 @@ export default function Menu() {
         </div>
       </section>
 
-      <section className="border-t border-[rgba(26,18,14,0.08)] bg-[hsl(33,28%,90%)] py-12">
-        <div className="container mx-auto max-w-6xl px-4">
+      <Section tone="muted" className="border-t border-[rgba(26,18,14,0.08)] py-12">
+        <div>
           <div className="flex flex-col gap-6 border border-[rgba(26,18,14,0.1)] bg-[hsla(34,38%,97%,0.85)] p-8 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="section-kicker">Larger orders</p>
@@ -643,7 +608,7 @@ export default function Menu() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
     </Layout>
   );
 }
