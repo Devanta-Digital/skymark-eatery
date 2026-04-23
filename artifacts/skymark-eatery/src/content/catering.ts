@@ -552,3 +552,134 @@ export const CATERING_NOTES = [
   "Minimums are per line item (e.g. 12–24 pieces on bites, 8–10 sandwiches on platters). We confirm counts when we reply.",
   "Some seafood and market items may re-quote if your event date is far out.",
 ];
+
+/**
+ * Catering trust / operational pills surfaced below the hero CTAs. Plain facts —
+ * no ratings or invented claims.
+ */
+export const CATERING_TRUST_PILLS = [
+  "Per-person pricing",
+  "24h minimum lead time",
+  "Pickup + delivery",
+  "Same kitchen as the counter",
+];
+
+/**
+ * Decision helper — four simple paths that route buyers away from analysis
+ * paralysis. Links should stay internal so the page keeps moving.
+ */
+export const CATERING_DECISION_PATHS = [
+  {
+    eyebrow: "Under 8 guests",
+    title: "Use the takeout menu",
+    body: "For small teams, single-plate sandwiches, salads, pasta, and pizza off the main menu are simpler than a tray.",
+    cta: { label: "Open takeout menu", href: "/menu" },
+  },
+  {
+    eyebrow: "Meeting lunch · 8–24",
+    title: "Buffet packages",
+    body: "Classic Lasagna Feast or Cannelloni Duo — one quote line, per-person pricing, clear minimums.",
+    cta: { label: "Compare packages", href: "#packages" },
+  },
+  {
+    eyebrow: "Boardroom buffet · 25+",
+    title: "Build from hot trays",
+    body: "Mix hot pasta trays, salads, and sides to fit the room. Works for recurring Thursday lunches or larger events.",
+    cta: { label: "Browse the menu", href: "#catering-menu" },
+  },
+  {
+    eyebrow: "Light reception / morning",
+    title: "Platters + appetizers",
+    body: "Grazing boards, sandwich platters, bruschetta, and bites for receptions, hosted visits, or earlier sessions.",
+    cta: { label: "See platters", href: "#catering-menu" },
+  },
+];
+
+/**
+ * How ordering works — the 4-step process buyers expect to see before they
+ * send an RFP. Numbers beat adjectives.
+ */
+export const CATERING_HOW_IT_WORKS = [
+  {
+    step: "01",
+    title: "Inquire",
+    body: "Send the form below or an email with your date, guest count, and pickup-vs-delivery preference. A few dietary notes help.",
+  },
+  {
+    step: "02",
+    title: "Quote",
+    body: "We reply within one business day (Mon–Fri, 8:30a–3:00p) with a per-person quote, tray options, and any suggested adds.",
+  },
+  {
+    step: "03",
+    title: "Confirm",
+    body: "Lock the order with a 50% deposit or a PO. Final headcount is due 48 hours before service so the kitchen can scale cleanly.",
+  },
+  {
+    step: "04",
+    title: "Delivery or pickup",
+    body: "Trays arrive 30 minutes before service with disposable chafers and serveware where the package includes them. Pickup is at 2630 Skymark Ave, unit 102.",
+  },
+];
+
+export type CateringFaq = {
+  question: string;
+  answer: string;
+};
+
+/**
+ * FAQs required before a buyer will send a PO — each one is a question we have
+ * heard enough to bake in, and each answer is defensible today.
+ */
+export const CATERING_FAQS: CateringFaq[] = [
+  {
+    question: "How much lead time do you need?",
+    answer:
+      "24 hours is the minimum for most orders. Larger buffets (40+ guests) or orders with custom dietary needs are safer with 2–3 business days' notice. For recurring weekly office lunch we set up a standing schedule so lead time drops to a quick confirmation.",
+  },
+  {
+    question: "What's your delivery area and fee?",
+    answer:
+      "We deliver across Mississauga with a focus on Skymark Ave, Airport Corporate Centre, Matheson Blvd East, Spectrum Way, and the Pearson-west corridor. Delivery fees are distance-based and quoted with the order — most office deliveries sit under $25. Pickup at 2630 Skymark Ave, unit 102 is always free.",
+  },
+  {
+    question: "Do you set up / stay for service?",
+    answer:
+      "Standard orders are a tray drop-off: we arrive 30 minutes before service, lay out the spread, and leave. Full on-site service is available for larger events on request — tell us in the inquiry and we'll scope staff and timing.",
+  },
+  {
+    question: "What comes with the package — chafers, plates, utensils, napkins?",
+    answer:
+      "Buffet packages include disposable chafers, serving utensils, plates, cutlery, and napkins unless you'd prefer rentals. À la carte tray orders are priced without service-ware by default — add it line-by-line or ask us to bundle.",
+  },
+  {
+    question: "Can you accommodate gluten-free, vegan, halal, or nut-free?",
+    answer:
+      "Yes — tell us the dietary count with your inquiry and we build options into the quote. The core menu has gluten-free, lactose-free, halal, pescatarian, vegan, vegetarian, and nut-free options. We cannot guarantee a fully allergen-free kitchen environment; we'll flag that explicitly for severe allergies.",
+  },
+  {
+    question: "How do I pay? Do you take POs?",
+    answer:
+      "Credit card, e-transfer, or invoice / PO for established office clients. First-time orders over $500 generally run through a 50% deposit to confirm the date; balance is settled on delivery or within your PO terms.",
+  },
+  {
+    question: "What's the cancellation policy?",
+    answer:
+      "Free to cancel or reschedule up to 48 hours before service. Inside 48 hours we retain the deposit to cover ordered ingredients and prep; inside 24 hours the full quote applies because production has started.",
+  },
+  {
+    question: "What happens if my headcount changes 48 hours out?",
+    answer:
+      "Small adjustments (±2 guests) are easy and do not change the invoice. Larger headcount changes are easier in the upward direction — we can usually add 4–6 guests inside 24 hours. Large downward changes inside 48 hours are handled case-by-case.",
+  },
+  {
+    question: "Do you deliver to Pearson tenants and Airport Corporate Centre buildings?",
+    answer:
+      "Yes — that corridor is home base. We regularly deliver to offices on Skymark Ave, around Airport Corporate Centre, and along Matheson Blvd East and Spectrum Way. Tell us the building and suite; most security desks know us.",
+  },
+  {
+    question: "Can you do recurring weekly office lunch?",
+    answer:
+      "Yes. We'll set up a standing menu (or a rotation) and a recurring PO so your EA sends one email to lock the week. Pricing follows the same per-person structure; recurring orders get priority in the prep schedule.",
+  },
+];

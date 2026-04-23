@@ -45,8 +45,15 @@ function absoluteUrl(path: string) {
   return `${origin}${normalizedPath}`;
 }
 
+/**
+ * Real, current Google/Yelp rating for the restaurant. Leave as `null` until
+ * verified numbers are pulled from the live listing — Google flags fabricated
+ * aggregateRating schema. When real data is available, set both fields.
+ */
+const RESTAURANT_RATING: { ratingValue: number; reviewCount: number } | null = null;
+
 export function restaurantStructuredData() {
-  return {
+  const base: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "@id": absoluteUrl("/#restaurant"),
@@ -64,6 +71,11 @@ export function restaurantStructuredData() {
     areaServed: [
       { "@type": "City", name: "Mississauga" },
       { "@type": "AdministrativeArea", name: "Ontario" },
+      { "@type": "Place", name: "Skymark Avenue corridor, Mississauga" },
+      { "@type": "Place", name: "Airport Corporate Centre, Mississauga" },
+      { "@type": "Place", name: "Matheson Boulevard East, Mississauga" },
+      { "@type": "Place", name: "Spectrum Way, Mississauga" },
+      { "@type": "Place", name: "Pearson-west / near Toronto Pearson (YYZ)" },
     ],
     address: {
       "@type": "PostalAddress",
@@ -94,6 +106,37 @@ export function restaurantStructuredData() {
       areaServed: "CA",
     },
     sameAs: [BUSINESS_INFO.instagramHref],
+  };
+
+  if (RESTAURANT_RATING) {
+    base.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: RESTAURANT_RATING.ratingValue,
+      reviewCount: RESTAURANT_RATING.reviewCount,
+    };
+  }
+
+  return base;
+}
+
+/**
+ * Build a FAQPage schema block. Only ship this when the FAQs are actually
+ * visible and answerable on the page — Google flags orphan FAQ schema.
+ */
+export function faqStructuredData(
+  faqs: Array<{ question: string; answer: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }
 
