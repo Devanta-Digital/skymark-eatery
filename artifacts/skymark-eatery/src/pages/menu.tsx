@@ -111,26 +111,42 @@ function MenuRow({
     <div
       className={cn(
         "group flex gap-3 border-b border-[rgba(36,24,18,0.07)] last:border-b-0 sm:gap-4",
-        compact ? "px-4 py-2.5 sm:px-5 sm:py-3" : "px-5 py-3.5 sm:px-6 sm:py-4",
+        compact
+          ? "flex-col gap-1.5 px-4 py-2.5 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:px-5 sm:py-3"
+          : "px-5 py-3.5 sm:px-6 sm:py-4",
       )}
     >
       <div className="min-w-0 flex-1">
-        <div className="flex min-w-0 items-end gap-2">
+        <div
+          className={cn(
+            "flex min-w-0 gap-2",
+            compact
+              ? "flex-col sm:flex-row sm:items-baseline sm:justify-between sm:gap-3"
+              : "items-end",
+          )}
+        >
           <h3
             className={cn(
-              "shrink-0 font-sans font-semibold tracking-tight text-[hsl(var(--foreground))]",
+              "min-w-0 font-sans font-semibold tracking-tight text-[hsl(var(--foreground))]",
               compact
-                ? "max-w-[68%] truncate text-[1.02rem] sm:max-w-[72%]"
-                : "text-lg",
+                ? "text-[1.02rem] sm:max-w-[min(32rem,72%)]"
+                : "text-[1.07rem] sm:text-[1.11rem]",
             )}
           >
             {item.name}
           </h3>
+          {compact ? null : (
+            <span
+              className="mb-[0.32rem] min-h-px min-w-[0.5rem] flex-1 border-b border-dotted border-[rgba(36,24,18,0.22)]"
+              aria-hidden
+            />
+          )}
           <span
-            className="mb-[0.32rem] min-h-px min-w-[0.5rem] flex-1 border-b border-dotted border-[rgba(36,24,18,0.22)]"
-            aria-hidden
-          />
-          <span className="shrink-0 font-sans text-base font-semibold tabular-nums text-[hsl(var(--foreground))] sm:text-[1.05rem]">
+            className={cn(
+              "shrink-0 font-sans text-base font-semibold tabular-nums text-[hsl(var(--foreground))] sm:text-[1.05rem]",
+              compact && "text-left sm:text-right",
+            )}
+          >
             {price}
           </span>
         </div>
@@ -206,6 +222,8 @@ function SectionIntro({
   note,
   accent,
   tightBelow,
+  relaxed,
+  lead,
 }: {
   eyebrow: string;
   title: string;
@@ -215,22 +233,34 @@ function SectionIntro({
   accent?: boolean;
   /** Tighter gap from intro to first list row */
   tightBelow?: boolean;
+  /** Extra breathing room before the list (long sections) */
+  relaxed?: boolean;
+  /** First section on page — slightly stronger hierarchy without new chrome */
+  lead?: boolean;
 }) {
   return (
     <header
       className={cn(
-        "max-w-2xl border-l-[3px] pl-4 sm:pl-5",
-        tightBelow ? "mb-5 sm:mb-6" : "mb-8 sm:mb-10",
+        "max-w-2xl pl-4 sm:pl-5",
+        lead ? "border-l-4" : "border-l-[3px]",
+        tightBelow ? "mb-5 sm:mb-6" : relaxed ? "mb-9 sm:mb-11" : "mb-7 sm:mb-9",
         accent
           ? "border-[hsl(152_48%_30%)]"
           : "border-[hsl(var(--primary))]",
       )}
     >
       <p className="section-kicker">{eyebrow}</p>
-      <h2 className="mt-2 font-sans text-2xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-[1.85rem]">
+      <h2
+        className={cn(
+          "mt-2 font-sans font-semibold tracking-tight text-[hsl(var(--foreground))]",
+          lead
+            ? "text-[clamp(1.28rem,2.85vw,1.92rem)] leading-[1.14]"
+            : "text-2xl sm:text-[1.85rem]",
+        )}
+      >
         {title}
       </h2>
-      <p className="mt-2.5 max-w-prose font-sans text-sm leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-base">
+      <p className="mt-2.5 max-w-[min(38rem,100%)] font-sans text-sm leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-[0.97rem]">
         {description}
       </p>
       {note ? (
@@ -253,10 +283,10 @@ export default function Menu() {
     title:
       "Menu — Skymark Eatery by Caffe E Pranzo | Italian Lunch & Takeout, Mississauga",
     description:
-      "Weekday Italian takeout menu on Skymark Ave, Mississauga (near Pearson): breakfast, sandwiches, salads, pizza, pasta, and sides. Order pickup online when available or call the kitchen.",
+      "Weekday Italian takeout menu on Skymark Ave, Mississauga (near Pearson): breakfast, sandwiches, salads, pizza, pasta, and sides. Order pickup online when available or call the kitchen. For trays and buffets, use the catering page.",
     path: "/menu",
-    image: SITE_IMAGES.og,
-    imageAlt: SITE_IMAGES.ogImageAlt,
+    image: SITE_IMAGES.shareMenu,
+    imageAlt: SITE_IMAGES.shareMenuAlt,
     structuredData: [
       restaurantStructuredData(),
       breadcrumbStructuredData([
@@ -271,6 +301,15 @@ export default function Menu() {
   const liveItemMap = useMemo(
     () => new Map(safeItems.map((entry) => [entry.name.toLowerCase(), entry])),
     [safeItems],
+  );
+
+  const menuSectionNavItems = useMemo(
+    () =>
+      MAIN_MENU_SECTIONS.map((section) => ({
+        id: section.id,
+        label: section.shortLabel,
+      })),
+    [],
   );
 
   const getLiveItem = (name: string) => liveItemMap.get(name.toLowerCase());
@@ -291,25 +330,30 @@ export default function Menu() {
 
   const onlineOrderingReady = safeItems.length > 0;
 
-  const featuredPicks = useMemo(() => {
-    const rows: {
-      section: (typeof MAIN_MENU_SECTIONS)[number];
-      item: StaticMenuItem;
-    }[] = [];
-    for (const section of MAIN_MENU_SECTIONS) {
-      for (const entry of section.items ?? []) {
-        if (entry.featured) rows.push({ section, item: entry });
-      }
-    }
-    return rows.slice(0, 8);
-  }, []);
-
   const breakfast = getSection("breakfast");
   const sandwiches = getSection("sandwiches");
   const salads = getSection("salads");
   const sides = getSection("sides");
   const pizza = getSection("pizza");
   const pasta = getSection("pasta");
+
+  const mostOrdered = useMemo(() => {
+    const picks: { section: string; item: StaticMenuItem }[] = [];
+    for (const section of MAIN_MENU_SECTIONS) {
+      for (const entry of section.items ?? []) {
+        if (entry.featured) picks.push({ section: section.shortLabel, item: entry });
+      }
+      for (const group of section.pastaGroups ?? []) {
+        for (const entry of group.items) {
+          if (entry.featured) picks.push({ section: section.shortLabel, item: entry });
+        }
+      }
+      for (const entry of section.signatureItems ?? []) {
+        if (entry.featured) picks.push({ section: section.shortLabel, item: entry });
+      }
+    }
+    return picks.slice(0, 5);
+  }, []);
 
   if (!breakfast || !sandwiches || !salads || !sides || !pizza || !pasta) {
     return (
@@ -330,6 +374,9 @@ export default function Menu() {
   return (
     <Layout>
       <Hero
+        className="menu-page-hero"
+        density="interior"
+        contentClassName="lg:max-w-[min(30rem,92vw)]"
         eyebrow="Skymark Ave takeout · weekday only"
         title="Italian lunch you can actually order before the meeting starts."
         subtitle={`Breakfast through pasta from the Skymark Ave line. ${
@@ -338,7 +385,7 @@ export default function Menu() {
             : "Browse here, then call the kitchen to order."
         }`}
         imageSrc={SITE_IMAGES.menuHero}
-        imageAlt="Italian lunch favourites from Skymark Eatery by Caffe E Pranzo"
+        imageAlt={SITE_IMAGES.menuHeroAlt}
         imageClassName="media-crop-menu-hero"
         primaryCta={{ label: "Call to order", href: BUSINESS_INFO.phoneHref }}
         secondaryCta={{ label: "Catering", href: "/catering" }}
@@ -352,109 +399,78 @@ export default function Menu() {
         }
       />
 
-      {featuredPicks.length > 0 ? (
-        <Section tone="muted" density="default" className="border-b border-[hsla(220,14%,12%,0.08)]">
-          <div>
-            <p className="section-kicker">House favourites</p>
-            <h2 className="brand-rail mt-3 max-w-2xl text-[hsl(var(--foreground))]">
-              Start with what the line orders most.
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm text-[hsl(var(--muted-foreground))]">
-              Curated picks across breakfast, sandwiches, salads, and mains — same prices as the full menu below.
-            </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {featuredPicks.map(({ section, item }) => {
-                const liveItem = getLiveItem(item.name);
-                return (
-                  <div
-                    key={`${section.id}-${item.name}`}
-                    className="flex flex-col justify-between gap-4 rounded-xl border-0 bg-white/95 p-4 ring-1 ring-[hsla(220,14%,12%,0.07)] sm:p-5 transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-36px_rgba(15,23,42,0.14)]"
-                  >
-                    <div>
-                      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[hsl(152_30%_28%)]">
-                        {section.shortLabel}
-                      </p>
-                      <h3 className="mt-2 font-sans text-lg font-semibold text-[hsl(var(--foreground))]">{item.name}</h3>
-                      {item.description ? (
-                        <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
-                          {item.description}
-                        </p>
-                      ) : null}
-                    </div>
-                    <div className="flex items-end justify-between gap-3 border-t border-[rgba(26,18,14,0.08)] pt-3">
-                      <span className="font-sans text-lg font-semibold tabular-nums text-[hsl(var(--foreground))]">
-                        {formatPrice(item.price, liveItem)}
-                      </span>
-                      {liveItem ? (
-                        <OrderControls
-                          liveItem={liveItem}
-                          quantity={getCartQuantity(liveItem.id)}
-                          onAdd={handleAdd}
-                          onIncrement={handleIncrement}
-                          onDecrement={handleDecrement}
-                        />
-                      ) : (
-                        <a
-                          href={BUSINESS_INFO.phoneHref}
-                          className="shrink-0 rounded-md border border-[rgba(26,18,14,0.12)] bg-[#faf6f1] px-3 py-1.5 font-sans text-[11px] font-semibold text-[#1f1410] hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))]"
-                        >
-                          Call kitchen
-                        </a>
-                      )}
-                    </div>
-                    <a
-                      href={`/menu#${section.id}`}
-                      className="font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:underline"
-                    >
-                      More in {section.shortLabel.toLowerCase()}
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </Section>
-      ) : null}
-
       <StickySectionNav
         label="Menu sections"
-        items={MAIN_MENU_SECTIONS.map((section) => ({
-          id: section.id,
-          label: section.shortLabel,
-        }))}
+        items={menuSectionNavItems}
         cta={
           <a
             href={BUSINESS_INFO.phoneHref}
-            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:text-white"
+            className="whitespace-nowrap font-sans text-[11px] font-semibold text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary))]/25 underline-offset-2 transition hover:decoration-[hsl(var(--primary))]"
           >
             {BUSINESS_INFO.phone}
           </a>
         }
       />
 
-      <div className="border-b border-[hsla(220,14%,12%,0.08)] bg-[hsl(var(--card))]">
-        <div className="container mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-b border-[hsla(32,14%,12%,0.07)] bg-gradient-to-b from-[hsl(40_34%_97%)] to-[hsl(43_30%_98%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.72)]">
+        <div className="container mx-auto flex max-w-6xl flex-col gap-3.5 px-4 py-[0.95rem] sm:flex-row sm:items-center sm:justify-between sm:py-4">
           <p className="font-sans text-xs leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-sm">
             <span className="font-semibold text-[hsl(var(--foreground))]">Takeout below</span>
             {" · "}
             Trays and buffets on{" "}
-            <Link href="/catering" className="font-semibold text-[hsl(var(--primary))] hover:underline">
+            <Link
+              href="/catering"
+              className="font-semibold text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary))]/30 underline-offset-2 transition hover:decoration-[hsl(var(--primary))]"
+            >
               catering
             </Link>
             .
           </p>
           <Link
             href="/catering"
-            className="inline-flex w-fit items-center gap-1 rounded-md border border-[hsla(220,14%,12%,0.12)] bg-white px-3 py-1.5 font-sans text-xs font-semibold text-[hsl(var(--foreground))] shadow-sm hover:border-[hsl(var(--primary))]/40 hover:text-[hsl(var(--primary))]"
+            className="inline-flex w-fit items-center gap-1.5 rounded-lg border border-[hsla(32,16%,12%,0.11)] bg-white px-3.5 py-2 font-sans text-xs font-semibold text-[hsl(var(--foreground))] shadow-sm transition hover:border-[hsl(var(--primary))]/45 hover:shadow-md hover:text-[hsl(var(--primary))] active:scale-[0.99]"
           >
             Open catering
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </Link>
         </div>
       </div>
 
-      <section className="py-10 sm:py-12">
-        <div className="container mx-auto max-w-6xl space-y-14 px-4 sm:space-y-16 lg:space-y-[4.75rem]">
+      <section className="border-t border-[hsla(220,14%,12%,0.05)] bg-[hsl(var(--background))] py-11 sm:py-14">
+        <div className="container mx-auto max-w-6xl space-y-11 px-4 sm:space-y-[3.15rem] lg:space-y-[4.5rem]">
+          {mostOrdered.length > 0 ? (
+            <div className="anchor-section -mt-4 sm:-mt-6">
+              <div className="flex items-baseline justify-between gap-3">
+                <div>
+                  <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[hsl(var(--primary))]">
+                    Most ordered this week
+                  </p>
+                  <p className="mt-1 font-sans text-xs text-[hsl(var(--muted-foreground))]">
+                    The five plates the Skymark counter runs most on a weekday.
+                  </p>
+                </div>
+              </div>
+              <ul className="mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
+                {mostOrdered.map(({ section, item: entry }) => (
+                  <li
+                    key={entry.name}
+                    className="flex min-w-[14rem] snap-start flex-col rounded-lg border border-[hsla(32,14%,12%,0.1)] bg-white p-3.5 sm:min-w-0"
+                  >
+                    <p className="font-sans text-[0.58rem] font-semibold uppercase tracking-[0.2em] text-[hsl(var(--muted-foreground))]">
+                      {section}
+                    </p>
+                    <p className="mt-1.5 font-sans text-sm font-semibold leading-snug text-[hsl(var(--foreground))]">
+                      {entry.name}
+                    </p>
+                    <p className="mt-auto pt-2 font-sans text-sm font-semibold tabular-nums text-[hsl(var(--primary))]">
+                      {entry.price}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           <section id={breakfast.id} className="anchor-section">
             <SectionIntro
               eyebrow={breakfast.eyebrow}
@@ -463,6 +479,7 @@ export default function Menu() {
               note={breakfast.note}
               accent={false}
               tightBelow
+              lead
             />
             <div className="menu-list-rail overflow-hidden transition-[box-shadow] duration-300">
               {(breakfast.items ?? []).map((entry) => {
@@ -486,7 +503,7 @@ export default function Menu() {
 
           <section
             id={sandwiches.id}
-            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-11 sm:pt-14 lg:pt-[3.55rem]"
           >
             <SectionIntro
               eyebrow={sandwiches.eyebrow}
@@ -494,6 +511,7 @@ export default function Menu() {
               description={sandwiches.description}
               accent
               tightBelow
+              relaxed
             />
             <div className="menu-list-shelf overflow-hidden pl-2 transition-[box-shadow] duration-300 sm:pl-4">
               {sandwiches.items?.map((entry) => {
@@ -524,7 +542,7 @@ export default function Menu() {
 
           <section
             id={salads.id}
-            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-11 sm:pt-14 lg:pt-[3.25rem]"
           >
             <SectionIntro
               eyebrow={salads.eyebrow}
@@ -533,7 +551,7 @@ export default function Menu() {
               accent={false}
               tightBelow
             />
-            <div className="menu-list-rail pl-0 transition-[box-shadow] duration-300 sm:pl-1">
+            <div className="menu-list-shelf max-w-3xl overflow-hidden pl-2 transition-[box-shadow] duration-300 sm:pl-4">
               {salads.items?.map((entry) => {
                 const liveItem = getLiveItem(entry.name);
                 return (
@@ -560,7 +578,7 @@ export default function Menu() {
 
           <section
             id={sides.id}
-            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-11 sm:pt-14 lg:pt-[3.25rem]"
           >
             <SectionIntro
               eyebrow={sides.eyebrow}
@@ -591,7 +609,7 @@ export default function Menu() {
 
           <section
             id={pizza.id}
-            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-11 sm:pt-14 lg:pt-[3.45rem]"
           >
             <SectionIntro
               eyebrow={pizza.eyebrow}
@@ -629,27 +647,9 @@ export default function Menu() {
             ) : null}
           </section>
 
-          <div className="relative -mx-4 border-y border-[hsla(220,14%,12%,0.07)] bg-[hsl(38_38%_96.4%)] px-5 py-9 sm:-mx-0 sm:rounded-lg sm:px-7 sm:py-10 lg:px-10 lg:py-11">
-            <div className="grid gap-5 lg:grid-cols-2 lg:items-start lg:gap-12">
-              <div>
-                <p className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[hsl(152_48%_28%)]">
-                  Midday shift
-                </p>
-                <h2 className="mt-2 max-w-xl text-[clamp(1.4rem,3vw,1.95rem)] font-semibold leading-tight tracking-tight text-[hsl(var(--foreground))]">
-                  From the line to pasta bowls.
-                </h2>
-              </div>
-              <p className="max-w-md text-sm leading-relaxed text-[hsl(var(--muted-foreground))] lg:pt-1 lg:text-[0.95rem]">
-                Same counter, different pace after noon — sandwiches and salads stay
-                quick; pasta builds when meetings run long. Jump ahead when you know
-                what the room wants.
-              </p>
-            </div>
-          </div>
-
           <section
             id={pasta.id}
-            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-10 sm:pt-12 lg:pt-14"
+            className="anchor-section border-t border-[hsla(220,14%,12%,0.09)] pt-11 sm:pt-14 lg:pt-[3.28rem]"
           >
             <div className="max-w-3xl border-l-2 border-[hsl(var(--primary))]/16 pl-3 sm:pl-5">
               <SectionIntro
@@ -726,7 +726,7 @@ export default function Menu() {
         </div>
       </section>
 
-      <Section tone="muted" className="border-t border-[rgba(26,18,14,0.08)] py-12">
+      <Section tone="muted" density="snug" className="border-t border-[rgba(26,18,14,0.08)]">
         <div>
           <div className="flex flex-col gap-6 rounded-2xl bg-[hsl(var(--muted))]/50 p-8 ring-1 ring-[hsla(220,14%,12%,0.06)] sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -740,10 +740,7 @@ export default function Menu() {
               </p>
             </div>
             <div className="flex flex-col gap-2 sm:items-end">
-              <Button
-                className="rounded-md bg-[#9c4f38] font-sans text-white hover:bg-[#7a3c2a]"
-                asChild
-              >
+              <Button className="rounded-md font-sans" asChild>
                 <Link href="/catering">
                   Catering menu
                   <ArrowRight className="ml-1 h-4 w-4" />

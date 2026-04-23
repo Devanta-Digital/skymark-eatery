@@ -3,15 +3,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Link } from "wouter";
-import { CheckCircle2, Mail, Phone, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, Phone, Sparkles } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { Hero } from "@/components/sections/hero";
 import { Section } from "@/components/sections/section";
 import { StickySectionNav } from "@/components/sticky-section-nav";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Form,
   FormControl,
@@ -34,14 +39,18 @@ import {
 } from "@/content/site";
 import {
   BUFFET_PACKAGES,
-  CATERING_INTRO,
+  CATERING_DECISION_PATHS,
+  CATERING_FAQS,
+  CATERING_HOW_IT_WORKS,
   CATERING_NOTES,
   CATERING_OVERVIEW,
   CATERING_SECTIONS,
+  CATERING_TRUST_PILLS,
   DIETARY_BADGES,
 } from "@/content/catering";
 import {
   breadcrumbStructuredData,
+  faqStructuredData,
   restaurantStructuredData,
   useSeo,
 } from "@/lib/seo";
@@ -63,53 +72,13 @@ const cateringSchema = z.object({
 type CateringValues = z.infer<typeof cateringSchema>;
 
 const anchorLinks = [
-  { id: "occasion", label: "Plan" },
   { id: "packages", label: "Packages" },
-  { id: "appetizers", label: "Appetizers" },
-  { id: "platters", label: "Platters" },
-  { id: "presentation", label: "Trays" },
-  { id: "hot-catering", label: "Hot trays" },
-  { id: "pizza", label: "Pizza" },
-  { id: "desserts", label: "Desserts" },
+  { id: "how-it-works", label: "How it works" },
+  { id: "catering-menu", label: "Menu" },
   { id: "dietary", label: "Dietary" },
+  { id: "faq", label: "FAQ" },
   { id: "inquire", label: "Inquire" },
 ];
-
-function BuffetCompareTable() {
-  return (
-    <div className="mt-8 overflow-x-auto rounded-xl bg-[hsl(220_40%_99%/0.92)] shadow-[0_20px_50px_-42px_rgba(15,23,42,0.12)] ring-1 ring-[hsla(220,14%,12%,0.06)]">
-      <table className="w-full min-w-[600px] border-collapse text-left text-sm">
-        <thead className="border-b border-[hsla(220,14%,12%,0.08)] bg-[hsl(var(--muted))]/80 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[hsl(var(--muted-foreground))]">
-          <tr>
-            <th className="px-4 py-3 sm:px-5">Package</th>
-            <th className="px-4 py-3 sm:px-5">Per person</th>
-            <th className="px-4 py-3 sm:px-5">Minimum</th>
-            <th className="px-4 py-3 sm:px-5">Feeds</th>
-          </tr>
-        </thead>
-        <tbody>
-          {BUFFET_PACKAGES.map((pkg) => (
-            <tr
-              key={pkg.publicName}
-              className="border-b border-[rgba(36,24,18,0.06)] last:border-b-0"
-            >
-              <td className="px-4 py-3.5 font-sans font-semibold text-[hsl(var(--foreground))] sm:px-5">
-                {pkg.publicName}
-              </td>
-              <td className="px-4 py-3.5 tabular-nums text-[hsl(var(--foreground))] sm:px-5">
-                {pkg.pricePerPerson}
-              </td>
-              <td className="px-4 py-3.5 text-[hsl(var(--muted-foreground))] sm:px-5">
-                {pkg.minimumOrder}
-              </td>
-              <td className="px-4 py-3.5 text-[hsl(var(--muted-foreground))] sm:px-5">{pkg.feeds}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
 
 function metaLine(serving?: string, dietary?: string[]) {
   return [serving, ...(dietary ?? [])].filter(Boolean).join(" • ");
@@ -134,7 +103,7 @@ function CateringRows({
       className={cn(
         "anchor-section overflow-hidden transition-[box-shadow,transform] duration-300 ease-out",
         tray &&
-          "rounded-xl border-0 bg-white ring-1 ring-[hsla(220,14%,12%,0.06)] hover:-translate-y-px hover:shadow-[0_22px_52px_-42px_rgba(15,23,42,0.12)]",
+          "rounded-xl border-0 bg-white ring-1 ring-[hsla(220,14%,12%,0.06)]",
         flush && "rounded-none border-0 bg-transparent shadow-none ring-0",
         !tray && !flush && "menu-paper",
       )}
@@ -170,15 +139,11 @@ function CateringRows({
             )}
           >
             <div className="min-w-0 flex-1">
-              <div className="flex min-w-0 items-end gap-2">
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3">
                 <h4 className="min-w-0 font-sans text-[0.98rem] text-[#1c120e] sm:text-lg">
                   {item.name}
                 </h4>
-                <span
-                  className="mb-[0.28rem] min-h-px min-w-[0.5rem] flex-1 border-b border-dotted border-[rgba(36,24,18,0.2)] sm:mb-[0.32rem]"
-                  aria-hidden
-                />
-                <p className="shrink-0 font-sans text-[0.98rem] tabular-nums text-[#1c120e] sm:text-base">
+                <p className="shrink-0 text-left font-sans text-[0.98rem] tabular-nums text-[#1c120e] sm:text-right sm:text-base sm:pl-2">
                   {item.price}
                 </p>
               </div>
@@ -200,22 +165,22 @@ function CateringRows({
 
 export default function Catering() {
   const [submitted, setSubmitted] = useState(false);
-  const [occasion, setOccasion] = useState("office-lunch");
 
   useSeo({
     title:
       "Catering & Buffets — Skymark Eatery by Caffe E Pranzo | Mississauga Office & Event Italian",
     description:
-      "Office and event Italian catering on Skymark Ave, Mississauga (Pearson-adjacent): buffet packages with per-person pricing, hot trays, sandwich platters, appetizers, desserts, and inquiry support from Skymark Eatery by Caffe E Pranzo.",
+      "Office and event Italian catering on Skymark Ave, Mississauga (Pearson-adjacent): buffet packages with per-person pricing, hot trays, sandwich platters, appetizers, desserts, and inquiry support. Weekday takeout single orders stay on the takeout menu.",
     path: "/catering",
-    image: SITE_IMAGES.og,
-    imageAlt: SITE_IMAGES.ogImageAlt,
+    image: SITE_IMAGES.shareCatering,
+    imageAlt: SITE_IMAGES.shareCateringAlt,
     structuredData: [
       restaurantStructuredData(),
       breadcrumbStructuredData([
         { name: "Home", path: "/" },
         { name: "Catering", path: "/catering" },
       ]),
+      faqStructuredData(CATERING_FAQS),
     ],
   });
 
@@ -255,47 +220,122 @@ export default function Catering() {
   return (
     <Layout>
       <Hero
+        className="catering-page-hero"
+        density="interior"
+        contentClassName="lg:max-w-[min(30rem,92vw)]"
         eyebrow="Office catering · Mississauga · Pearson-west"
-        title="Trays and buffets your finance lead can forward."
-        subtitle={CATERING_INTRO}
+        title="Catering you can pin to a calendar invite."
+        subtitle="Buffet packages from $16.75 per guest, hot trays, and sandwich boards — cooked on Skymark Ave, quoted and confirmed in one email thread."
         imageSrc={SITE_IMAGES.cateringHero}
-        imageAlt="Catering salad and tray spread from Skymark Eatery, Mississauga"
+        imageAlt={SITE_IMAGES.cateringHeroAlt}
         imageClassName="media-crop-catering-hero"
-        primaryCta={{ label: "Buffet packages", href: "/catering#packages" }}
-        secondaryCta={{ label: "Request catering", href: "/catering#inquire" }}
+        primaryCta={{ label: "Compare packages", href: "/catering#packages" }}
+        secondaryCta={{ label: "Request a quote", href: "/catering#inquire" }}
+        infoLine={
+          <ul className="flex flex-wrap gap-x-2 gap-y-2">
+            {CATERING_TRUST_PILLS.map((pill) => (
+              <li
+                key={pill}
+                className="rounded-full border border-[hsla(220,14%,12%,0.14)] bg-white/75 px-2.5 py-1 font-sans text-[11px] font-medium uppercase tracking-[0.1em] text-[hsl(var(--foreground))]/80"
+              >
+                {pill}
+              </li>
+            ))}
+          </ul>
+        }
       />
 
-      <Section id="occasion" tone="muted" withMotion className="py-6 md:py-9">
-        <div>
-          <p className="section-kicker">Occasion selector</p>
-          <Tabs value={occasion} onValueChange={setOccasion} className="mt-4">
-            <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-md border border-[hsla(220,14%,12%,0.1)] bg-white p-1 shadow-sm">
-              <TabsTrigger value="office-lunch">Team lunch</TabsTrigger>
-              <TabsTrigger value="meeting">Office meeting</TabsTrigger>
-              <TabsTrigger value="corporate-event">Hosted event</TabsTrigger>
-              <TabsTrigger value="family-event">Family gathering</TabsTrigger>
-            </TabsList>
-            <TabsContent value="office-lunch">
-              <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">
-                Fast setup, easy portions, and dependable timing for teams near Pearson and Skymark offices.
-              </p>
-            </TabsContent>
-            <TabsContent value="meeting">
-              <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">
-                Balanced trays and buffet combinations that stay practical for meeting schedules and room turnovers.
-              </p>
-            </TabsContent>
-            <TabsContent value="family-event">
-              <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">
-                Comfort-first combinations with generous servings and flexible trays for mixed preferences.
-              </p>
-            </TabsContent>
-            <TabsContent value="corporate-event">
-              <p className="mt-3 text-sm text-[hsl(var(--muted-foreground))]">
-                Presentation-forward package planning with appetizers, mains, and add-ons for hosted events.
-              </p>
-            </TabsContent>
-          </Tabs>
+      <Section
+        tone="light"
+        density="snug"
+        withMotion
+        className="border-b border-[hsla(220,14%,12%,0.06)]"
+      >
+        <div className="mx-auto max-w-5xl">
+          <p className="section-kicker text-center">Built to be safe to send a PO to</p>
+          <div className="mt-8 grid gap-8 md:grid-cols-3">
+            {CATERING_OVERVIEW.map((item, index) => (
+              <article
+                key={item.title}
+                className="relative border-t border-[hsla(220,14%,12%,0.12)] pt-5"
+              >
+                <span
+                  className="absolute left-0 top-[-1px] h-[3px] w-12 bg-[hsl(var(--primary))]"
+                  aria-hidden
+                />
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[hsl(152_58%_26%)]">
+                  {String(index + 1).padStart(2, "0")} · {item.title}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+                  {item.text}
+                </p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
+            Sections below list group portions and minimums — not the weekday single-plate line. Questions go to{" "}
+            <a
+              className="font-semibold text-[hsl(var(--foreground))] underline decoration-[hsl(var(--primary))]/40 underline-offset-2 hover:text-[hsl(var(--primary))]"
+              href={BUSINESS_INFO.emailHref}
+            >
+              {BUSINESS_INFO.email}
+            </a>
+            .
+          </p>
+        </div>
+      </Section>
+
+      <Section
+        id="decide"
+        tone="muted"
+        density="snug"
+        withMotion
+        className="anchor-section border-b border-[hsla(220,14%,12%,0.06)]"
+      >
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-xl">
+            <p className="section-kicker">Which catering fits you?</p>
+            <h2 className="font-display-hero mt-3 text-[hsl(var(--foreground))] text-[clamp(1.45rem,3vw,1.95rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+              Start here, skip the catalog scroll.
+            </h2>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+            Four common paths for Mississauga offices. Pick the closest fit and we'll narrow the rest on the quote.
+          </p>
+        </div>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {CATERING_DECISION_PATHS.map((path) => {
+            const isRoute = path.cta.href.startsWith("/");
+            const ctaClass =
+              "mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))]";
+            return (
+              <article
+                key={path.title}
+                className="flex h-full flex-col gap-3 rounded-xl bg-white p-5 ring-1 ring-[hsla(220,14%,12%,0.07)] transition-shadow duration-300 hover:shadow-[0_16px_44px_-30px_rgba(15,23,42,0.28)]"
+              >
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[hsl(var(--primary))]">
+                  {path.eyebrow}
+                </p>
+                <h3 className="font-serif text-lg font-semibold text-[hsl(var(--foreground))]">
+                  {path.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+                  {path.body}
+                </p>
+                {isRoute ? (
+                  <Link href={path.cta.href} className={ctaClass}>
+                    {path.cta.label}
+                    <ArrowRight className="h-3.5 w-3.5 text-[hsl(var(--primary))]" aria-hidden />
+                  </Link>
+                ) : (
+                  <a href={path.cta.href} className={ctaClass}>
+                    {path.cta.label}
+                    <ArrowRight className="h-3.5 w-3.5 text-[hsl(var(--primary))]" aria-hidden />
+                  </a>
+                )}
+              </article>
+            );
+          })}
         </div>
       </Section>
 
@@ -305,78 +345,36 @@ export default function Catering() {
         cta={
           <a
             href="#inquire"
-            className="whitespace-nowrap pb-1 font-sans text-[11px] font-semibold text-[hsl(var(--primary))] hover:text-white"
+            className="whitespace-nowrap font-sans text-[11px] font-semibold text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary))]/25 underline-offset-2 transition hover:decoration-[hsl(var(--primary))]"
           >
             Get a quote
           </a>
         }
       />
 
-      <section className="border-b border-[hsla(220,14%,12%,0.06)] section-muted py-10">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="grid gap-10 sm:grid-cols-3 sm:gap-12 lg:gap-16">
-            {CATERING_OVERVIEW.map((item, index) => (
-              <div key={item.title} className="relative sm:pl-2">
-                <span
-                  className="pointer-events-none absolute -left-1 -top-3 font-sans text-[2.75rem] font-semibold leading-none text-[hsl(var(--foreground))]/[0.05] sm:text-[3.25rem]"
-                  aria-hidden
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <p className="relative font-sans text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-[hsl(var(--primary))]">
-                  {item.title}
-                </p>
-                <p className="relative mt-2 font-sans text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
-                  {item.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative overflow-hidden border-b border-[hsla(220,14%,12%,0.07)] bg-[hsl(220_26%_9%)] py-14 text-white sm:py-16">
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-[min(55%,420px)] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.14),transparent_68%)]"
-          aria-hidden
-        />
-        <div className="container relative mx-auto max-w-3xl px-4 text-center">
-          <h2 className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-white/50">
-            How Skymark treats office catering
-          </h2>
-          <blockquote className="mt-6 font-sans text-[1.35rem] font-medium leading-snug tracking-tight text-white/95 sm:text-[1.6rem] sm:leading-tight">
-            It is not a longer menu — it is portion math, pickup timing, and trays that still read well when someone forwards the photo to finance.
-          </blockquote>
-        </div>
-      </section>
-
       <section
         id="packages"
         className="anchor-section border-y border-[hsla(220,14%,12%,0.06)] bg-[hsl(var(--muted))] py-14 sm:py-16"
       >
         <div className="container mx-auto max-w-6xl px-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl">
+          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:gap-x-14 lg:gap-y-5">
+            <div className="brand-rail max-w-3xl lg:flex-1">
               <div className="section-kicker">Buffet Catering Packages</div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl">
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[hsl(var(--foreground))] sm:text-[2.1rem] sm:leading-[1.12] lg:text-[2.25rem]">
                 Ready-made buffet options with clear per-person pricing and
                 minimums.
               </h2>
             </div>
-            <p className="max-w-2xl text-sm leading-7 text-[hsl(var(--muted-foreground))] sm:text-base">
-              Start here if you want the easiest path for office lunches,
-              meetings, and family-style events. Each package keeps the menu,
-              guest minimum, and price per person easy to compare.
+            <p className="max-w-md text-sm leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-[0.95rem] lg:max-w-[17.5rem] lg:pb-1 lg:text-right">
+              Each package lists minimum guests, per-person pricing, and included dishes so you can compare quickly.
             </p>
           </div>
-
-          <BuffetCompareTable />
 
           <div className="mt-10 grid gap-5 lg:grid-cols-2">
             {BUFFET_PACKAGES.map((pkg) => (
               <article
                 key={pkg.publicName}
-                className="overflow-hidden rounded-xl border border-[hsla(220,14%,12%,0.08)] bg-white shadow-md transition-[box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_28px_64px_-40px_rgba(15,23,42,0.18)]"
+                className="overflow-hidden rounded-xl border border-[hsla(220,14%,12%,0.08)] bg-white shadow-[0_14px_40px_-34px_rgba(15,23,42,0.12)] transition-[border-color] duration-200 ease-out hover:border-[hsla(220,14%,12%,0.16)]"
               >
                 <div className="relative border-b border-white/10 bg-[hsl(220_28%_9%)] px-5 py-4 text-white sm:px-6 sm:py-5">
                   <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,transparent,hsla(4,86%,55%,0.55),transparent)] opacity-90" />
@@ -434,8 +432,57 @@ export default function Catering() {
         </div>
       </section>
 
-      <section className="bg-background py-14 sm:py-16">
+      <section
+        id="how-it-works"
+        className="anchor-section border-b border-[hsla(220,14%,12%,0.06)] bg-[hsl(var(--background))] py-14 sm:py-16"
+      >
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-xl">
+              <p className="section-kicker">How ordering works</p>
+              <h2 className="font-display-hero mt-3 text-[hsl(var(--foreground))] text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+                Four steps, one email thread.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+              Same cadence for a Tuesday office lunch and a 60-guest Thursday buffet — we handle the math, the lead time, and the setup.
+            </p>
+          </div>
+          <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {CATERING_HOW_IT_WORKS.map((step) => (
+              <li
+                key={step.step}
+                className="relative flex h-full flex-col gap-3 rounded-xl border-t-2 border-[hsl(var(--primary))] bg-white p-5 ring-1 ring-[hsla(220,14%,12%,0.06)]"
+              >
+                <span className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[hsl(var(--primary))]">
+                  Step {step.step}
+                </span>
+                <h3 className="font-serif text-lg font-semibold text-[hsl(var(--foreground))]">
+                  {step.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+                  {step.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-6 text-xs text-[hsl(var(--muted-foreground))]/80">
+            Reply window: within 1 business day · Mon–Fri, 8:30a–3:00p. Recurring weekly lunch? We set up a standing menu so the quote step collapses to a confirmation.
+          </p>
+        </div>
+      </section>
+
+      <section id="catering-menu" className="anchor-section bg-background py-14 sm:py-16">
         <div className="container mx-auto grid max-w-6xl gap-12 px-4">
+          <div className="max-w-2xl">
+            <p className="section-kicker">Catering menu</p>
+            <h2 className="font-display-hero mt-3 text-[hsl(var(--foreground))] text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+              Trays, platters, hot dishes, pizza, and desserts.
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+              Group portions and minimums — not single-plate pricing. Mix and match with a package or build a custom spread from the sections below.
+            </p>
+          </div>
           <section className="grid gap-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
             <div className="max-w-sm">
               <div className="section-kicker">Reception bites</div>
@@ -604,6 +651,53 @@ export default function Catering() {
       </section>
 
       <section
+        id="faq"
+        className="anchor-section border-t border-[hsla(220,14%,12%,0.06)] bg-[hsl(var(--muted))] py-14 sm:py-16"
+      >
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="max-w-2xl">
+            <p className="section-kicker">Questions finance lead asks</p>
+            <h2 className="font-display-hero mt-3 text-[hsl(var(--foreground))] text-[clamp(1.5rem,3vw,2rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+              Answers before you send the PO.
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
+              Lead time, delivery area, payment, cancellation — the operational detail that usually lives in a back-and-forth, answered once here.
+            </p>
+          </div>
+          <Accordion
+            type="single"
+            collapsible
+            className="mt-8 divide-y divide-[hsla(220,14%,12%,0.1)] rounded-xl bg-white px-5 ring-1 ring-[hsla(220,14%,12%,0.06)] sm:px-7"
+          >
+            {CATERING_FAQS.map((faq, index) => (
+              <AccordionItem
+                key={faq.question}
+                value={`faq-${index}`}
+                className="border-b-0"
+              >
+                <AccordionTrigger className="gap-4 py-5 text-left font-serif text-[1.02rem] font-semibold tracking-tight text-[hsl(var(--foreground))] hover:no-underline sm:text-[1.1rem]">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="pb-5 pr-6 text-sm leading-relaxed text-[hsl(var(--muted-foreground))] sm:text-[15px]">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+          <p className="mt-6 text-xs text-[hsl(var(--muted-foreground))]/80">
+            Didn't see your question?{" "}
+            <a
+              href={BUSINESS_INFO.emailHref}
+              className="font-semibold text-[hsl(var(--foreground))] underline decoration-[hsl(var(--primary))]/40 underline-offset-2 hover:text-[hsl(var(--primary))]"
+            >
+              Email the team
+            </a>{" "}
+            — reply within one business day.
+          </p>
+        </div>
+      </section>
+
+      <section
         id="inquire"
         className="anchor-section bg-background py-16 sm:py-20"
       >
@@ -696,10 +790,6 @@ export default function Catering() {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-6"
                   >
-                    <p className="font-sans text-xs leading-relaxed tracking-wide text-[#6d5748]">
-                      <span className="font-semibold text-[hsl(var(--foreground))]">Inquiry flow:</span>{" "}
-                      event basics → service preferences → notes, then send your draft.
-                    </p>
                     <div className="grid gap-6 sm:grid-cols-2">
                       <FormField
                         control={form.control}
