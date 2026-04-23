@@ -5,7 +5,7 @@ import { fadeUp } from "@/lib/motion";
 import { isVisualQaCapture } from "@/lib/visual-qa";
 
 type SectionTone = "light" | "muted" | "dark" | "transparent";
-type SectionDensity = "default" | "airy";
+type SectionDensity = "default" | "airy" | "snug";
 
 type SectionProps = {
   id?: string;
@@ -26,8 +26,11 @@ const sectionToneClass: Record<SectionTone, string> = {
 };
 
 const densityClass: Record<SectionDensity, string> = {
+  /** Long-form marketing pages */
   default: "py-12 md:py-16 lg:py-20",
   airy: "py-14 md:py-20 lg:py-24",
+  /** Cross-page editorial rhythm (home / menu / catering / contact) */
+  snug: "py-11 md:py-14 lg:py-[3.65rem]",
 };
 
 export function Section({
@@ -66,7 +69,7 @@ export function Section({
         id ? "anchor-section" : "",
       )}
     >
-      <div className={cn("container mx-auto max-w-7xl px-4", containerClassName)}>
+      <div className={cn("container mx-auto max-w-6xl px-4", containerClassName)}>
         {content}
       </div>
     </section>

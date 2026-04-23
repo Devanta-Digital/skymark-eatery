@@ -1,4 +1,4 @@
-# Skymark Eatery by Caffè É Pranzo
+#n Skymark Eatery by Caffè É Pranzo
 
   A production-ready Italian restaurant platform built with React, Node.js, and PostgreSQL.
 

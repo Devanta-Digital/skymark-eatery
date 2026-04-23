@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export type StickySectionNavItem = {
@@ -37,15 +37,23 @@ export function StickySectionNav({
     [],
   );
   const [activeId, setActiveId] = useState(initialId || items[0]?.id);
+  const [elevated, setElevated] = useState(false);
+
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+
+  const itemIdKey = items.map((item) => item.id).join(",");
 
   useEffect(() => {
-    if (!items.length) return;
+    if (!itemIdKey) return;
 
     const updateActive = () => {
+      const list = itemsRef.current;
+      if (!list.length) return;
       const stickyOffset = readOffsetVariable("--section-nav-offset", 200);
-      let current = items[0].id;
+      let current = list[0].id;
 
-      items.forEach((item) => {
+      list.forEach((item) => {
         const section = document.getElementById(item.id);
         if (!section) return;
         if (section.getBoundingClientRect().top - stickyOffset <= 0) {
@@ -64,7 +72,14 @@ export function StickySectionNav({
       window.removeEventListener("scroll", updateActive);
       window.removeEventListener("resize", updateActive);
     };
-  }, [items]);
+  }, [itemIdKey]);
+
+  useEffect(() => {
+    const onScroll = () => setElevated(window.scrollY > 6);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (!items.length) return null;
 
@@ -72,13 +87,15 @@ export function StickySectionNav({
     <nav
       aria-label={label}
       className={cn(
-        "sticky top-[var(--site-header-height)] z-40 border-b border-white/10 bg-[hsla(220,22%,8%,0.92)] text-slate-300 backdrop-blur-md",
+        "public-sticky-section-nav sticky top-[var(--site-header-height)] z-40 border-b border-[hsla(32,16%,12%,0.1)] bg-[hsla(42,36%,97%,0.97)] text-[hsl(var(--foreground))] backdrop-blur-md backdrop-saturate-150 transition-shadow duration-200",
+        elevated &&
+          "shadow-[0_8px_28px_-10px_rgba(24,16,10,0.12)]",
         className,
       )}
     >
       <div className="container mx-auto max-w-6xl px-4">
-        <div className="flex items-end justify-between gap-3">
-          <div className="scrollbar-none flex min-w-0 flex-1 items-end gap-0 overflow-x-auto sm:gap-0.5">
+        <div className="flex min-h-11 items-center justify-between gap-3 py-1.5">
+          <div className="scrollbar-none flex min-w-0 flex-1 items-center gap-1 overflow-x-auto pr-1 sm:gap-1.5">
             {items.map((item) => {
               const isActive = item.id === activeId;
               return (
@@ -87,10 +104,11 @@ export function StickySectionNav({
                   href={`#${item.id}`}
                   aria-current={isActive ? "location" : undefined}
                   className={cn(
-                    "relative shrink-0 border-b-2 px-2 pb-2 pt-1.5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors sm:px-2.5 sm:text-[12px] sm:tracking-[0.14em]",
+                    "relative shrink-0 rounded-full px-2.5 py-1.5 font-sans text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors sm:px-3 sm:text-[12px] sm:tracking-[0.12em]",
                     isActive
-                      ? "border-[hsl(var(--primary))] text-white"
-                      : "border-transparent text-slate-400 hover:text-[hsl(var(--primary))]",
+                      ? "bg-[hsl(var(--primary))]/12 text-[hsl(var(--foreground))] ring-1 ring-[hsl(var(--primary))]/35"
+                      : "text-[hsl(var(--muted-foreground))] hover:bg-[hsla(32,28%,88%,0.65)] hover:text-[hsl(var(--foreground))]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--primary))]/40 focus-visible:ring-offset-1 focus-visible:ring-offset-[hsla(42,36%,97%)]",
                   )}
                 >
                   {item.label}
@@ -99,7 +117,7 @@ export function StickySectionNav({
             })}
           </div>
           {cta ? (
-            <div className="flex shrink-0 items-center pb-1">{cta}</div>
+            <div className="flex shrink-0 items-center pl-0.5">{cta}</div>
           ) : null}
         </div>
       </div>

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..1000;1,9..40,400..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -133,6 +134,7 @@
 
   --app-font-sans: "DM Sans", system-ui, sans-serif;
   --app-font-serif: "DM Sans", system-ui, sans-serif;
+  --app-font-display: "Fraunces", "Georgia", ui-serif, serif;
   --app-font-mono: Menlo, monospace;
 
   --radius: 0.45rem;
@@ -219,7 +221,7 @@ html[data-visual-qa="1"] *::after {
 
 /* Flatten 3D / parallax during capture so PNGs match what users see at rest */
 html[data-visual-qa="1"] .depth-tilt,
-html[data-visual-qa="1"] .depth-tilt img,
+html[data-visual-qa="1"] .depth-tilt img:not(.media-crop-home-hero),
 html[data-visual-qa="1"] .depth-tilt video {
   transform: none !important;
   box-shadow: none !important;
@@ -229,14 +231,33 @@ html[data-visual-qa="1"] .depth-tilt {
   perspective: none !important;
 }
 
-html[data-visual-qa="1"] .media-crop-home-hero,
+/* Keep catering hero flat in QA; preserve stable hero crops for consistent snapshots. */
 html[data-visual-qa="1"] .media-crop-catering-hero {
   transform: none !important;
+}
+
+html[data-visual-qa="1"] .home-hero .depth-tilt img.media-crop-home-hero {
+  transform: scale(1.1) !important;
+}
+
+html[data-visual-qa="1"] .contact-hero .depth-tilt img.media-crop-contact-hero {
+  transform: scale(1.05) !important;
 }
 
 html[data-visual-qa="1"] .home-hero .depth-tilt {
   overflow: hidden !important;
   margin-right: 0 !important;
+}
+
+/**
+ * Stitched full-page screenshots: `position: sticky` rails repaint at the same
+ * viewport offset on every scroll strip (only the fixed header was cropped).
+ * Flatten during `?visualQa=1` so captures match a single real document flow.
+ */
+html[data-visual-qa="1"] .public-sticky-section-nav {
+  position: relative !important;
+  top: auto !important;
+  z-index: 20;
 }
 
 .dark {
@@ -282,8 +303,9 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
     @apply border-border;
   }
 
+  /* Instant scroll — avoids long smooth travel on tall catering/menu pages. */
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     scroll-padding-top: calc(
       var(--site-header-height) + var(--sticky-nav-height) + 0.75rem
     );
@@ -294,8 +316,9 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
     background-color: hsl(var(--background));
     background-image: linear-gradient(
       180deg,
-      hsl(43 100% 99.5%) 0%,
-      hsl(220 14% 94%) 100%
+      hsl(38 42% 99.2%) 0%,
+      hsl(43 36% 96.5%) 38%,
+      hsl(220 12% 93%) 100%
     );
     min-width: 320px;
     font-size: var(--type-body-size);
@@ -410,7 +433,18 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
   }
 
   .image-vignette {
-    box-shadow: inset 0 0 80px rgba(15, 10, 8, 0.18);
+    box-shadow: inset 0 0 64px rgba(15, 10, 8, 0.12);
+  }
+
+  /** Marketing hero headlines — Italian editorial, still paired with DM Sans body */
+  .font-display-hero {
+    font-family: var(--app-font-display);
+    font-optical-sizing: auto;
+  }
+
+  /** Slightly richer food photography without harsh steam-table flatness */
+  .hero-photo-editorial {
+    filter: saturate(1.08) contrast(1.05) brightness(1.02);
   }
 
   .anchor-section {
@@ -454,10 +488,19 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
     transition: filter 0.35s ease, opacity 0.35s ease;
   }
 
+  /** Trust band storefront — lighter proof, not feature art */
+  .trust-storefront-thumb {
+    filter: saturate(0.78) contrast(1.04) brightness(0.9);
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .trust-proof-thumb:hover {
       filter: saturate(0.94) contrast(1.1) brightness(0.96);
       opacity: 1;
+    }
+
+    .trust-storefront-thumb:hover {
+      filter: saturate(0.85) contrast(1.06) brightness(0.92);
     }
   }
 
@@ -495,39 +538,33 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
   /**
    * Restrained depth on hero / feature media — hover only, disabled in visual QA.
    */
+  /**
+   * `.depth-tilt` is a layout hook only. Hover parallax was removed: combined with
+   * `object-fit: cover` + `transform: scale(...)` crops it exposed the panel’s grey
+   * background at corners (especially home hero with lg overflow visible).
+   */
   .depth-tilt {
-    perspective: 1100px;
-    transform-style: preserve-3d;
+    transform-style: flat;
   }
 
   .depth-tilt > img,
   .depth-tilt > video {
-    transform: translateZ(0) rotateX(0deg) rotateY(0deg);
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .depth-tilt:hover > img,
-    .depth-tilt:hover > video {
-      transform: translateZ(6px) rotateX(1deg) rotateY(-1deg) scale(1.02);
-      box-shadow: -8px 14px 28px -18px rgba(15, 23, 42, 0.22);
-    }
+    transform: translateZ(0);
   }
 
   /** Tighter appetite crops on known marketing photos */
   .media-crop-menu-hero {
-    object-position: 58% 38%;
+    object-position: 48% 42%;
   }
 
+  /** Home hero — tighter editorial crop + zoom (avoid empty plate edges / watermark zones) */
   .media-crop-home-hero {
-    object-position: 60% center;
-    transform: scale(1.13);
-    transform-origin: 64% 44%;
+    object-position: 42% 44%;
+    transform: scale(1.1);
+    transform-origin: 44% 46%;
   }
 
-  /** Home hero: editorial bleed + left read edge (see hero.tsx `.home-hero`) */
+  /** Home hero: soft read edge into the type column (see hero.tsx `.home-hero`) */
   .home-hero .depth-tilt::before {
     content: "";
     pointer-events: none;
@@ -536,8 +573,8 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
     z-index: 1;
     background: linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.12),
-      transparent 38%
+      rgba(0, 0, 0, 0.14),
+      transparent 44%
     );
   }
 
@@ -551,9 +588,15 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
   }
 
   .media-crop-catering-hero {
-    object-position: 50% 26%;
+    object-position: 46% 34%;
     transform: scale(1.04);
-    transform-origin: 48% 36%;
+    transform-origin: 46% 36%;
+  }
+
+  /** Paper rail sits under marketing heroes — soften the seam */
+  .menu-page-hero + .public-sticky-section-nav,
+  .catering-page-hero + .public-sticky-section-nav {
+    border-top: 1px solid hsla(32, 18%, 12%, 0.05);
   }
 
   .media-crop-offer-catering {
@@ -569,11 +612,36 @@ html[data-visual-qa="1"] .home-hero .depth-tilt {
   }
 
   .media-crop-contact-hero {
-    object-position: 48% 40%;
+    object-position: 56% 38%;
+    transform: scale(1.05);
+    transform-origin: 58% 42%;
+  }
+
+  /** Office tray block — pull focal weight off-centre vs symmetric 50/50 */
+  .media-crop-home-tray {
+    object-position: 40% 44%;
   }
 
   .media-crop-showcase-tray {
     object-position: 42% 38%;
+  }
+
+  /** Contact compact hero — deliberate frame + weight toward copy column */
+  .contact-hero .depth-tilt::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to left,
+      rgba(0, 0, 0, 0.06),
+      transparent 42%
+    );
+  }
+
+  .contact-hero .hero-image-vignette {
+    z-index: 2;
   }
 
   .ratio-hero {

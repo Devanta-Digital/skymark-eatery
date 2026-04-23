@@ -6,10 +6,11 @@
  * Run: pnpm run visual:snapshots
  * Desktop only: pnpm run visual:snapshots:desktop  (passes --desktop)
  * Partial desktop QA: pnpm run visual:snapshots:qa-partial
- *   (--shots=home-hero,home-mid,home-full,menu-full rebuilds only those PNGs)
+ *   (--shots=… comma list). In zsh, quote the value: --shots='home-hero,home-full,menu-full,contact-full'
  */
 import { chromium } from "playwright";
-import { spawn } from "node:child_process";
+import { execSync, spawn } from "node:child_process";
+import sharp from "sharp";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,6 +20,99 @@ const root = path.join(__dirname, "..");
 const outDir = path.join(root, "design-snapshots");
 const base = "http://127.0.0.1:4173";
 
+/** Stale preview servers leave 4173 bound; Vite then picks another port while this script still probes 4173 */
+function freePreviewPort(port = 4173) {
+  if (process.platform === "win32") return;
+  try {
+    execSync(
+      `lsof -nP -iTCP:${port} -sTCP:LISTEN -t 2>/dev/null | xargs kill -9 2>/dev/null`,
+      { stdio: "ignore", shell: "/bin/bash" },
+    );
+  } catch {
+    /* ignore */
+  }
+}
+
+/**
+ * `fullPage: true` hangs on these marketing routes (Playwright + fixed chrome).
+ * Stitch viewport captures; strip the fixed header band from frames after the first.
+ * Fixed-position back-to-top is omitted when `?visualQa=1` (see Layout) so stitched
+ * PNGs do not repeat the primary-colored control on every strip.
+ */
+async function screenshotStitchedFullPage(page, outPath) {
+  const size = page.viewportSize();
+  if (!size) return;
+  const { width: vw, height: vh } = size;
+
+  const headerH = await page.evaluate(() => {
+    const hdr = document.querySelector("header");
+    return hdr ? Math.ceil(hdr.getBoundingClientRect().height) : 72;
+  });
+
+  const scrollH = await page.evaluate(() =>
+    Math.max(
+      document.documentElement?.scrollHeight ?? 0,
+      document.body?.scrollHeight ?? 0,
+    ),
+  );
+
+  const step = Math.max(320, vh - headerH);
+  const cappedScrollH = Math.min(Math.max(scrollH, vh), 28_000);
+  const raw = [];
+  const maxStrips = 45;
+  for (let y = 0; y < cappedScrollH && raw.length < maxStrips; y += step) {
+    await page.evaluate((yy) => window.scrollTo(0, yy), y);
+    await settlePage(page);
+    raw.push(await page.screenshot({ type: "png", timeout: 60_000 }));
+  }
+
+  const strips = [];
+  for (let i = 0; i < raw.length; i++) {
+    const meta = await sharp(raw[i]).metadata();
+    const w = meta.width ?? vw;
+    const h = meta.height ?? vh;
+    if (i === 0) {
+      strips.push(await sharp(raw[i]).png().toBuffer());
+    } else {
+      const top = Math.min(headerH, Math.max(0, h - 2));
+      strips.push(
+        await sharp(raw[i])
+          .extract({ left: 0, top, width: w, height: h - top })
+          .png()
+          .toBuffer(),
+      );
+    }
+  }
+
+  let totalH = 0;
+  const heights = [];
+  for (const s of strips) {
+    const m = await sharp(s).metadata();
+    const hh = m.height ?? 0;
+    heights.push(hh);
+    totalH += hh;
+  }
+
+  const composites = [];
+  let acc = 0;
+  for (let i = 0; i < strips.length; i++) {
+    composites.push({ input: strips[i], top: acc, left: 0 });
+    acc += heights[i];
+  }
+
+  await sharp({
+    create: {
+      width: vw,
+      height: totalH,
+      channels: 4,
+      background: { r: 10, g: 14, b: 20, alpha: 1 },
+    },
+  })
+    .composite(composites)
+    .png()
+    .toFile(outPath);
+}
+
 function withVisualQa(pathname) {
   const sep = pathname.includes("?") ? "&" : "?";
   return `${base}${pathname}${sep}visualQa=1`;
@@ -27,7 +121,10 @@ function withVisualQa(pathname) {
 async function waitForServer() {
   for (let i = 0; i < 80; i++) {
     try {
-      const r = await fetch(base);
+      const ac = new AbortController();
+      const t = setTimeout(() => ac.abort(), 3000);
+      const r = await fetch(base, { signal: ac.signal });
+      clearTimeout(t);
       if (r.ok) return;
     } catch {
       /* retry */
@@ -40,20 +137,25 @@ async function waitForServer() {
 async function settlePage(page) {
   await page.evaluate(() => document.fonts.ready).catch(() => {});
   await page.waitForTimeout(350);
+  /** Never hang on a single broken/slow image (load/error may never fire) */
   await page
-    .evaluate(() =>
-      Promise.all(
-        [...document.images]
-          .filter((img) => !img.complete)
-          .map(
-            (img) =>
-              new Promise((resolve) => {
-                img.addEventListener("load", resolve, { once: true });
-                img.addEventListener("error", resolve, { once: true });
-              }),
-          ),
-      ),
-    )
+    .evaluate(() => {
+      const pending = [...document.images]
+        .filter((img) => !img.complete)
+        .map(
+          (img) =>
+            new Promise((resolve) => {
+              const done = () => resolve();
+              img.addEventListener("load", done, { once: true });
+              img.addEventListener("error", done, { once: true });
+              setTimeout(done, 4000);
+            }),
+        );
+      return Promise.race([
+        Promise.all(pending),
+        new Promise((resolve) => setTimeout(resolve, 4500)),
+      ]);
+    })
     .catch(() => {});
   await page.waitForTimeout(200);
 }
@@ -64,6 +166,8 @@ function partialShotToFilename(key) {
     "home-mid": "home-desktop-mid.png",
     "home-full": "home-desktop-full.png",
     "menu-full": "menu-desktop-full.png",
+    "catering-full": "catering-desktop-full.png",
+    "contact-full": "contact-desktop-full.png",
   };
   return map[key] ?? null;
 }
@@ -90,16 +194,31 @@ async function capturePartialDesktopShots(page, keys) {
 
   for (const key of keys) {
     const file = partialShotToFilename(key);
-    if (!file) throw new Error(`Unknown --shots key: ${key}. Expected: home-hero, home-mid, home-full, menu-full`);
+    if (!file)
+      throw new Error(
+        `Unknown --shots key: ${key}. Expected: home-hero, home-mid, home-full, menu-full, catering-full, contact-full`,
+      );
     const outPath = path.join(outDir, file);
     if (fs.existsSync(outPath)) fs.unlinkSync(outPath);
 
     if (key === "menu-full") {
       await page.goto(withVisualQa("/menu"), { waitUntil: "load", timeout: 90_000 });
       await settlePage(page);
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await screenshotStitchedFullPage(page, outPath);
+      continue;
+    }
+
+    if (key === "catering-full") {
+      await page.goto(withVisualQa("/catering"), { waitUntil: "load", timeout: 90_000 });
       await settlePage(page);
-      await page.screenshot({ path: outPath, fullPage: true, timeout: 120_000 });
+      await screenshotStitchedFullPage(page, outPath);
+      continue;
+    }
+
+    if (key === "contact-full") {
+      await page.goto(withVisualQa("/contact"), { waitUntil: "load", timeout: 90_000 });
+      await settlePage(page);
+      await screenshotStitchedFullPage(page, outPath);
       continue;
     }
 
@@ -122,9 +241,7 @@ async function capturePartialDesktopShots(page, keys) {
       await settlePage(page);
       await screenshotViewportClip(page, outPath);
     } else if (key === "home-full") {
-      await page.evaluate(() => window.scrollTo(0, 0));
-      await settlePage(page);
-      await page.screenshot({ path: outPath, fullPage: true, timeout: 120_000 });
+      await screenshotStitchedFullPage(page, outPath);
     }
   }
 }
@@ -199,6 +316,7 @@ async function main() {
     }
   }
 
+  freePreviewPort(4173);
   const build = spawn("pnpm", ["exec", "vite", "build", "--config", "vite.config.ts"], {
     cwd: root,
     stdio: "inherit",
@@ -215,15 +333,20 @@ async function main() {
   );
 
   try {
-    await new Promise((r) => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 1200));
     await waitForServer();
 
-    const browser = await chromium.launch();
+    const browser = await chromium.launch({
+      args: ["--disable-dev-shm-usage", "--disable-gpu"],
+    });
 
     if (partialShotKeys?.length) {
-      const page = await browser.newPage();
-      await capturePartialDesktopShots(page, partialShotKeys);
-      await page.close();
+      for (const shotKey of partialShotKeys) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await capturePartialDesktopShots(page, [shotKey]);
+        await page.close();
+      }
     } else {
       const paths = ["/", "/menu", "/catering", "/contact"];
       const desktopOnly = process.argv.includes("--desktop");
