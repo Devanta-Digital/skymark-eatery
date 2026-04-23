@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect, useLayoutEffect, useRef } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -74,6 +74,49 @@ function RequireStaff({ children }: { children: React.ReactNode }) {
 
   if (!user || !STAFF_ROLES.includes(user.role)) return null;
   return <>{children}</>;
+}
+
+/** Reset scroll on pathname change; respect hash targets (e.g. /catering#inquire). */
+function ScrollRestoration() {
+  const [location] = useLocation();
+  const prevPath = useRef<string | null>(null);
+
+  useLayoutEffect(() => {
+    const path = String(location).split("?")[0].split("#")[0];
+    const hash =
+      typeof window !== "undefined"
+        ? window.location.hash.replace(/^#/, "")
+        : "";
+
+    if (prevPath.current === null) {
+      prevPath.current = path;
+      if (hash) {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(decodeURIComponent(hash));
+          if (el) {
+            el.scrollIntoView({ block: "start", behavior: "auto" });
+          }
+        });
+      }
+      return;
+    }
+
+    if (prevPath.current !== path) {
+      prevPath.current = path;
+      if (hash) {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(decodeURIComponent(hash));
+          if (el) {
+            el.scrollIntoView({ block: "start", behavior: "auto" });
+          }
+        });
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      }
+    }
+  }, [location]);
+
+  return null;
 }
 
 function Router() {
@@ -172,6 +215,7 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <ScrollRestoration />
               <Router />
             </WouterRouter>
             <Toaster richColors position="top-right" />

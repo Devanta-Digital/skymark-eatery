@@ -262,8 +262,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
         name: "Assorted Sliced Cold Meat & Cheese Platter",
         description:
           "A deli-style platter arranged for grazing, sandwich building, or office sharing.",
-        price: "$72.75 / $109.15 / $145.50 / $181.95",
-        serving: '12" / 14" / 16" / 18"',
+        price: "$109.15 / $145.50",
+        serving: 'Medium 14" / large 16" platters',
       },
       {
         name: "Cold Sandwich Platter",
@@ -285,61 +285,61 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "pasta-baked",
     title: "Pasta, Lasagna & Baked Dishes",
     description:
-      "Tray and bake formats only — same kitchen as the pasta line, but portioning and tray sizes are for groups. Counter pasta plates stay on the menu.",
+      "Tray and bake formats only — same kitchen as the pasta line, but portioning and medium / large tray sizes are for groups. Counter pasta plates stay on the menu.",
     items: [
       {
         name: "Lasagna",
         description:
           "Available in meat, vegetable, spinach and ricotta, three cheese, or chicken and red pepper.",
-        price: "$32.00 / $47.00 / $79.00 / $174.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$47.00 / $79.00",
+        serving: "Medium / large trays",
       },
       {
         name: "Gluten-Free Lasagna",
         description: "The same tray sizes, prepared for gluten-free requests.",
-        price: "$34.00 / $52.00 / $84.00 / $187.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$52.00 / $84.00",
+        serving: "Medium / large trays",
         dietary: ["Gluten free"],
       },
       {
         name: "Eggplant Parmigiana",
         description:
           "A hearty baked eggplant tray finished with tomato sauce and cheese.",
-        price: "$34.00 / $52.00 / $84.00 / $187.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$52.00 / $84.00",
+        serving: "Medium / large trays",
         dietary: ["Vegetarian"],
       },
       {
         name: "Cannelloni",
         description: "Available with beef or spinach and ricotta.",
-        price: "$29.00 / $58.00 / $114.85",
-        serving: "Medium 6 pieces / large 12 pieces / extra large 24 pieces",
+        price: "$58.00 / $114.85",
+        serving: "Medium 6 pieces / large 12 pieces",
       },
       {
         name: "Tortellini, Ravioli, or Gnocchi in Tomato Sauce",
         description:
           "A classic tomato sauce option for crowd-friendly pasta trays.",
-        price: "$28.90 / $57.00 / $79.00 / $109.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$57.00 / $79.00",
+        serving: "Medium / large trays",
       },
       {
         name: "Tortellini, Ravioli, or Gnocchi in Rose Sauce",
         description: "Finished in Skymark's creamy rose sauce.",
-        price: "$29.95 / $58.00 / $82.00 / $113.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$58.00 / $82.00",
+        serving: "Medium / large trays",
       },
       {
         name: "Tortellini, Ravioli, or Gnocchi in Alfredo Sauce",
         description: "A richer Alfredo tray for comfort-food catering.",
-        price: "$30.85 / $59.00 / $85.00 / $117.00",
-        serving: "Small / medium / large / extra large trays",
+        price: "$59.00 / $85.00",
+        serving: "Medium / large trays",
       },
       {
         name: "Penne, Rigatoni, Spaghetti, Linguine, or Fettuccine",
         description:
-          "Bulk tray build: pick shape and sauce for the group — pricing scales by tray size and add-ons, not by the single-plate menu board.",
+          "Bulk tray build: pick shape and sauce for the group — pricing scales by medium or large tray and add-ons, not by the single-plate menu board.",
         price: "$22.00 to $26.00 base",
-        serving: "Sauce and add-on pricing quoted by tray selection",
+        serving: "Sauce and add-on pricing quoted by tray selection (medium or large)",
       },
     ],
   },
@@ -359,16 +359,16 @@ export const CATERING_SECTIONS: CateringSection[] = [
       {
         name: "Gamberi al Pomodoro",
         description: "Jumbo shrimp in tomato, white wine, and garlic sauce.",
-        price: "$87.00 / $175.00 / $260.00",
-        serving: "Medium / large / extra large trays",
+        price: "$87.00 / $175.00",
+        serving: "Medium / large trays",
         dietary: ["Pescatarian"],
       },
       {
         name: "Zuppa di Mare",
         description:
           "Shrimp, scallops, calamari, and mussels in a seafood tray for larger gatherings.",
-        price: "$105.00 / $210.00 / $315.00",
-        serving: "Medium / large / extra large trays",
+        price: "$105.00 / $210.00",
+        serving: "Medium / large trays",
         dietary: ["Pescatarian"],
       },
     ],
@@ -377,22 +377,22 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "sides",
     title: "Vegetables & Sides",
     description:
-      "Rice and potato trays that anchor a buffet — sized medium through extra large so you can match starch to headcount.",
+      "Rice and potato trays that anchor a buffet — medium and large sizes so you can match starch to headcount.",
     items: [
       {
         name: "Mediterranean Rice with Vegetables",
         description:
           "A versatile side for buffet service and plated group meals.",
-        price: "$25.00 / $50.00 / $101.00",
-        serving: "Medium / large / extra large trays",
+        price: "$25.00 / $50.00",
+        serving: "Medium / large trays",
         dietary: ["Vegetarian"],
       },
       {
         name: "Roasted Parisienne Potatoes",
         description:
           "Roasted potatoes prepared for buffet and family-style service.",
-        price: "$23.00 / $46.00 / $92.00",
-        serving: "Medium / large / extra large trays",
+        price: "$23.00 / $46.00",
+        serving: "Medium / large trays",
         dietary: ["Vegetarian", "Gluten free"],
       },
     ],
@@ -401,32 +401,29 @@ export const CATERING_SECTIONS: CateringSection[] = [
     id: "salads",
     title: "Salads",
     description:
-      "Tray and deep-pan formats below — not the same price grid as Italian / Caesar / Greek bowls on the takeout menu.",
+      "Catering salad trays in medium and large — not the same price grid as Italian / Caesar / Greek bowls on the takeout menu.",
     items: [
       {
         name: "Italian Salad",
         description:
           "House Italian mix in disposable or rental pans — best as a buffet side beside pasta or parm trays.",
-        price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
-        serving:
-          "Family / large / XXL shallow / extra large / extra large deep",
+        price: "$28.85 / $43.35",
+        serving: "Medium / large",
         dietary: ["Vegetarian"],
       },
       {
         name: "Caesar Salad",
         description:
           "Classic Caesar in catering depths — good when you want a familiar green that holds dressing on a long service window.",
-        price: "$21.90 / $28.85 / $43.35 / $57.20 / $68.75",
-        serving:
-          "Family / large / XXL shallow / extra large / extra large deep",
+        price: "$28.85 / $43.35",
+        serving: "Medium / large",
       },
       {
         name: "Greek Salad",
         description:
           "Feta-forward tray for brighter tables — works when half the room wants something lighter next to hot mains.",
-        price: "$25.95 / $29.95 / $47.95 / $60.00 / $70.00",
-        serving:
-          "Family / large / XXL shallow / extra large / extra large deep",
+        price: "$29.95 / $47.95",
+        serving: "Medium / large",
         dietary: ["Vegetarian", "Gluten free"],
       },
     ],
@@ -483,15 +480,15 @@ export const CATERING_SECTIONS: CateringSection[] = [
         name: "Homemade Italian Cookies",
         description:
           "A cookie assortment sized for dessert tables and coffee service.",
-        price: "$51.95 / $78.50 / $130.50",
-        serving: '12" / 14" / 18" trays',
+        price: "$78.50 / $130.50",
+        serving: 'Medium 14" / large 18" trays',
       },
       {
         name: "Homemade Tiramisu",
         description:
           "A house-made tiramisu option for smaller gatherings or larger dessert service.",
         price: "$28.85 / $80.80",
-        serving: "Small serves up to 6 / large serves up to 18",
+        serving: "Medium serves up to 10 / large serves up to 18",
       },
     ],
   },
@@ -504,7 +501,7 @@ export const CATERING_SECTIONS: CateringSection[] = [
       {
         name: "Homemade Bread",
         description: "Fresh bread served alongside buffet and tray orders.",
-        price: "$5.20 small / $8.85 large",
+        price: "$5.20 medium / $8.85 large",
       },
       {
         name: "Assorted Dinner Rolls",
@@ -533,8 +530,8 @@ export const CATERING_SECTIONS: CateringSection[] = [
         name: "Topping Trays",
         description:
           "Extra toppings arranged by tray size for sandwiches, platters, and catered spreads.",
-        price: "$31.15 / $60.65 / $90.80 / $115.30",
-        serving: "Medium / large / XL shallow / extra large",
+        price: "$60.65 / $90.80",
+        serving: "Medium / large",
       },
     ],
   },
